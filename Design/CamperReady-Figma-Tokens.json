@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "name": "CamperReady Figma Tokens",
+    "version": 1,
+    "description": "Foundational design tokens for the CamperReady MVP Figma file."
+  },
+  "colors": {
+    "canvas": {
+      "top": "#F2F5FA",
+      "bottom": "#E3EBF5"
+    },
+    "ink": {
+      "primary": "#141C29",
+      "secondary": "#596371"
+    },
+    "accent": {
+      "blue": "#1278F0"
+    },
+    "status": {
+      "green": "#2B9C5C",
+      "yellow": "#DB9417",
+      "red": "#D94540"
+    },
+    "surface": {
+      "card": "rgba(255,255,255,0.78)",
+      "stroke": "rgba(255,255,255,0.72)"
+    },
+    "heroGradients": {
+      "green": ["#2B9C5C", "#66BF82"],
+      "yellow": ["#DB9417", "#F2C254"],
+      "red": ["#D94540", "#F07C69"],
+      "blue": ["#1278F0", "#2E9EE0"],
+      "costs": ["#197350", "#39B584"]
+    }
+  },
+  "spacing": {
+    "xs": 8,
+    "sm": 12,
+    "md": 16,
+    "lg": 18,
+    "xl": 22,
+    "xxl": 24,
+    "hero": 30
+  },
+  "radius": {
+    "pill": 16,
+    "card": 22,
+    "hero": 30,
+    "button": 999
+  },
+  "shadow": {
+    "card": {
+      "color": "rgba(20,28,41,0.08)",
+      "x": 0,
+      "y": 12,
+      "blur": 24
+    },
+    "hero": {
+      "color": "rgba(18,120,240,0.24)",
+      "x": 0,
+      "y": 16,
+      "blur": 28
+    }
+  },
+  "typography": {
+    "displayHero": {
+      "fontFamily": "SF Pro Rounded",
+      "fontWeight": "Bold",
+      "fontSize": 34,
+      "lineHeight": 38
+    },
+    "titleCard": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Bold",
+      "fontSize": 24,
+      "lineHeight": 28
+    },
+    "headline": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Semibold",
+      "fontSize": 17,
+      "lineHeight": 22
+    },
+    "bodyStrong": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Semibold",
+      "fontSize": 16,
+      "lineHeight": 21
+    },
+    "body": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "lineHeight": 21
+    },
+    "captionLabel": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Bold",
+      "fontSize": 12,
+      "lineHeight": 15,
+      "letterSpacing": 0.8
+    },
+    "captionMeta": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Medium",
+      "fontSize": 12,
+      "lineHeight": 15
+    },
+    "footnote": {
+      "fontFamily": "SF Pro",
+      "fontWeight": "Medium",
+      "fontSize": 13,
+      "lineHeight": 17
+    }
+  },
+  "layout": {
+    "device": {
+      "primary": {
+        "name": "iPhone 15 Pro",
+        "width": 393,
+        "height": 852
+      }
+    },
+    "grid": {
+      "columns": 4,
+      "margin": 16,
+      "gutter": 12
+    }
+  }
+}
