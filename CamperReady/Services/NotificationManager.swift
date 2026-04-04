@@ -5,6 +5,7 @@ import UserNotifications
 @MainActor
 final class NotificationManager {
     static let shared = NotificationManager()
+    private let requestPrefix = "camperready."
 
     private init() {}
 
@@ -17,6 +18,31 @@ final class NotificationManager {
         (try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])) ?? false
     }
 
+    func rescheduleAllIfAuthorized(context: ModelContext) async {
+        let status = await notificationStatus()
+        guard status == .authorized || status == .provisional || status == .ephemeral else { return }
+        await rescheduleAll(context: context)
+    }
+
+    func rescheduleAll(context: ModelContext) async {
+        let documents = (try? context.fetch(FetchDescriptor<DocumentRecord>())) ?? []
+        let maintenance = (try? context.fetch(FetchDescriptor<MaintenanceEntry>())) ?? []
+        let checklists = (try? context.fetch(FetchDescriptor<ChecklistRun>())) ?? []
+        let checklistItems = (try? context.fetch(FetchDescriptor<ChecklistItemRecord>())) ?? []
+        let trips = (try? context.fetch(FetchDescriptor<Trip>())) ?? []
+        let costs = (try? context.fetch(FetchDescriptor<CostEntry>())) ?? []
+        let currentOdometerKm = AppDataLocator.currentOdometerKm(maintenance: maintenance, costs: costs)
+        let plans = ReminderPlanner.plans(
+            documents: documents,
+            maintenance: maintenance,
+            checklists: checklists,
+            checklistItems: checklistItems,
+            trips: trips,
+            currentOdometerKm: currentOdometerKm
+        )
+        await reschedule(plans: plans)
+    }
+
     func rescheduleDocumentRemindersIfAuthorized(documents: [DocumentRecord]) async {
         let status = await notificationStatus()
         guard status == .authorized || status == .provisional || status == .ephemeral else { return }
@@ -24,28 +50,39 @@ final class NotificationManager {
     }
 
     func rescheduleDocumentReminders(documents: [DocumentRecord]) async {
+        let plans = ReminderPlanner.plans(
+            documents: documents,
+            maintenance: [],
+            checklists: [],
+            checklistItems: [],
+            trips: [],
+            currentOdometerKm: nil
+        )
+        await reschedule(plans: plans)
+    }
+
+    private func reschedule(plans: [ReminderPlan]) async {
         let center = UNUserNotificationCenter.current()
-        let prefix = "camperready.document."
         let pending = await center.pendingNotificationRequests()
-            .filter { $0.identifier.hasPrefix(prefix) }
+            .filter { $0.identifier.hasPrefix(requestPrefix) }
             .map(\.identifier)
         center.removePendingNotificationRequests(withIdentifiers: pending)
 
-        for document in documents {
-            guard let validUntil = document.validUntil else { continue }
-            let offsets: [(Int, Bool)] = [(90, document.remind90Days), (30, document.remind30Days), (7, document.remind7Days)]
-            for (days, isEnabled) in offsets where isEnabled {
-                guard let fireDate = Calendar.current.date(byAdding: .day, value: -days, to: validUntil), fireDate > .now else { continue }
-                let content = UNMutableNotificationContent()
-                content.title = "CamperReady Erinnerung"
-                content.body = "\(document.title) lauft bald ab (\(validUntil.shortDateString()))."
-                content.sound = .default
+        for plan in plans {
+            guard plan.fireDate > .now else { continue }
+            let content = UNMutableNotificationContent()
+            content.title = plan.title
+            content.body = plan.body
+            content.sound = .default
 
-                let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
-                let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-                let request = UNNotificationRequest(identifier: "\(prefix)\(document.id.uuidString).\(days)", content: content, trigger: trigger)
-                try? await center.add(request)
-            }
+            let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: plan.fireDate)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            let request = UNNotificationRequest(
+                identifier: "\(requestPrefix)\(plan.identifier)",
+                content: content,
+                trigger: trigger
+            )
+            try? await center.add(request)
         }
     }
 }

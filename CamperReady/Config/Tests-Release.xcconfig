@@ -1,0 +1,8 @@
+#include "Shared.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = com.camperready.appTests
+INFOPLIST_FILE = CamperReadyTests/Support/Info.plist
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @loader_path/Frameworks @executable_path/Frameworks
+TEST_HOST = $(BUILT_PRODUCTS_DIR)/CamperReady.app/CamperReady
+BUNDLE_LOADER = $(TEST_HOST)
+

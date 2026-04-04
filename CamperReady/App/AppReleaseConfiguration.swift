@@ -3,9 +3,9 @@ import Foundation
 enum AppReleaseConfiguration {
     static let supportEmail = "support@camperready.app"
 
-    static let privacyPolicyURL: URL? = nil
-    static let supportURL: URL? = nil
-    static let marketingURL: URL? = nil
+    static let privacyPolicyURL: URL? = URL(string: "https://camperready.app/privacy")
+    static let supportURL: URL? = URL(string: "https://camperready.app/support")
+    static let marketingURL: URL? = URL(string: "https://camperready.app")
 
     static let legalDisclaimer = """
     CamperReady ist eine persönliche Organisations- und Erinnerungshilfe für private Camper-Besitzer:innen. Die App ersetzt keine technische Prüfung, keine Wiegung und keine Rechtsberatung. Vorschriften, Prüffristen und regionale Anforderungen können sich ändern.

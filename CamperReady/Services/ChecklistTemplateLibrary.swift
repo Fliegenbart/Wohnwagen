@@ -32,6 +32,8 @@ enum ChecklistTemplateLibrary {
             )
         }
 
+        checklist.items = items
+
         return (checklist, items)
     }
 

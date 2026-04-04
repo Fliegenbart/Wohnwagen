@@ -44,6 +44,11 @@ struct ReadinessTile: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassCard(strokeColor: accentColor.opacity(0.25))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(result.title)
+        .accessibilityValue([result.summary, result.reasons.first, result.nextAction]
+            .compactMap { $0 }
+            .joined(separator: ". "))
     }
 
     private var accentColor: Color {

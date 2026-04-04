@@ -31,6 +31,15 @@ final class VehicleProfile {
     var serviceIntervalKm: Int?
     var notes: String
     var attachmentPath: String?
+    @Relationship(deleteRule: .cascade) var trips: [Trip] = []
+    @Relationship(deleteRule: .cascade) var packingItems: [PackingItem] = []
+    @Relationship(deleteRule: .cascade) var passengers: [PassengerLoad] = []
+    @Relationship(deleteRule: .cascade) var loadSettings: [TripLoadSettings] = []
+    @Relationship(deleteRule: .cascade) var checklists: [ChecklistRun] = []
+    @Relationship(deleteRule: .cascade) var maintenanceEntries: [MaintenanceEntry] = []
+    @Relationship(deleteRule: .cascade) var documents: [DocumentRecord] = []
+    @Relationship(deleteRule: .cascade) var places: [PlaceNote] = []
+    @Relationship(deleteRule: .cascade) var costs: [CostEntry] = []
 
     init(
         id: UUID = UUID(),

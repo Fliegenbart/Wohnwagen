@@ -59,49 +59,72 @@ struct VehicleProfileView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Schnellstart") {
-                    TextField("Fahrzeugname", text: nameBinding)
+                Section {
+                    Text("Für den Start reicht ein Fahrzeugname. Alles andere kannst du auch später ergänzen.")
+                        .font(.footnote)
+                        .foregroundStyle(AppTheme.mutedInk)
+                }
+
+                Section {
+                    TextField("z. B. Unser Kastenwagen", text: nameBinding)
                     Picker("Typ", selection: vehicleKindBinding) {
                         ForEach(VehicleKind.allCases) { kind in
                             Text(kind.title).tag(kind)
                         }
                     }
-                    TextField("Marke", text: brandBinding)
-                    TextField("Modell", text: modelBinding)
-                    TextField("Kennzeichen", text: licensePlateBinding)
+                    TextField("z. B. Pössl", text: brandBinding)
+                    TextField("z. B. Summit 600", text: modelBinding)
+                    TextField("z. B. M-AB 1234", text: licensePlateBinding)
                     Picker("Land", selection: countryBinding) {
                         ForEach(CountryPreset.allCases) { country in
                             Text(country.title).tag(country)
                         }
                     }
+                } header: {
+                    Text("Für den Start")
+                } footer: {
+                    Text("Wenn du etwas noch nicht weißt, ist das kein Problem. Du kannst es später ergänzen.")
                 }
 
-                Section("Gewicht & Technik") {
-                    TextField("zGG", value: gvwrBinding, format: .number)
+                Section {
+                    TextField("zGG (kg)", value: gvwrBinding, format: .number)
                         .keyboardType(.decimalPad)
-                    TextField("Gemessenes Leergewicht", value: measuredWeightBinding, format: .number)
+                    TextField("Leergewicht, gemessen (kg)", value: measuredWeightBinding, format: .number)
                         .keyboardType(.decimalPad)
-                    TextField("Frischwasser Kapazität", value: freshWaterBinding, format: .number)
+                    TextField("Frischwasser (l)", value: freshWaterBinding, format: .number)
                         .keyboardType(.decimalPad)
-                    TextField("Grauwasser Kapazität", value: greyWaterBinding, format: .number)
+                    TextField("Grauwasser (l)", value: greyWaterBinding, format: .number)
                         .keyboardType(.decimalPad)
                     Stepper("Gasflaschen: \(gasBottleCountBinding.wrappedValue)", value: gasBottleCountBinding, in: 0...4)
                     TextField("Flaschengröße (kg)", value: gasBottleSizeBinding, format: .number)
                         .keyboardType(.decimalPad)
+                } header: {
+                    Text("Gewicht, Wasser und Gas")
+                } footer: {
+                    Text("Trag nur die Werte ein, die du sicher kennst. Die App funktioniert auch mit unvollständigen Angaben.")
                 }
 
-                Section("Wartungslogik") {
-                    Stepper("Intervall Monate: \(serviceMonthsBinding.wrappedValue)", value: serviceMonthsBinding, in: 0...36)
-                    Stepper("Intervall km: \(serviceKmBinding.wrappedValue)", value: serviceKmBinding, in: 0...60000, step: 1000)
+                Section {
+                    Stepper("Service alle \(serviceMonthsBinding.wrappedValue) Monate", value: serviceMonthsBinding, in: 0...36)
+                    Stepper("Service alle \(serviceKmBinding.wrappedValue) km", value: serviceKmBinding, in: 0...60000, step: 1000)
+                } header: {
+                    Text("Service")
+                } footer: {
+                    Text("Wenn du keine festen Intervalle nutzt, kannst du diese Werte auch später anpassen.")
                 }
 
-                Section("Notizen") {
+                Section {
                     TextEditor(text: notesBinding)
                         .frame(minHeight: 120)
+                } header: {
+                    Text("Notizen")
+                } footer: {
+                    Text("Zum Beispiel Besonderheiten zu Gewicht, Gas oder wiederkehrenden Aufgaben.")
                 }
             }
             .navigationTitle(vehicle == nil ? "Fahrzeug anlegen" : "Fahrzeugprofil")
             .navigationBarTitleDisplayMode(.inline)
+            .scrollDismissesKeyboard(.interactively)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Schließen") { dismiss() }

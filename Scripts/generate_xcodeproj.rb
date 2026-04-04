@@ -22,16 +22,13 @@ def configure_target(target, bundle_id, test_host_path: nil)
     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
     config.build_settings['SWIFT_VERSION'] = '5.0'
     config.build_settings['SWIFT_EMIT_LOC_STRINGS'] = 'NO'
-    config.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
+    config.build_settings['GENERATE_INFOPLIST_FILE'] = 'NO'
     config.build_settings['CODE_SIGN_STYLE'] = 'Automatic'
     config.build_settings['TARGETED_DEVICE_FAMILY'] = '1'
     config.build_settings['MARKETING_VERSION'] = '1.0'
     config.build_settings['CURRENT_PROJECT_VERSION'] = '1'
     config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'minimal'
     config.build_settings['ASSETCATALOG_COMPILER_APPICON_NAME'] = 'AppIcon'
-    config.build_settings['ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME'] = ''
-    config.build_settings['INFOPLIST_KEY_UILaunchScreen_Generation'] = 'YES'
-    config.build_settings['INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone'] = 'UIInterfaceOrientationPortrait'
     config.build_settings['LD_RUNPATH_SEARCH_PATHS'] = '$(inherited) @executable_path/Frameworks'
     next unless test_host_path
 
@@ -78,9 +75,41 @@ def add_asset_catalogs(root_group:, target:, base_directory:)
   end
 end
 
+def add_project_files(root_group:, patterns:)
+  patterns.each do |pattern|
+    Dir.glob(File.join(ROOT, pattern)).sort.each do |absolute_path|
+      relative_path = Pathname.new(absolute_path).relative_path_from(Pathname.new(ROOT)).to_s
+      relative_directory = File.dirname(relative_path)
+      group = ensure_group(root_group, relative_directory.sub("#{root_group.display_name}/", ''))
+      group.files.find { |ref| ref.path == relative_path } || group.new_file(relative_path)
+    end
+  end
+end
+
+def apply_base_configurations(target:, debug_ref:, release_ref:)
+  target.build_configurations.each do |config|
+    config.base_configuration_reference = config.name == 'Debug' ? debug_ref : release_ref
+  end
+end
+
 add_files(project: project, root_group: source_group, target: app_target, base_directory: File.join(ROOT, 'CamperReady'))
 add_files(project: project, root_group: test_group, target: test_target, base_directory: File.join(ROOT, 'CamperReadyTests'))
 add_asset_catalogs(root_group: source_group, target: app_target, base_directory: File.join(ROOT, 'CamperReady'))
+add_project_files(root_group: source_group, patterns: ['CamperReady/Config/*.xcconfig', 'CamperReady/Support/*.plist', 'CamperReady/Support/*.xcprivacy'])
+add_project_files(root_group: test_group, patterns: ['CamperReadyTests/Support/*.plist'])
+
+shared_config_ref = source_group['Config']['Shared.xcconfig']
+app_debug_config_ref = source_group['Config']['App-Debug.xcconfig']
+app_release_config_ref = source_group['Config']['App-Release.xcconfig']
+tests_debug_config_ref = source_group['Config']['Tests-Debug.xcconfig']
+tests_release_config_ref = source_group['Config']['Tests-Release.xcconfig']
+
+project.build_configuration_list.build_configurations.each do |config|
+  config.base_configuration_reference = shared_config_ref
+end
+
+apply_base_configurations(target: app_target, debug_ref: app_debug_config_ref, release_ref: app_release_config_ref)
+apply_base_configurations(target: test_target, debug_ref: tests_debug_config_ref, release_ref: tests_release_config_ref)
 
 project.save
 

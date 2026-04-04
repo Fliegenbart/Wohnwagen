@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct FirstRunOnboardingView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var isPresented: Bool
     @Binding var hasDismissedOnboarding: Bool
 
     @State private var showVehicleSheet = false
+    @State private var hasAppeared = false
 
     var body: some View {
         NavigationStack {
@@ -13,26 +15,35 @@ struct FirstRunOnboardingView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         hero
 
-                        onboardingCard(
-                            title: "Bereitschaft statt Bauchgefühl",
-                            text: "Vor jeder Reise siehst du sofort, ob Gewicht, Dokumente, Wartung und Winter-/Wasserstatus wirklich abfahrbereit sind.",
-                            systemImage: "checkmark.shield.fill",
-                            tint: AppTheme.green
-                        )
+                        VStack(alignment: .leading, spacing: 14) {
+                            sectionHeading(
+                                title: "Was du hier erledigen kannst",
+                                subtitle: "Die App hilft dir dabei, vor jeder Fahrt schnell den Überblick zu bekommen."
+                            )
 
-                        onboardingCard(
-                            title: "Ehrliche Gewichtsbewertung",
-                            text: "CamperReady zeigt Reserve, Risiken und Wiege-Empfehlungen, ohne dir pseudo-genaue Achslasten vorzugaukeln.",
-                            systemImage: "scalemass.fill",
-                            tint: AppTheme.yellow
-                        )
+                            onboardingLine(
+                                title: "Bereitschaft statt Bauchgefühl",
+                                text: "Vor jeder Reise siehst du sofort, ob Gewicht, Dokumente, Wartung und Wasserzustand passen.",
+                                systemImage: "checkmark.shield.fill",
+                                tint: AppTheme.green
+                            )
 
-                        onboardingCard(
-                            title: "Alles an einem Ort",
-                            text: "Checklisten, Wartung, Fristen, Kosten und private Ortsnotizen bleiben lokal auf deinem iPhone und schnell erreichbar.",
-                            systemImage: "square.grid.2x2.fill",
-                            tint: AppTheme.accent
-                        )
+                            onboardingLine(
+                                title: "Ehrliche Gewichtsbewertung",
+                                text: "Du siehst Reserve, Risiken und wann Wiegen sinnvoll ist, ohne falsche Genauigkeit.",
+                                systemImage: "scalemass.fill",
+                                tint: AppTheme.yellow
+                            )
+
+                            onboardingLine(
+                                title: "Alles an einem Ort",
+                                text: "Checklisten, Wartung, Fristen, Kosten und eigene Platznotizen bleiben lokal auf deinem iPhone.",
+                                systemImage: "square.grid.2x2.fill",
+                                tint: AppTheme.accent
+                            )
+                        }
+                        .opacity(hasAppeared ? 1 : 0.01)
+                        .offset(y: hasAppeared ? 0 : 18)
 
                         VStack(spacing: 12) {
                             Button {
@@ -61,6 +72,8 @@ struct FirstRunOnboardingView: View {
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(AppTheme.mutedInk)
                         }
+                        .opacity(hasAppeared ? 1 : 0.01)
+                        .offset(y: hasAppeared ? 0 : 22)
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 12)
@@ -69,6 +82,16 @@ struct FirstRunOnboardingView: View {
             }
             .navigationTitle("Willkommen")
             .navigationBarTitleDisplayMode(.inline)
+            .task {
+                guard !hasAppeared else { return }
+                if reduceMotion {
+                    hasAppeared = true
+                } else {
+                    withAnimation(.easeOut(duration: 0.75)) {
+                        hasAppeared = true
+                    }
+                }
+            }
         }
         .sheet(isPresented: $showVehicleSheet) {
             VehicleProfileView(vehicle: nil)
@@ -76,76 +99,147 @@ struct FirstRunOnboardingView: View {
     }
 
     private var hero: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Text("CamperReady")
-                .font(.caption.weight(.bold))
-                .textCase(.uppercase)
-                .tracking(0.8)
-                .foregroundStyle(.white.opacity(0.78))
+        ZStack(alignment: .bottomLeading) {
+            onboardingBackground
 
-            Text("In 60 Sekunden wissen,\nob du losfahren kannst.")
-                .font(.system(size: 34, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("CamperReady")
+                        .font(.system(size: 36, weight: .black, design: .serif))
+                        .foregroundStyle(.white)
+                        Text("Schnell wissen, ob alles passt")
+                        .font(.caption.weight(.bold))
+                        .textCase(.uppercase)
+                        .tracking(1.4)
+                        .foregroundStyle(.white.opacity(0.78))
+                }
 
-            Text("Richte einmal dein Fahrzeug ein und nutze danach ein persönliches Bereitschafts-Cockpit statt verstreuter Notizen und Checklisten.")
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.white.opacity(0.84))
+                Spacer(minLength: 24)
 
-            HStack(spacing: 10) {
-                heroPill(title: "Modul 1", value: "Gewicht")
-                heroPill(title: "Modul 2", value: "Fristen")
-                heroPill(title: "Modul 3", value: "Abfahrt")
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("In 60 Sekunden wissen,\nob du losfahren kannst.")
+                        .font(.system(size: 38, weight: .heavy, design: .rounded))
+                        .foregroundStyle(.white)
+                        .minimumScaleFactor(0.74)
+
+                    Text("Richte dein Fahrzeug einmal ein. Danach prüfst du vor jeder Fahrt in weniger als einer Minute, ob noch etwas fehlt.")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.84))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                HStack(spacing: 14) {
+                    onboardingMeta(label: "Gewicht", systemImage: "scalemass")
+                    onboardingMeta(label: "Fristen", systemImage: "doc.text")
+                    onboardingMeta(label: "Abfahrt", systemImage: "checklist")
+                }
             }
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [AppTheme.accent.opacity(0.96), Color(red: 0.23, green: 0.69, blue: 0.95)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 30, style: .continuous)
-        )
-        .shadow(color: AppTheme.accent.opacity(0.28), radius: 28, x: 0, y: 16)
+        .padding(.horizontal, 22)
+        .padding(.vertical, 24)
+        .frame(maxWidth: .infinity, minHeight: 470, maxHeight: 540, alignment: .bottomLeading)
+        .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
+        .opacity(hasAppeared ? 1 : 0.01)
+        .offset(y: hasAppeared ? 0 : 20)
     }
 
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2.weight(.bold))
-                .textCase(.uppercase)
-                .foregroundStyle(.white.opacity(0.72))
-            Text(value)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(.white)
+    private var onboardingBackground: some View {
+        ZStack {
+            Rectangle()
+                .fill(AppTheme.roadHeroGradient)
+
+            Rectangle()
+                .fill(AppTheme.roadFogGradient)
+
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [AppTheme.asphalt.opacity(0.88), Color.black.opacity(0.98)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(height: 190)
+            }
+
+            VStack {
+                HStack {
+                    Spacer()
+                    Image(systemName: "car.side.air.circulate.fill")
+                        .font(.system(size: 152, weight: .black))
+                        .foregroundStyle(.white.opacity(0.16))
+                        .padding(.trailing, 8)
+                        .padding(.top, 18)
+                }
+                Spacer()
+            }
+
+            VStack {
+                Spacer()
+                HStack(spacing: 26) {
+                    ForEach(0..<5, id: \.self) { _ in
+                        Capsule()
+                            .fill(Color.white.opacity(0.50))
+                            .frame(width: 34, height: 4)
+                    }
+                }
+                .offset(y: -28)
+            }
+
+            LinearGradient(
+                colors: [Color.clear, AppTheme.accent.opacity(0.20)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         }
+    }
+
+    private func onboardingMeta(label: String, systemImage: String) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: systemImage)
+                .font(.caption.weight(.bold))
+            Text(label)
+                .lineLimit(1)
+        }
+        .font(.footnote.weight(.semibold))
+        .foregroundStyle(.white.opacity(0.88))
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(.ultraThinMaterial.opacity(0.58), in: Capsule())
     }
 
-    private func onboardingCard(title: String, text: String, systemImage: String, tint: Color) -> some View {
+    private func sectionHeading(title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.system(.title3, design: .serif, weight: .bold))
+                .foregroundStyle(AppTheme.ink)
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(AppTheme.mutedInk)
+        }
+    }
+
+    private func onboardingLine(title: String, text: String, systemImage: String, tint: Color) -> some View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: systemImage)
                 .font(.headline)
                 .foregroundStyle(tint)
-                .frame(width: 38, height: 38)
-                .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.headline.weight(.semibold))
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
                 Text(text)
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard()
+        .padding(.vertical, 10)
     }
 }
 

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D732CAE101F0846505B1429D"
+               BlueprintIdentifier = "7896BA2CD8431A62F183DC21"
                BuildableName = "CamperReady.app"
                BlueprintName = "CamperReady"
                ReferencedContainer = "container:CamperReady.xcodeproj">
@@ -28,7 +28,7 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E426F0C1AD3ED43D49D64E27"
+               BlueprintIdentifier = "F13D04BB17CFB06D1E392F9B"
                BuildableName = "CamperReadyTests.xctest"
                BlueprintName = "CamperReadyTests"
                ReferencedContainer = "container:CamperReady.xcodeproj">
@@ -46,7 +46,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E426F0C1AD3ED43D49D64E27"
+               BlueprintIdentifier = "F13D04BB17CFB06D1E392F9B"
                BuildableName = "CamperReadyTests.xctest"
                BlueprintName = "CamperReadyTests"
                ReferencedContainer = "container:CamperReady.xcodeproj">

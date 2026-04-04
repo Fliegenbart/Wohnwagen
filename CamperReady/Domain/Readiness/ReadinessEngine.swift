@@ -144,7 +144,7 @@ enum ReadinessEngine {
                 estimatedGrossWeightKg: nil,
                 remainingMarginKg: nil,
                 summary: "Gewicht unvollständig",
-                warnings: ["zGG oder Leergewicht fehlt. Die Anzeige bleibt bewusst vorsichtig."],
+                warnings: ["zGG oder Leergewicht fehlt. Darum ist die Einschätzung noch ungenau."],
                 nextAction: "zGG und gemessenes Leergewicht nachtragen",
                 contributors: (input.packingItems + input.passengers).sorted(by: { $0.weightKg > $1.weightKg }),
                 axleRisk: .elevated,
@@ -231,7 +231,7 @@ enum ReadinessEngine {
                 title: "Gas & Dokumente",
                 status: .yellow,
                 summary: "Noch keine Fristen hinterlegt",
-                reasons: ["Dokumente und Prüfungen sind editierbar und bewusst keine Rechtsberatung."],
+                reasons: ["Du kannst Fristen und Nachweise selbst anpassen."],
                 nextAction: "Mindestens HU, Versicherung und Gasprüfung anlegen"
             )
         }
@@ -271,7 +271,7 @@ enum ReadinessEngine {
                 title: "Gas & Dokumente",
                 status: .green,
                 summary: "\(farthest.0.title) gültig bis \(farthest.0.validUntil?.monthYearString() ?? "")",
-                reasons: ["Regeln können sich ändern. Quellenhinweise bleiben editierbar."],
+                reasons: ["Prüfe wichtige Fristen trotzdem regelmäßig selbst."],
                 nextAction: "Nachweise aktuell halten"
             )
         }
@@ -327,7 +327,7 @@ enum ReadinessEngine {
                 title: "Wartung",
                 status: .yellow,
                 summary: "\(soon.0.title) in \(max(soon.1, 0)) Tagen fällig",
-                reasons: ["Wartung naht. Reiseplanung und Werkstattfenster abstimmen."],
+                reasons: ["Dieser Termin rückt näher."],
                 nextAction: "Termin vormerken"
             )
         }
@@ -357,7 +357,7 @@ enum ReadinessEngine {
                 title: "Wasser / Winter",
                 status: .yellow,
                 summary: "Kein Modus aktiv",
-                reasons: ["Abfahrts- oder Wintermodus wurde noch nicht gestartet."],
+                reasons: ["Du hast noch keine passende Checkliste gestartet."],
                 nextAction: "Passenden Modus starten"
             )
         }
@@ -391,7 +391,7 @@ enum ReadinessEngine {
             title: "Wasser / Winter",
             status: .green,
             summary: "\(latest.mode.title) komplett",
-            reasons: ["Letzter operativer Modus wurde abgeschlossen."],
+                reasons: ["Die letzte passende Checkliste ist erledigt."],
             nextAction: "Status bei Wetterumschwung neu prüfen"
         )
     }
@@ -410,7 +410,7 @@ enum ReadinessEngine {
                 status: .yellow,
                 summary: "Keine aktive Reise",
                 reasons: ["Fixkosten \(annualFixedTotal.euroString) pro Jahr erfasst."],
-                nextAction: "Reise anlegen, um variable Kosten zu tracken"
+                nextAction: "Reise anlegen, um Kosten für unterwegs festzuhalten"
             )
         }
 

@@ -5,8 +5,8 @@ import UserNotifications
 
 struct AppInfoView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.openURL) private var openURL
-    @Query(sort: \DocumentRecord.validUntil) private var documents: [DocumentRecord]
 
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @State private var isUpdatingNotifications = false
@@ -21,8 +21,8 @@ struct AppInfoView: View {
                         SectionCard(title: "App") {
                             VStack(alignment: .leading, spacing: 10) {
                                 infoRow(title: "Version", value: AppReleaseConfiguration.appVersionDescription)
-                                infoRow(title: "Betrieb", value: "Offline-first, lokal auf diesem iPhone")
-                                infoRow(title: "Region", value: "Deutsch als Primärsprache, DACH-ready")
+                                infoRow(title: "Speicherort", value: "Lokal auf diesem iPhone")
+                                infoRow(title: "Sprache", value: "Deutsch")
                             }
                         }
 
@@ -45,7 +45,7 @@ struct AppInfoView: View {
                                     .disabled(isUpdatingNotifications)
                                 }
 
-                                Text("Dokumenten-Erinnerungen bleiben optional und funktionieren auch dann nicht blockierend, wenn Mitteilungen abgelehnt wurden.")
+                                Text("Erinnerungen sind optional. Die App funktioniert auch ohne Mitteilungen weiter.")
                                     .font(.footnote)
                                     .foregroundStyle(AppTheme.mutedInk)
                             }
@@ -88,7 +88,7 @@ struct AppInfoView: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Release-Info")
+                    Text("Info")
                         .font(.caption.weight(.bold))
                         .textCase(.uppercase)
                         .tracking(0.8)
@@ -96,7 +96,7 @@ struct AppInfoView: View {
                     Text("CamperReady")
                         .font(.system(size: 30, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
-                    Text("Persönliches Bereitschafts-Cockpit statt Camping-Marktplatz.")
+                    Text("Alles Wichtige zu App, Erinnerungen und Kontakt.")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.white.opacity(0.82))
                 }
@@ -112,7 +112,7 @@ struct AppInfoView: View {
 
             HStack(spacing: 10) {
                 heroPill(title: "Version", value: AppReleaseConfiguration.appVersionDescription)
-                heroPill(title: "Support", value: "Vorbereitet")
+                heroPill(title: "Kontakt", value: "Per E-Mail")
                 heroPill(title: "Privatsphäre", value: "Lokal")
             }
         }
@@ -171,7 +171,7 @@ struct AppInfoView: View {
                     .font(.subheadline)
                     .multilineTextAlignment(.trailing)
             } else {
-                Text("Vor Release ergänzen")
+                Text("Noch nicht hinterlegt")
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.mutedInk)
             }
@@ -211,7 +211,7 @@ struct AppInfoView: View {
         }
 
         notificationStatus = await NotificationManager.shared.notificationStatus()
-        await NotificationManager.shared.rescheduleDocumentRemindersIfAuthorized(documents: documents)
+        await NotificationManager.shared.rescheduleAllIfAuthorized(context: modelContext)
     }
 }
 

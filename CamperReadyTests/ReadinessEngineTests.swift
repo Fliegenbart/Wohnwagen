@@ -88,4 +88,43 @@ final class ReadinessEngineTests: XCTestCase {
 
         XCTAssertEqual(ReadinessEngine.annualizedAmount(for: fixedCost), 960, accuracy: 0.001)
     }
+
+    func testCSVRowEscapesDelimitersAndQuotes() {
+        let row = ExportService.csvRow(["Hallo;Welt", #"=SUM(A1:A2)"#, #"A "Quote""#])
+
+        XCTAssertEqual(row, "\"Hallo;Welt\";\"'=SUM(A1:A2)\";\"A \"\"Quote\"\"\"")
+    }
+
+    func testCSVFieldFlattensNewlines() {
+        let field = ExportService.csvField("Zeile 1\nZeile 2")
+
+        XCTAssertEqual(field, "\"Zeile 1 Zeile 2\"")
+    }
+
+    func testPlaceDraftCannotSaveWithBlankTitleOrInvalidCoordinates() {
+        var draft = PlaceDraft(place: nil)
+        draft.title = "   "
+        draft.latitude = 91
+        draft.longitude = 13.4
+
+        XCTAssertFalse(draft.canSave)
+
+        draft.title = "Ruhiger Stellplatz"
+        draft.latitude = 48.1
+        draft.longitude = 190
+
+        XCTAssertFalse(draft.canSave)
+    }
+
+    func testPlaceDraftNormalizesRatingToValidRange() {
+        var draft = PlaceDraft(place: nil)
+        draft.personalRating = 8
+        XCTAssertEqual(draft.normalizedRating, 5)
+
+        draft.personalRating = 0
+        XCTAssertNil(draft.normalizedRating)
+
+        draft.personalRating = 4
+        XCTAssertEqual(draft.normalizedRating, 4)
+    }
 }

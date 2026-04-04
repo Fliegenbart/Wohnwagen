@@ -77,3 +77,4 @@ For a production-ready rollout, sample data should stay disabled by default. See
 
 - `Docs/App-Store-Launch-Checklist.md`
 - `Docs/App-Store-Metadata.md`
+- `Docs/Frontend-Foundation.md`

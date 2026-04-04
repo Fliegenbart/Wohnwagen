@@ -19,5 +19,6 @@ struct SectionCard<Content: View>: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassCard()
+        .accessibilityElement(children: .contain)
     }
 }

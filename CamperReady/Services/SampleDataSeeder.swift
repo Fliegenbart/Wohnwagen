@@ -41,6 +41,7 @@ enum SampleDataSeeder {
             notes: "Schnelle Frühlingsrunde mit zwei Fahrrädern."
         )
         context.insert(trip)
+        vehicle.trips.append(trip)
 
         let loadSettings = TripLoadSettings(
             vehicleID: vehicle.id,
@@ -55,12 +56,14 @@ enum SampleDataSeeder {
             notes: "Mit Heckträger und Werkzeugkiste."
         )
         context.insert(loadSettings)
+        vehicle.loadSettings.append(loadSettings)
 
         let passengers = [
             PassengerLoad(vehicleID: vehicle.id, tripID: trip.id, name: "David", weightKg: 84, isDriver: true),
             PassengerLoad(vehicleID: vehicle.id, tripID: trip.id, name: "Lea", weightKg: 68)
         ]
         passengers.forEach(context.insert)
+        vehicle.passengers.append(contentsOf: passengers)
 
         let packingItems = [
             PackingItem(vehicleID: vehicle.id, tripID: trip.id, name: "Geschirrbox", category: .kitchen, quantity: 1, unitWeightKg: 18, isPersistent: true),
@@ -73,11 +76,13 @@ enum SampleDataSeeder {
             PackingItem(vehicleID: vehicle.id, tripID: trip.id, name: "Kleidung Wochenende", category: .clothing, quantity: 2, unitWeightKg: 6, isPersistent: false)
         ]
         packingItems.forEach(context.insert)
+        vehicle.packingItems.append(contentsOf: packingItems)
 
         let departureTemplate = ChecklistTemplateLibrary.makeChecklist(mode: .departure, vehicleID: vehicle.id, tripID: trip.id)
         departureTemplate.0.state = .inProgress
         departureTemplate.0.isPinned = true
         context.insert(departureTemplate.0)
+        vehicle.checklists.append(departureTemplate.0)
         departureTemplate.1.enumerated().forEach { index, item in
             if index < 7 { item.isCompleted = true }
             context.insert(item)
@@ -87,6 +92,7 @@ enum SampleDataSeeder {
         winterTemplate.0.state = .inProgress
         winterTemplate.0.updatedAt = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
         context.insert(winterTemplate.0)
+        vehicle.checklists.append(winterTemplate.0)
         winterTemplate.1.enumerated().forEach { index, item in
             if index < 8 { item.isCompleted = true }
             context.insert(item)
@@ -126,6 +132,7 @@ enum SampleDataSeeder {
             )
         ]
         maintenanceEntries.forEach(context.insert)
+        vehicle.maintenanceEntries.append(contentsOf: maintenanceEntries)
 
         let documents = [
             DocumentRecord(
@@ -163,6 +170,7 @@ enum SampleDataSeeder {
             )
         ]
         documents.forEach(context.insert)
+        vehicle.documents.append(contentsOf: documents)
 
         let places = [
             PlaceNote(
@@ -189,6 +197,7 @@ enum SampleDataSeeder {
             )
         ]
         places.forEach(context.insert)
+        vehicle.places.append(contentsOf: places)
 
         let costs = [
             CostEntry(vehicleID: vehicle.id, tripID: trip.id, date: Calendar.current.date(byAdding: .day, value: -1, to: .now) ?? .now, category: .fuel, amountEUR: 96, odometerKm: 42000, liters: 52, notes: "Diesel vor Abfahrt"),
@@ -199,6 +208,7 @@ enum SampleDataSeeder {
             CostEntry(vehicleID: vehicle.id, date: .now, category: .other, amountEUR: 168, notes: "Jahressteuer", isRecurringFixedCost: true, recurrence: .yearly)
         ]
         costs.forEach(context.insert)
+        vehicle.costs.append(contentsOf: costs)
 
         try context.save()
     }

@@ -12,6 +12,7 @@ final class ChecklistRun {
     var updatedAt: Date
     var stateRaw: String
     var isPinned: Bool
+    @Relationship(deleteRule: .cascade) var items: [ChecklistItemRecord] = []
 
     init(
         id: UUID = UUID(),
