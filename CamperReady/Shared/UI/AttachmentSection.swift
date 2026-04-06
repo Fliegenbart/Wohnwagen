@@ -59,7 +59,7 @@ struct AttachmentSection: View {
         } footer: {
             Text(helperText)
         }
-        .fileImporter(isPresented: $isImportingFile, allowedContentTypes: [.item]) { result in
+        .fileImporter(isPresented: $isImportingFile, allowedContentTypes: AttachmentStore.allowedContentTypes) { result in
             switch result {
             case .success(let url):
                 importFile(from: url)
@@ -101,7 +101,14 @@ struct AttachmentSection: View {
                 errorMessage = "Das Foto konnte nicht gelesen werden."
                 return
             }
-            storedPath = try attachmentStore.replaceAttachment(currentPath: storedPath, with: data, fileName: "foto.jpg")
+            let contentType = item.supportedContentTypes.first(where: { $0.conforms(to: .image) }) ?? .jpeg
+            let fileExtension = contentType.preferredFilenameExtension ?? "jpg"
+            storedPath = try attachmentStore.replaceAttachment(
+                currentPath: storedPath,
+                with: data,
+                fileName: "foto.\(fileExtension)",
+                contentType: contentType
+            )
             selectedPhoto = nil
         } catch {
             errorMessage = "Das Foto konnte nicht gespeichert werden."

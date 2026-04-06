@@ -221,7 +221,7 @@ struct ChecklistsView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .serif))
+                            .font(.system(size: 34, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                         Text("Checklisten")
                             .font(.caption.weight(.bold))
@@ -355,7 +355,7 @@ struct ChecklistsView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(.title3, design: .serif, weight: .bold))
+                    .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundStyle(AppTheme.ink)
                 Text(subtitle)
                     .font(.subheadline)
@@ -616,13 +616,20 @@ private struct ChecklistItemFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Punkt") {
-                    TextField("Titel", text: $draft.title)
-                    TextField("Details", text: $draft.details, axis: .vertical)
-                        .lineLimit(3, reservesSpace: true)
-                    Toggle("Pflichtpunkt", isOn: $draft.isRequired)
-                    Toggle("Für Bereitschaft relevant", isOn: $draft.contributesToReadiness)
+            RoadSheetScaffold(
+                eyebrow: "Checkliste",
+                title: existingItem == nil ? "Punkt ergänzen" : "Punkt anpassen",
+                subtitle: "Halte fest, was bei diesem Modus wirklich geprüft werden soll.",
+                systemImage: "checklist.checked"
+            ) {
+                Form {
+                    Section("Punkt") {
+                        TextField("Titel", text: $draft.title)
+                        TextField("Details", text: $draft.details, axis: .vertical)
+                            .lineLimit(3, reservesSpace: true)
+                        Toggle("Pflichtpunkt", isOn: $draft.isRequired)
+                        Toggle("Für Bereitschaft relevant", isOn: $draft.contributesToReadiness)
+                    }
                 }
             }
             .navigationTitle(existingItem == nil ? "Punkt hinzufügen" : "Punkt bearbeiten")

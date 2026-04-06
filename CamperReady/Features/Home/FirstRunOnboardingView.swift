@@ -105,7 +105,7 @@ struct FirstRunOnboardingView: View {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("CamperReady")
-                        .font(.system(size: 36, weight: .black, design: .serif))
+                        .font(.system(size: 36, weight: .black, design: .rounded))
                         .foregroundStyle(.white)
                         Text("Schnell wissen, ob alles passt")
                         .font(.caption.weight(.bold))
@@ -214,7 +214,7 @@ struct FirstRunOnboardingView: View {
     private func sectionHeading(title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.system(.title3, design: .serif, weight: .bold))
+                .font(.system(.title3, design: .rounded, weight: .bold))
                 .foregroundStyle(AppTheme.ink)
             Text(subtitle)
                 .font(.subheadline)

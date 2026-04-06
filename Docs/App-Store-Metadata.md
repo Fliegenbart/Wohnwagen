@@ -1,104 +1,107 @@
-# CamperReady App Store Metadata Draft
+# CamperReady App-Store-Metadaten
 
-## Basis
+Stand: 6. April 2026
 
-- App Name: `CamperReady`
-- Primary Language: `Deutsch (Deutschland)`
-- Primary Category: `Utilities`
-- Secondary Category: `Travel`
+## Veröffentlichung
 
-## Name
+- App-Name: `CamperReady`
+- Anbieter: `David Wegener Marketing Consulting GmbH`
+- Anschrift: `Stockmeyerstraße 43, 20457 Hamburg`
+- Hauptsprache: `Deutsch (Deutschland)`
+- Plattform: `iPhone`
+- iPad-Version: `nein`
+- Kategorie 1: `Dienstprogramme`
+- Kategorie 2: `Reisen`
+- Preisziel: `0,99 €`
 
-- `CamperReady`
+Hinweis:
 
-## Subtitle
+- In App Store Connect wird der Preis nicht als freier Euro-Wert eingetragen, sondern über ein Preislevel. Für Deutschland soll das Preislevel gewählt werden, das `0,99 €` entspricht.
 
-- `Bereit für die nächste Abfahrt`
+## Öffentliche Links
+
+- Datenschutz: `https://www.wegener-gmbh.com/datenschutz-camperready`
+- Support: `https://www.wegener-gmbh.com`
+- Website: `https://www.wegener-gmbh.com`
+- Support-E-Mail: `mail@wegener-gmbh.com`
+
+## App Name
+
+`CamperReady`
+
+## Untertitel
+
+`Abfahrt, Gewicht und Fristen im Blick`
 
 ## Promotional Text
 
-- `CamperReady hilft privaten Camper-Besitzer:innen, Gewicht, Checklisten, Fristen, Wartung und Kosten an einem Ort im Blick zu behalten.`
+`CamperReady hilft privaten Wohnmobil- und Campervan-Besitzer:innen, vor jeder Reise Gewicht, Fristen, Checklisten, Wartung und Kosten an einem Ort im Blick zu behalten.`
 
-## Description
+## Beschreibung
 
-`CamperReady` ist dein persönliches Bereitschafts-Cockpit für Campervan und Wohnmobil.
+`CamperReady` ist dein persönliches Cockpit für die Abfahrtsbereitschaft deines Campers.
 
-Statt Campingplätze, Community oder Buchungen in den Mittelpunkt zu stellen, beantwortet die App vor jeder Reise die praktische Frage:
+Die App richtet sich an private Besitzer:innen von Campervan oder Wohnmobil in Deutschland, Österreich und der Schweiz. Statt Campingplätze, Buchungen oder Community-Funktionen in den Mittelpunkt zu stellen, hilft dir CamperReady bei einer einfachen Frage:
 
 `Kann ich jetzt losfahren?`
 
-Mit CamperReady behältst du im Blick:
+Mit CamperReady kannst du:
 
-- Fahrbereitschaft und offene Blocker
-- Gewicht und Restreserve ohne Scheingenauigkeit
-- Abfahrts-, Winter- und Betriebs-Checklisten
-- Wartung, Fristen und Dokumente
-- persönliche Ortsnotizen
-- Reise- und Jahreskosten
+- die Abfahrtsbereitschaft auf einen Blick prüfen
+- Gewicht und Restreserve ohne Scheingenauigkeit im Blick behalten
+- Abfahrts-, Winter- und Betriebs-Checklisten nutzen
+- Wartung, Dokumente und Fristen verwalten
+- persönliche Ortsnotizen speichern
+- Reise- und Jahreskosten nachvollziehen
 
-CamperReady arbeitet lokal auf deinem iPhone und ist auf private Besitzer:innen in Deutschland, Österreich und der Schweiz ausgerichtet.
+CamperReady arbeitet lokal auf deinem iPhone. Es gibt kein Benutzerkonto und keinen Zwang zu einer Online-Verbindung.
 
 Wichtige Hinweise:
 
-- Die App ist eine persönliche Organisations- und Erinnerungshilfe.
-- Sie ersetzt keine technische Prüfung, keine Wiegung und keine Rechtsberatung.
-- Vorschriften und Fristen können sich ändern.
+- CamperReady ist eine persönliche Organisations- und Erinnerungshilfe.
+- Die App ersetzt keine technische Prüfung, keine Wiegung und keine Rechtsberatung.
+- Prüffristen, Vorschriften und regionale Anforderungen können sich ändern.
 
 ## Keywords
 
-- camper
-- wohnmobil
-- campervan
-- abfahrt
-- checkliste
-- gewicht
-- wartung
-- dokumente
-- gasprüfung
-- kosten
+`camper,wohnmobil,campervan,checkliste,abfahrt,gewicht,wartung,dokumente,gaskontrolle,kosten`
 
-## Support
+## Review Notes
 
-Vor Release ersetzen:
+`CamperReady` ist eine lokale Organisations- und Erinnerungshilfe für private Camper-Besitzer:innen. Die App bietet keine Buchung, keine öffentliche Stellplatzsuche und keine Community-Funktionen. Hinweise zu Dokumenten, Fristen, Gasprüfung und Winterbetrieb dienen nur der persönlichen Erinnerung und stellen keine Rechtsberatung oder technische Freigabe dar.
 
-- Support URL: `REPLACE_ME`
-- Privacy Policy URL: `REPLACE_ME`
-- Marketing URL: `optional`
-- Support E-Mail: `support@camperready.app`
+## Preis und Vertrieb
 
-## Screenshot Order
+- Bezahl-App: `ja`
+- Zielpreis in Deutschland: `0,99 €`
+- In-App-Käufe: `nein`
+- Abos: `nein`
 
-Empfohlene Reihenfolge:
+## Geräte und Screenshots
 
-1. Home Cockpit
+- Nur `iPhone`
+- Keine iPad-Screenshots nötig
+
+Empfohlene Screenshot-Reihenfolge:
+
+1. Home
 2. Gewicht
 3. Checklisten
 4. Logbuch
 5. Kosten
 
-## App Privacy Draft
+## App Privacy Arbeitsstand
 
-Nur als Arbeitsgrundlage. Vor Einreichung gegen den echten finalen Build prüfen.
+Auf Basis des aktuellen Projekts ist der wahrscheinlichste Stand:
 
-Aktueller wahrscheinlicher Stand:
-
-- kein Account-System
 - kein Tracking
-- keine Cloud-Synchronisierung
-- keine externe Analytics
+- kein Konto-System
 - keine Werbe-SDKs
+- keine externe Analytics
+- keine Cloud-Synchronisierung
 
-Arbeitsannahme:
+Arbeitsannahme für App Store Connect:
 
-- möglicherweise `No, we do not collect data from this app`
+- `No, we do not collect data from this app`
 
-Neu bewerten, sobald hinzukommt:
-
-- Analytics
-- Crash-Reporting
-- Cloud-Backup
-- externe APIs mit personenbeziehbaren Daten
-
-## Review Notes Draft
-
-`CamperReady` ist eine lokale Organisations- und Erinnerungshilfe für private Camper-Besitzer:innen. Die App bietet keine öffentliche Campingplatzsuche, keine Buchung und keine Community-Funktionen. Hinweise zu Dokumenten, Gasprüfung und Fristen dienen ausschließlich als persönliche Erinnerung und stellen keine Rechtsberatung dar.
+Das muss vor der echten Einreichung noch einmal gegen den finalen Build geprüft werden.

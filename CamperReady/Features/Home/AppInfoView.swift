@@ -23,6 +23,7 @@ struct AppInfoView: View {
                                 infoRow(title: "Version", value: AppReleaseConfiguration.appVersionDescription)
                                 infoRow(title: "Speicherort", value: "Lokal auf diesem iPhone")
                                 infoRow(title: "Sprache", value: "Deutsch")
+                                infoRow(title: "Anbieter", value: AppReleaseConfiguration.providerName)
                             }
                         }
 
@@ -52,9 +53,14 @@ struct AppInfoView: View {
                         }
 
                         SectionCard(title: "Rechtliches") {
-                            Text(AppReleaseConfiguration.legalDisclaimer)
-                                .font(.footnote)
-                                .foregroundStyle(AppTheme.ink)
+                            VStack(alignment: .leading, spacing: 10) {
+                                infoRow(title: "Anbieter", value: AppReleaseConfiguration.providerName)
+                                infoRow(title: "Adresse", value: AppReleaseConfiguration.providerAddress)
+
+                                Text(AppReleaseConfiguration.legalDisclaimer)
+                                    .font(.footnote)
+                                    .foregroundStyle(AppTheme.ink)
+                            }
                         }
 
                         SectionCard(title: "Links") {

@@ -202,7 +202,7 @@ final class WorldClassUpgradeTests: XCTestCase {
     func testAttachmentStoreImportsAndDeletesFile() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         let store = AttachmentStore(rootDirectory: root)
-        let source = root.appendingPathComponent("source.txt")
+        let source = root.appendingPathComponent("source.pdf")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         try Data("Beleg".utf8).write(to: source)
 
@@ -214,6 +214,30 @@ final class WorldClassUpgradeTests: XCTestCase {
         try store.deleteAttachment(at: storedPath)
 
         XCTAssertFalse(FileManager.default.fileExists(atPath: storedURL.path))
+    }
+
+    func testAttachmentStoreRejectsUnsupportedFileTypes() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let store = AttachmentStore(rootDirectory: root)
+        let source = root.appendingPathComponent("notiz.txt")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        try Data("Nur Text".utf8).write(to: source)
+
+        XCTAssertThrowsError(try store.importFile(from: source)) { error in
+            XCTAssertEqual(error as? AttachmentStoreError, .unsupportedType)
+        }
+    }
+
+    func testPersistenceControllerPreparesProtectedStoreDirectory() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+
+        let storeURL = try PersistenceController.preparePersistentStoreLocation(baseDirectory: root)
+        try Data().write(to: storeURL)
+        XCTAssertNoThrow(try PersistenceController.protectPersistentStoreArtifacts(at: storeURL))
+
+        XCTAssertEqual(storeURL.lastPathComponent, "default.store")
+        XCTAssertEqual(storeURL.deletingLastPathComponent().lastPathComponent, PersistenceController.storeDirectoryName)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: storeURL.deletingLastPathComponent().path))
     }
 
     func testExportServiceCreatesVehicleArchiveJSON() throws {

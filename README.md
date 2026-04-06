@@ -60,7 +60,7 @@ The models use UUID links instead of complex object graphs to keep the starter i
 - iOS 17+ is acceptable and portrait-first on iPhone is enough for the starter MVP
 - One primary vehicle is the MVP default even though the schema could later support multiple vehicles
 - A simple form-based vehicle editor is sufficient for V1 onboarding depth
-- Attachments are modeled as local file path placeholders for now; a full picker/import flow can be added next
+- Attachments now support local import for images and files through an app-owned local storage flow
 - Document presets remain editable data records rather than fixed legal truth
 - Weight results stay conservative whenever essential values are missing
 - Cost exports and dashboard PDF are starter scaffolds, not finalized report templates
@@ -77,4 +77,15 @@ For a production-ready rollout, sample data should stay disabled by default. See
 
 - `Docs/App-Store-Launch-Checklist.md`
 - `Docs/App-Store-Metadata.md`
+- `Docs/CamperReady-Veroeffentlichungspaket.md`
+- `Docs/CamperReady-Support-Seite.md`
 - `Docs/Frontend-Foundation.md`
+- `Docs/CamperReady-Release-Status.md`
+- `Docs/TestFlight-Upload-Guide.md`
+
+## Release helpers
+
+- `bash Scripts/release_preflight.sh`
+  - checks simulator build, tests, and unsigned release archive
+- `DEVELOPMENT_TEAM=DEINTEAMID bash Scripts/archive_for_testflight.sh`
+  - creates a signed release archive for Xcode Organizer and TestFlight

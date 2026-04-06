@@ -247,7 +247,7 @@ struct CostsView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .serif))
+                            .font(.system(size: 34, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                         Text("Kosten")
                             .font(.caption.weight(.bold))
@@ -421,7 +421,7 @@ struct CostsView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(.title3, design: .serif, weight: .bold))
+                    .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundStyle(AppTheme.ink)
                 Text(subtitle)
                     .font(.subheadline)
@@ -617,50 +617,57 @@ private struct TripFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    TextField("z. B. Osterwochenende am Chiemsee", text: $draft.title)
-                    TextField("Ziel oder Route", text: $draft.destinationSummary)
-                    DatePicker("Start", selection: $draft.startDate, displayedComponents: .date)
-                } header: {
-                    Text("Reise")
-                } footer: {
-                    Text("Nutze einen klaren Namen, damit du Kosten und Notizen später schnell wiederfindest.")
-                }
-
-                Section {
-                    Toggle("Enddatum eintragen", isOn: $draft.hasEndDate.animation())
-                    if draft.hasEndDate {
-                        DatePicker("Ende", selection: $draft.endDate, displayedComponents: .date)
-                    }
-
-                    Toggle("Geplante Strecke eintragen", isOn: $draft.hasPlannedDistance.animation())
-                    if draft.hasPlannedDistance {
-                        TextField("Kilometer", value: $draft.plannedDistanceKm, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-
-                    Toggle("Als aktive Reise verwenden", isOn: $draft.isActive)
-                } header: {
-                    Text("Planung")
-                } footer: {
-                    Text("Es sollte immer nur eine Reise aktiv sein. Wenn du diese Reise aktiv setzt, wird eine andere aktive Reise beendet.")
-                }
-
-                Section("Notizen") {
-                    TextEditor(text: $draft.notes)
-                        .frame(minHeight: 120)
-                }
-
-                if existingTrip != nil {
+            RoadSheetScaffold(
+                eyebrow: "Kosten",
+                title: existingTrip == nil ? "Reise anlegen" : "Reise anpassen",
+                subtitle: "Ein klarer Reiseeintrag hilft dir, Kosten und Notizen später schnell wiederzufinden.",
+                systemImage: "road.lanes"
+            ) {
+                Form {
                     Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Reise löschen", systemImage: "trash")
-                        }
+                        TextField("z. B. Osterwochenende am Chiemsee", text: $draft.title)
+                        TextField("Ziel oder Route", text: $draft.destinationSummary)
+                        DatePicker("Start", selection: $draft.startDate, displayedComponents: .date)
+                    } header: {
+                        Text("Reise")
                     } footer: {
-                        Text("Bereits erfasste Kosten bleiben erhalten, werden danach aber keiner Reise mehr zugeordnet.")
+                        Text("Nutze einen klaren Namen, damit du Kosten und Notizen später schnell wiederfindest.")
+                    }
+
+                    Section {
+                        Toggle("Enddatum eintragen", isOn: $draft.hasEndDate.animation())
+                        if draft.hasEndDate {
+                            DatePicker("Ende", selection: $draft.endDate, displayedComponents: .date)
+                        }
+
+                        Toggle("Geplante Strecke eintragen", isOn: $draft.hasPlannedDistance.animation())
+                        if draft.hasPlannedDistance {
+                            TextField("Kilometer", value: $draft.plannedDistanceKm, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+
+                        Toggle("Als aktive Reise verwenden", isOn: $draft.isActive)
+                    } header: {
+                        Text("Planung")
+                    } footer: {
+                        Text("Es sollte immer nur eine Reise aktiv sein. Wenn du diese Reise aktiv setzt, wird eine andere aktive Reise beendet.")
+                    }
+
+                    Section("Notizen") {
+                        TextEditor(text: $draft.notes)
+                            .frame(minHeight: 120)
+                    }
+
+                    if existingTrip != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Reise löschen", systemImage: "trash")
+                            }
+                        } footer: {
+                            Text("Bereits erfasste Kosten bleiben erhalten, werden danach aber keiner Reise mehr zugeordnet.")
+                        }
                     }
                 }
             }
@@ -762,71 +769,78 @@ private struct CostEntryFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    DatePicker("Datum", selection: $draft.date, displayedComponents: .date)
-                    Picker("Kategorie", selection: $draft.category) {
-                        ForEach(CostCategory.allCases) { category in
-                            Text(category.title).tag(category)
-                        }
-                    }
-                    TextField("Betrag in EUR", value: $draft.amountEUR, format: .number)
-                        .keyboardType(.decimalPad)
-                    TextField("Notiz", text: $draft.notes)
-                } header: {
-                    Text("Kosten")
-                } footer: {
-                    Text("Zum Beispiel Tanken, Maut, Stellplatz oder Werkstatt.")
-                }
-
-                Section {
-                    Toggle("Als regelmäßige Kosten speichern", isOn: $draft.isRecurringFixedCost.animation())
-
-                    if draft.isRecurringFixedCost {
-                        Picker("Intervall", selection: $draft.recurrence) {
-                            Text("Monatlich").tag(FixedCostInterval.monthly)
-                            Text("Vierteljährlich").tag(FixedCostInterval.quarterly)
-                            Text("Jährlich").tag(FixedCostInterval.yearly)
-                        }
-                    } else if let activeTrip {
-                        LabeledContent("Wird zugeordnet zu", value: activeTrip.title)
-                    } else {
-                        Text("Der Eintrag wird ohne Reise gespeichert. Sobald eine Reise aktiv ist, kannst du neue Kosten direkt zuordnen.")
-                            .font(.footnote)
-                            .foregroundStyle(AppTheme.mutedInk)
-                    }
-                } header: {
-                    Text("Zuordnung")
-                }
-
-                Section("Zusätzliche Angaben") {
-                    Toggle("Kilometerstand speichern", isOn: $draft.hasOdometer.animation())
-                    if draft.hasOdometer {
-                        TextField("Kilometerstand", value: $draft.odometerKm, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-
-                    Toggle("Nächte speichern", isOn: $draft.hasNights.animation())
-                    if draft.hasNights {
-                        Stepper("Nächte: \(draft.nights)", value: $draft.nights, in: 1...90)
-                    }
-
-                    Toggle("Liter speichern", isOn: $draft.hasLiters.animation())
-                    if draft.hasLiters {
-                        TextField("Liter", value: $draft.liters, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-                }
-
-                if existingCost != nil {
+            RoadSheetScaffold(
+                eyebrow: "Kosten",
+                title: existingCost == nil ? "Kosten erfassen" : "Kosten anpassen",
+                subtitle: "So behältst du auf Reisen und übers Jahr ein ehrliches Bild deiner Ausgaben.",
+                systemImage: "eurosign.circle.fill"
+            ) {
+                Form {
                     Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Kosten löschen", systemImage: "trash")
+                        DatePicker("Datum", selection: $draft.date, displayedComponents: .date)
+                        Picker("Kategorie", selection: $draft.category) {
+                            ForEach(CostCategory.allCases) { category in
+                                Text(category.title).tag(category)
+                            }
                         }
+                        TextField("Betrag in EUR", value: $draft.amountEUR, format: .number)
+                            .keyboardType(.decimalPad)
+                        TextField("Notiz", text: $draft.notes)
+                    } header: {
+                        Text("Kosten")
                     } footer: {
-                        Text("Der Eintrag wird aus deiner Reise- oder Jahresübersicht entfernt.")
+                        Text("Zum Beispiel Tanken, Maut, Stellplatz oder Werkstatt.")
+                    }
+
+                    Section {
+                        Toggle("Als regelmäßige Kosten speichern", isOn: $draft.isRecurringFixedCost.animation())
+
+                        if draft.isRecurringFixedCost {
+                            Picker("Intervall", selection: $draft.recurrence) {
+                                Text("Monatlich").tag(FixedCostInterval.monthly)
+                                Text("Vierteljährlich").tag(FixedCostInterval.quarterly)
+                                Text("Jährlich").tag(FixedCostInterval.yearly)
+                            }
+                        } else if let activeTrip {
+                            LabeledContent("Wird zugeordnet zu", value: activeTrip.title)
+                        } else {
+                            Text("Der Eintrag wird ohne Reise gespeichert. Sobald eine Reise aktiv ist, kannst du neue Kosten direkt zuordnen.")
+                                .font(.footnote)
+                                .foregroundStyle(AppTheme.mutedInk)
+                        }
+                    } header: {
+                        Text("Zuordnung")
+                    }
+
+                    Section("Zusätzliche Angaben") {
+                        Toggle("Kilometerstand speichern", isOn: $draft.hasOdometer.animation())
+                        if draft.hasOdometer {
+                            TextField("Kilometerstand", value: $draft.odometerKm, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+
+                        Toggle("Nächte speichern", isOn: $draft.hasNights.animation())
+                        if draft.hasNights {
+                            Stepper("Nächte: \(draft.nights)", value: $draft.nights, in: 1...90)
+                        }
+
+                        Toggle("Liter speichern", isOn: $draft.hasLiters.animation())
+                        if draft.hasLiters {
+                            TextField("Liter", value: $draft.liters, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+                    }
+
+                    if existingCost != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Kosten löschen", systemImage: "trash")
+                            }
+                        } footer: {
+                            Text("Der Eintrag wird aus deiner Reise- oder Jahresübersicht entfernt.")
+                        }
                     }
                 }
             }

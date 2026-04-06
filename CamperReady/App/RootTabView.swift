@@ -16,6 +16,21 @@ struct RootTabView: View {
     @State private var didBootstrap = false
     @State private var showOnboarding = false
 
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
+        appearance.backgroundColor = UIColor(AppTheme.panelStrong).withAlphaComponent(0.82)
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(AppTheme.accent)
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(AppTheme.accent)]
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(AppTheme.mutedInk).withAlphaComponent(0.72)
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(AppTheme.mutedInk).withAlphaComponent(0.72)]
+        appearance.shadowColor = UIColor(AppTheme.accent).withAlphaComponent(0.10)
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+
     var body: some View {
         AppCanvas {
             VStack(spacing: 0) {
@@ -66,7 +81,7 @@ struct RootTabView: View {
                     .tag(AppTab.costs)
                 }
                 .toolbarBackground(.visible, for: .tabBar)
-                .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+                .toolbarBackground(.thinMaterial, for: .tabBar)
             }
         }
         .environmentObject(navigation)

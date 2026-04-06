@@ -8,22 +8,34 @@ struct StatusBadge: View {
         HStack(spacing: 8) {
             Circle()
                 .fill(color)
-                .frame(width: 8, height: 8)
+                .frame(width: 9, height: 9)
+                .overlay {
+                    Circle()
+                        .stroke(.white.opacity(0.35), lineWidth: 1)
+                }
             Text(text)
-                .font(.caption.weight(.bold))
+                .font(.system(.caption, design: .rounded, weight: .bold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
                 .textCase(.uppercase)
-                .tracking(0.5)
+                .tracking(0.7)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 13)
+        .padding(.vertical, 9)
         .foregroundStyle(color)
-        .background(.ultraThinMaterial.opacity(0.65), in: Capsule())
+        .background(
+            Capsule(style: .continuous)
+                .fill(color.opacity(0.18))
+                .overlay {
+                    Capsule(style: .continuous)
+                        .fill(.thinMaterial.opacity(0.26))
+                }
+        )
         .overlay(
             Capsule()
-                .stroke(color.opacity(0.38), lineWidth: 1)
+                .stroke(color.opacity(0.34), lineWidth: 1)
         )
+        .shadow(color: color.opacity(0.16), radius: 18, y: 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Status")
         .accessibilityValue(text)

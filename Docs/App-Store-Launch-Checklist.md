@@ -29,7 +29,7 @@ Offensichtlich noch offen:
 
 - Release-Signing finalisieren
 - App-Icon / Branding-Assets
-- Privacy Policy und Support-URL
+- Support-URL final prüfen
 - App Store Connect Record
 - App Privacy Angaben
 - echter Device-Test
@@ -60,6 +60,9 @@ Empfohlene Werte:
 
 - App Name: `CamperReady`
 - Bundle ID: `com.<deine-marke>.camperready`
+- Anbieter: `David Wegener Marketing Consulting GmbH`
+- Anschrift: `Stockmeyerstraße 43, 20457 Hamburg`
+- Datenschutz: `https://www.wegener-gmbh.com/datenschutz-camperready`
 
 ### 3. Xcode-Release-Setup
 
@@ -82,6 +85,8 @@ Konkrete To-dos fuer dieses Repo:
 - vollstaendigen App-Icon-Satz anlegen
 - Launch-Darstellung auf echtem Geraet pruefen
 - App-Store-Screenshots fuer mindestens ein iPhone-Format erzeugen
+- bestaetigen, dass die App nur fuer `iPhone` ausgeliefert wird
+- Preis in App Store Connect auf das Preislevel fuer `0,99 €` setzen
 
 Empfehlung fuer V1:
 
@@ -188,6 +193,7 @@ Manuelle Kernfluesse:
 
 - App Record anlegen
 - Kategorien waehlen
+- Preis auf `0,99 €` setzen
 - Untertitel, Beschreibung, Keywords pflegen
 - Privacy Policy URL eintragen
 - Support URL eintragen

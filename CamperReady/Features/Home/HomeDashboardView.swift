@@ -41,7 +41,7 @@ struct HomeDashboardView: View {
         )
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 24) {
                 if vehicle == nil {
                     emptyStateHero
                 } else {
@@ -101,14 +101,18 @@ struct HomeDashboardView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
-        .navigationTitle("CamperReady")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     showInfoSheet = true
                 } label: {
-                    Label("Info", systemImage: "info.circle")
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(AppTheme.accent)
+                        .frame(width: 40, height: 40)
+                        .background(.thinMaterial, in: Circle())
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -141,7 +145,11 @@ struct HomeDashboardView: View {
                         }
                     }
                 } label: {
-                    Label("Export", systemImage: "square.and.arrow.up")
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(AppTheme.accent)
+                        .frame(width: 40, height: 40)
+                        .background(.thinMaterial, in: Circle())
                 }
             }
         }
@@ -167,12 +175,15 @@ struct HomeDashboardView: View {
         ZStack(alignment: .bottomLeading) {
             heroBackground(status: snapshot.overallStatus)
 
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .serif))
+                            .font(.system(size: 30, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+                            .allowsTightening(true)
                         Text("Vor der Fahrt")
                             .font(.caption.weight(.bold))
                             .textCase(.uppercase)
@@ -190,7 +201,7 @@ struct HomeDashboardView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.overallHeadline)
-                        .font(.system(size: 38, weight: .heavy, design: .rounded))
+                        .font(.system(size: 36, weight: .heavy, design: .rounded))
                         .foregroundStyle(.white)
                         .lineLimit(2)
                         .minimumScaleFactor(0.72)
@@ -201,7 +212,7 @@ struct HomeDashboardView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 14) {
                     Button {
                         navigation.navigate(for: .departureChecklist)
                     } label: {
@@ -223,16 +234,17 @@ struct HomeDashboardView: View {
                     .accessibilityLabel("Vor Abfahrt prüfen")
                     .accessibilityHint("Öffnet die Checklisten für die Abfahrt.")
 
-                    HStack(spacing: 14) {
+                    if let trip {
+                        heroMeta(label: trip.title, systemImage: "map")
+                    } else {
                         heroMeta(label: snapshot.vehicleName, systemImage: "car.side.fill")
-                        heroMeta(label: trip?.title ?? "Keine Reise geplant", systemImage: "map")
                     }
                 }
             }
             .padding(.horizontal, 22)
-            .padding(.vertical, 24)
+            .padding(.vertical, 26)
         }
-        .frame(maxWidth: .infinity, minHeight: 470, maxHeight: 540, alignment: .bottomLeading)
+        .frame(maxWidth: .infinity, minHeight: 452, maxHeight: 520, alignment: .bottomLeading)
         .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
         .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
         .opacity(hasAppeared ? 1 : 0.01)
@@ -312,7 +324,7 @@ struct HomeDashboardView: View {
         }
         .font(.footnote.weight(.semibold))
         .foregroundStyle(.white.opacity(0.88))
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 13)
         .padding(.vertical, 10)
         .background(.ultraThinMaterial.opacity(0.58), in: Capsule())
     }
@@ -356,7 +368,9 @@ struct HomeDashboardView: View {
                 }
             }
             .padding(.horizontal, 2)
+            .padding(.top, 4)
         }
+        .padding(.top, 6)
     }
 
     private func plainSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
@@ -364,7 +378,7 @@ struct HomeDashboardView: View {
             sectionHeading(title: title, subtitle: subtitle)
             content()
         }
-        .padding(.top, 4)
+        .padding(.top, 8)
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 20)
         .animation(animation(for: 6, baseDelay: 0.24), value: hasAppeared)
@@ -373,11 +387,12 @@ struct HomeDashboardView: View {
     private func sectionHeading(title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.system(.title3, design: .serif, weight: .bold))
+                .font(.system(.title3, design: .rounded, weight: .bold))
                 .foregroundStyle(AppTheme.ink)
             Text(subtitle)
                 .font(.subheadline)
                 .foregroundStyle(AppTheme.mutedInk)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -392,10 +407,14 @@ struct HomeDashboardView: View {
 
     private func actionRow(title: String, subtitle: String, systemImage: String, tint: Color) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.headline)
-                .foregroundStyle(tint)
-                .frame(width: 34, height: 34)
+            ZStack {
+                Circle()
+                    .fill(tint.opacity(0.12))
+                    .frame(width: 36, height: 36)
+                Image(systemName: systemImage)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(tint)
+            }
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
@@ -409,7 +428,7 @@ struct HomeDashboardView: View {
                 .font(.footnote.weight(.bold))
                 .foregroundStyle(AppTheme.mutedInk)
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 9)
     }
 
     private func actionKind(for result: ReadinessDimensionResult) -> ReadinessActionKind? {
@@ -473,8 +492,10 @@ struct HomeDashboardView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .serif))
+                            .font(.system(size: 30, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
                         Text("Los geht's mit deinem Fahrzeug")
                             .font(.caption.weight(.bold))
                             .textCase(.uppercase)
@@ -492,7 +513,7 @@ struct HomeDashboardView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Noch nicht startklar")
-                        .font(.system(size: 38, weight: .heavy, design: .rounded))
+                        .font(.system(size: 36, weight: .heavy, design: .rounded))
                         .foregroundStyle(.white)
                     Text("Lege zuerst dein Fahrzeug an. Danach siehst du vor jeder Fahrt Gewicht, Fristen und wichtige Checks an einem Ort.")
                         .font(.subheadline.weight(.medium))
@@ -519,9 +540,9 @@ struct HomeDashboardView: View {
                 .buttonStyle(.plain)
             }
             .padding(.horizontal, 22)
-            .padding(.vertical, 24)
+            .padding(.vertical, 26)
         }
-        .frame(maxWidth: .infinity, minHeight: 470, maxHeight: 540, alignment: .bottomLeading)
+        .frame(maxWidth: .infinity, minHeight: 452, maxHeight: 520, alignment: .bottomLeading)
         .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
         .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
     }
@@ -543,23 +564,25 @@ private struct ReadinessStripRow: View {
         HStack(alignment: .top, spacing: 14) {
             Circle()
                 .fill(AppTheme.statusColor(result.status))
-                .frame(width: 11, height: 11)
-                .padding(.top, 7)
+                .frame(width: 10, height: 10)
+                .padding(.top, 6)
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(result.title)
-                        .font(.subheadline.weight(.semibold))
+                        .font(.footnote.weight(.bold))
+                        .textCase(.uppercase)
+                        .tracking(0.6)
                         .foregroundStyle(AppTheme.ink)
                     Spacer()
                     Text(result.status.title)
-                        .font(.caption.weight(.bold))
+                        .font(.caption2.weight(.bold))
                         .textCase(.uppercase)
                         .foregroundStyle(AppTheme.statusColor(result.status))
                 }
 
                 Text(result.summary)
-                    .font(.title3.weight(.bold))
+                    .font(.headline.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -581,9 +604,10 @@ private struct ReadinessStripRow: View {
                 Image(systemName: "arrow.right")
                     .font(.footnote.weight(.bold))
                     .foregroundStyle(AppTheme.mutedInk)
-                    .padding(.top, 6)
+                    .padding(.top, 4)
             }
         }
+        .padding(.vertical, 2)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(result.title)
         .accessibilityValue([result.summary, result.reasons.first, result.nextAction]

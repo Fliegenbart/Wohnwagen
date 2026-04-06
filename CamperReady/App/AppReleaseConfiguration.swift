@@ -1,11 +1,13 @@
 import Foundation
 
 enum AppReleaseConfiguration {
-    static let supportEmail = "support@camperready.app"
+    static let providerName = "David Wegener Marketing Consulting GmbH"
+    static let providerAddress = "Stockmeyerstraße 43, 20457 Hamburg"
+    static let supportEmail = "mail@wegener-gmbh.com"
 
-    static let privacyPolicyURL: URL? = URL(string: "https://camperready.app/privacy")
-    static let supportURL: URL? = URL(string: "https://camperready.app/support")
-    static let marketingURL: URL? = URL(string: "https://camperready.app")
+    static let privacyPolicyURL: URL? = URL(string: "https://www.wegener-gmbh.com/datenschutz-camperready")
+    static let supportURL: URL? = URL(string: "https://www.wegener-gmbh.com")
+    static let marketingURL: URL? = URL(string: "https://www.wegener-gmbh.com")
 
     static let legalDisclaimer = """
     CamperReady ist eine persönliche Organisations- und Erinnerungshilfe für private Camper-Besitzer:innen. Die App ersetzt keine technische Prüfung, keine Wiegung und keine Rechtsberatung. Vorschriften, Prüffristen und regionale Anforderungen können sich ändern.

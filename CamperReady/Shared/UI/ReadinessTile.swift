@@ -8,12 +8,12 @@ struct ReadinessTile: View {
             HStack(spacing: 10) {
                 Image(systemName: iconName)
                     .font(.headline)
-                    .foregroundStyle(accentColor)
+                    .foregroundStyle(.white)
                     .frame(width: 32, height: 32)
-                    .background(accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .background(accentGradient, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 Spacer()
                 Circle()
-                    .fill(accentColor)
+                    .fill(accentGradient)
                     .frame(width: 10, height: 10)
             }
 
@@ -53,6 +53,10 @@ struct ReadinessTile: View {
 
     private var accentColor: Color {
         AppTheme.statusColor(result.status)
+    }
+
+    private var accentGradient: LinearGradient {
+        AppTheme.statusGradient(result.status)
     }
 
     private var iconName: String {

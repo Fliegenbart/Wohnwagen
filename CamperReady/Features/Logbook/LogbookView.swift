@@ -245,7 +245,7 @@ struct LogbookView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .serif))
+                            .font(.system(size: 34, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                         Text("Logbuch")
                             .font(.caption.weight(.bold))
@@ -356,7 +356,7 @@ struct LogbookView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(.title3, design: .serif, weight: .bold))
+                    .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundStyle(AppTheme.ink)
                 Text(subtitle)
                     .font(.subheadline)
@@ -685,65 +685,72 @@ private struct MaintenanceEntryFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    DatePicker("Datum", selection: $draft.date, displayedComponents: .date)
-                    Picker("Kategorie", selection: $draft.category) {
-                        ForEach(MaintenanceCategory.allCases) { category in
-                            Text(category.title).tag(category)
-                        }
-                    }
-                    TextField("Titel", text: $draft.title)
-                } header: {
-                    Text("Eintrag")
-                }
-
-                Section("Zusätzliche Angaben") {
-                    Toggle("Kilometerstand speichern", isOn: $draft.hasOdometer.animation())
-                    if draft.hasOdometer {
-                        TextField("Kilometerstand", value: $draft.odometerKm, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-
-                    Toggle("Kosten speichern", isOn: $draft.hasCost.animation())
-                    if draft.hasCost {
-                        TextField("Kosten in EUR", value: $draft.costEUR, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-                }
-
-                Section("Nächste Fälligkeit") {
-                    Toggle("Nächstes Datum speichern", isOn: $draft.hasNextDueDate.animation())
-                    if draft.hasNextDueDate {
-                        DatePicker("Nächstes Datum", selection: $draft.nextDueDate, displayedComponents: .date)
-                    }
-
-                    Toggle("Nächsten Kilometerstand speichern", isOn: $draft.hasNextDueKm.animation())
-                    if draft.hasNextDueKm {
-                        TextField("Nächster Kilometerstand", value: $draft.nextDueOdometerKm, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-                }
-
-                Section("Notizen") {
-                    TextEditor(text: $draft.notes)
-                        .frame(minHeight: 120)
-                }
-
-                AttachmentSection(
-                    storedPath: $draft.attachmentPath,
-                    helperText: "Hier kannst du Fotos oder Belege zu diesem Eintrag lokal auf dem iPhone ablegen."
-                )
-
-                if existingEntry != nil {
+            RoadSheetScaffold(
+                eyebrow: "Logbuch",
+                title: existingEntry == nil ? "Wartung eintragen" : "Wartung anpassen",
+                subtitle: "Halte fest, was erledigt wurde und wann der nächste Schritt fällig ist.",
+                systemImage: "wrench.adjustable.fill"
+            ) {
+                Form {
                     Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Wartung löschen", systemImage: "trash")
+                        DatePicker("Datum", selection: $draft.date, displayedComponents: .date)
+                        Picker("Kategorie", selection: $draft.category) {
+                            ForEach(MaintenanceCategory.allCases) { category in
+                                Text(category.title).tag(category)
+                            }
                         }
-                    } footer: {
-                        Text("Nutze das nur, wenn der Eintrag wirklich weg soll.")
+                        TextField("Titel", text: $draft.title)
+                    } header: {
+                        Text("Eintrag")
+                    }
+
+                    Section("Zusätzliche Angaben") {
+                        Toggle("Kilometerstand speichern", isOn: $draft.hasOdometer.animation())
+                        if draft.hasOdometer {
+                            TextField("Kilometerstand", value: $draft.odometerKm, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+
+                        Toggle("Kosten speichern", isOn: $draft.hasCost.animation())
+                        if draft.hasCost {
+                            TextField("Kosten in EUR", value: $draft.costEUR, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+                    }
+
+                    Section("Nächste Fälligkeit") {
+                        Toggle("Nächstes Datum speichern", isOn: $draft.hasNextDueDate.animation())
+                        if draft.hasNextDueDate {
+                            DatePicker("Nächstes Datum", selection: $draft.nextDueDate, displayedComponents: .date)
+                        }
+
+                        Toggle("Nächsten Kilometerstand speichern", isOn: $draft.hasNextDueKm.animation())
+                        if draft.hasNextDueKm {
+                            TextField("Nächster Kilometerstand", value: $draft.nextDueOdometerKm, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+                    }
+
+                    Section("Notizen") {
+                        TextEditor(text: $draft.notes)
+                            .frame(minHeight: 120)
+                    }
+
+                    AttachmentSection(
+                        storedPath: $draft.attachmentPath,
+                        helperText: "Hier kannst du Fotos oder Belege zu diesem Eintrag lokal auf dem iPhone ablegen."
+                    )
+
+                    if existingEntry != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Wartung löschen", systemImage: "trash")
+                            }
+                        } footer: {
+                            Text("Nutze das nur, wenn der Eintrag wirklich weg soll.")
+                        }
                     }
                 }
             }
@@ -836,59 +843,66 @@ private struct DocumentRecordFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    TextField("Titel", text: $draft.title)
-                    Picker("Kategorie", selection: $draft.category) {
-                        ForEach(DocumentCategory.allCases) { category in
-                            Text(category.title).tag(category)
-                        }
-                    }
-                    Picker("Land", selection: $draft.country) {
-                        ForEach(CountryPreset.allCases) { country in
-                            Text(country.title).tag(country)
-                        }
-                    }
-                } header: {
-                    Text("Dokument")
-                }
-
-                Section("Frist") {
-                    Toggle("Gültig-bis-Datum speichern", isOn: $draft.hasValidUntil.animation())
-                    if draft.hasValidUntil {
-                        DatePicker("Gültig bis", selection: $draft.validUntil, displayedComponents: .date)
-                    }
-
-                    Toggle("Im Status berücksichtigen", isOn: $draft.isStatusRelevant)
-                    Toggle("Bei Ablauf als kritisch markieren", isOn: $draft.isBlockingWhenExpired)
-                }
-
-                Section("Erinnerungen") {
-                    Toggle("90 Tage vorher", isOn: $draft.remind90Days)
-                    Toggle("30 Tage vorher", isOn: $draft.remind30Days)
-                    Toggle("7 Tage vorher", isOn: $draft.remind7Days)
-                }
-
-                Section("Quelle & Notizen") {
-                    TextField("Quelle oder Hinweis", text: $draft.sourceLabel)
-                    TextEditor(text: $draft.notes)
-                        .frame(minHeight: 120)
-                }
-
-                AttachmentSection(
-                    storedPath: $draft.attachmentPath,
-                    helperText: "Hier kannst du einen Nachweis, ein PDF oder ein Foto lokal hinterlegen."
-                )
-
-                if existingDocument != nil {
+            RoadSheetScaffold(
+                eyebrow: "Logbuch",
+                title: existingDocument == nil ? "Dokument hinzufügen" : "Dokument anpassen",
+                subtitle: "Speichere Fristen und Nachweise so, dass du sie vor der Abfahrt schnell wiederfindest.",
+                systemImage: "doc.text.fill"
+            ) {
+                Form {
                     Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Dokument löschen", systemImage: "trash")
+                        TextField("Titel", text: $draft.title)
+                        Picker("Kategorie", selection: $draft.category) {
+                            ForEach(DocumentCategory.allCases) { category in
+                                Text(category.title).tag(category)
+                            }
                         }
-                    } footer: {
-                        Text("Die gespeicherte Frist und der Nachweis werden entfernt.")
+                        Picker("Land", selection: $draft.country) {
+                            ForEach(CountryPreset.allCases) { country in
+                                Text(country.title).tag(country)
+                            }
+                        }
+                    } header: {
+                        Text("Dokument")
+                    }
+
+                    Section("Frist") {
+                        Toggle("Gültig-bis-Datum speichern", isOn: $draft.hasValidUntil.animation())
+                        if draft.hasValidUntil {
+                            DatePicker("Gültig bis", selection: $draft.validUntil, displayedComponents: .date)
+                        }
+
+                        Toggle("Im Status berücksichtigen", isOn: $draft.isStatusRelevant)
+                        Toggle("Bei Ablauf als kritisch markieren", isOn: $draft.isBlockingWhenExpired)
+                    }
+
+                    Section("Erinnerungen") {
+                        Toggle("90 Tage vorher", isOn: $draft.remind90Days)
+                        Toggle("30 Tage vorher", isOn: $draft.remind30Days)
+                        Toggle("7 Tage vorher", isOn: $draft.remind7Days)
+                    }
+
+                    Section("Quelle & Notizen") {
+                        TextField("Quelle oder Hinweis", text: $draft.sourceLabel)
+                        TextEditor(text: $draft.notes)
+                            .frame(minHeight: 120)
+                    }
+
+                    AttachmentSection(
+                        storedPath: $draft.attachmentPath,
+                        helperText: "Hier kannst du einen Nachweis, ein PDF oder ein Foto lokal hinterlegen."
+                    )
+
+                    if existingDocument != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Dokument löschen", systemImage: "trash")
+                            }
+                        } footer: {
+                            Text("Die gespeicherte Frist und der Nachweis werden entfernt.")
+                        }
                     }
                 }
             }
@@ -999,67 +1013,74 @@ private struct PlaceNoteFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    TextField("Name des Ortes", text: $draft.title)
-                    Picker("Art", selection: $draft.type) {
-                        ForEach(PlaceType.allCases) { type in
-                            Text(type.title).tag(type)
-                        }
-                    }
-                } header: {
-                    Text("Ort")
-                } footer: {
-                    Text("Zum Beispiel ein Stellplatz, eine Entsorgung oder eine gute Wasserstelle.")
-                }
-
-                Section("Koordinaten") {
-                    TextField("Breitengrad", value: $draft.latitude, format: .number.precision(.fractionLength(4)))
-                        .keyboardType(.decimalPad)
-                    TextField("Längengrad", value: $draft.longitude, format: .number.precision(.fractionLength(4)))
-                        .keyboardType(.decimalPad)
-                    Text("Wenn du die Werte aus Karten oder Apple Maps einfügst, reicht das schon.")
-                        .font(.footnote)
-                        .foregroundStyle(AppTheme.mutedInk)
-                }
-
-                Section("Eigene Notizen") {
-                    TextEditor(text: $draft.notes)
-                        .frame(minHeight: 120)
-                }
-
-                AttachmentSection(
-                    storedPath: $draft.attachmentPath,
-                    helperText: "Hier kannst du Fotos oder einen Beleg für diesen Ort hinterlegen."
-                )
-
-                Section("Zusätzliche Angaben") {
-                    Toggle("Bewertung speichern", isOn: hasRatingBinding)
-                    if draft.personalRating != nil {
-                        Stepper("Bewertung: \(draft.normalizedRating ?? 4)/5", value: ratingBinding, in: 1...5)
-                    }
-
-                    Toggle("Kosten speichern", isOn: hasCostBinding)
-                    if draft.costEUR != nil {
-                        TextField("Kosten in EUR", value: costBinding, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-
-                    Toggle("Zuletzt genutzt speichern", isOn: hasLastUsedBinding)
-                    if draft.dateLastUsed != nil {
-                        DatePicker("Zuletzt genutzt", selection: lastUsedBinding, displayedComponents: .date)
-                    }
-                }
-
-                if existingPlace != nil {
+            RoadSheetScaffold(
+                eyebrow: "Logbuch",
+                title: existingPlace == nil ? "Ort merken" : "Ort anpassen",
+                subtitle: "Speichere gute Stopps, Ver- und Entsorgung oder eigene Hinweise für später.",
+                systemImage: "mappin.and.ellipse"
+            ) {
+                Form {
                     Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Ort löschen", systemImage: "trash")
+                        TextField("Name des Ortes", text: $draft.title)
+                        Picker("Art", selection: $draft.type) {
+                            ForEach(PlaceType.allCases) { type in
+                                Text(type.title).tag(type)
+                            }
                         }
+                    } header: {
+                        Text("Ort")
                     } footer: {
-                        Text("Die Notiz und die Kartenmarkierung werden entfernt.")
+                        Text("Zum Beispiel ein Stellplatz, eine Entsorgung oder eine gute Wasserstelle.")
+                    }
+
+                    Section("Koordinaten") {
+                        TextField("Breitengrad", value: $draft.latitude, format: .number.precision(.fractionLength(4)))
+                            .keyboardType(.decimalPad)
+                        TextField("Längengrad", value: $draft.longitude, format: .number.precision(.fractionLength(4)))
+                            .keyboardType(.decimalPad)
+                        Text("Wenn du die Werte aus Karten oder Apple Maps einfügst, reicht das schon.")
+                            .font(.footnote)
+                            .foregroundStyle(AppTheme.mutedInk)
+                    }
+
+                    Section("Eigene Notizen") {
+                        TextEditor(text: $draft.notes)
+                            .frame(minHeight: 120)
+                    }
+
+                    AttachmentSection(
+                        storedPath: $draft.attachmentPath,
+                        helperText: "Hier kannst du Fotos oder einen Beleg für diesen Ort hinterlegen."
+                    )
+
+                    Section("Zusätzliche Angaben") {
+                        Toggle("Bewertung speichern", isOn: hasRatingBinding)
+                        if draft.personalRating != nil {
+                            Stepper("Bewertung: \(draft.normalizedRating ?? 4)/5", value: ratingBinding, in: 1...5)
+                        }
+
+                        Toggle("Kosten speichern", isOn: hasCostBinding)
+                        if draft.costEUR != nil {
+                            TextField("Kosten in EUR", value: costBinding, format: .number)
+                                .keyboardType(.decimalPad)
+                        }
+
+                        Toggle("Zuletzt genutzt speichern", isOn: hasLastUsedBinding)
+                        if draft.dateLastUsed != nil {
+                            DatePicker("Zuletzt genutzt", selection: lastUsedBinding, displayedComponents: .date)
+                        }
+                    }
+
+                    if existingPlace != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Ort löschen", systemImage: "trash")
+                            }
+                        } footer: {
+                            Text("Die Notiz und die Kartenmarkierung werden entfernt.")
+                        }
                     }
                 }
             }

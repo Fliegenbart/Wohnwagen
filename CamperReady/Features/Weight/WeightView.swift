@@ -241,7 +241,7 @@ struct WeightView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .serif))
+                            .font(.system(size: 34, weight: .black, design: .rounded))
                             .foregroundStyle(.white)
                         Text("Vor der Fahrt")
                             .font(.caption.weight(.bold))
@@ -371,7 +371,7 @@ struct WeightView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(.title3, design: .serif, weight: .bold))
+                    .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundStyle(AppTheme.ink)
                 Text(subtitle)
                     .font(.subheadline)
@@ -546,31 +546,38 @@ private struct PackingItemFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Packstück") {
-                    TextField("Name", text: $draft.name)
-                    Picker("Kategorie", selection: $draft.category) {
-                        ForEach(WeightCategory.allCases) { category in
-                            Text(category.title).tag(category)
+            RoadSheetScaffold(
+                eyebrow: "Gewicht",
+                title: existingItem == nil ? "Packstück hinzufügen" : "Packstück anpassen",
+                subtitle: "Halte fest, was bei dieser Reise wirklich mitfährt.",
+                systemImage: "shippingbox.fill"
+            ) {
+                Form {
+                    Section("Packstück") {
+                        TextField("Name", text: $draft.name)
+                        Picker("Kategorie", selection: $draft.category) {
+                            ForEach(WeightCategory.allCases) { category in
+                                Text(category.title).tag(category)
+                            }
                         }
+                        TextField("Menge", value: $draft.quantity, format: .number)
+                            .keyboardType(.numberPad)
+                        TextField("Gewicht pro Stück (kg)", value: $draft.unitWeightKg, format: .number)
+                            .keyboardType(.decimalPad)
                     }
-                    TextField("Menge", value: $draft.quantity, format: .number)
-                        .keyboardType(.numberPad)
-                    TextField("Gewicht pro Stück (kg)", value: $draft.unitWeightKg, format: .number)
-                        .keyboardType(.decimalPad)
-                }
 
-                Section("Gültigkeit") {
-                    Toggle("Für alle Reisen merken", isOn: $draft.isPersistent)
-                    Toggle("Bei dieser Beladung berücksichtigen", isOn: $draft.includeInCurrentLoad)
-                }
+                    Section("Gültigkeit") {
+                        Toggle("Für alle Reisen merken", isOn: $draft.isPersistent)
+                        Toggle("Bei dieser Beladung berücksichtigen", isOn: $draft.includeInCurrentLoad)
+                    }
 
-                if existingItem != nil {
-                    Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Packstück löschen", systemImage: "trash")
+                    if existingItem != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Packstück löschen", systemImage: "trash")
+                            }
                         }
                     }
                 }
@@ -658,21 +665,28 @@ private struct PassengerFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Mitfahrende Person") {
-                    TextField("Name", text: $draft.name)
-                    TextField("Gewicht in kg", value: $draft.weightKg, format: .number)
-                        .keyboardType(.decimalPad)
-                    Toggle("Fahrer:in", isOn: $draft.isDriver)
-                    Toggle("Für alle Reisen merken", isOn: $draft.isPersistent)
-                }
+            RoadSheetScaffold(
+                eyebrow: "Gewicht",
+                title: existingPassenger == nil ? "Mitfahrende hinzufügen" : "Mitfahrende anpassen",
+                subtitle: "Auch Personen gehören zur ehrlichen Beladung dazu.",
+                systemImage: "person.2.fill"
+            ) {
+                Form {
+                    Section("Mitfahrende Person") {
+                        TextField("Name", text: $draft.name)
+                        TextField("Gewicht in kg", value: $draft.weightKg, format: .number)
+                            .keyboardType(.decimalPad)
+                        Toggle("Fahrer:in", isOn: $draft.isDriver)
+                        Toggle("Für alle Reisen merken", isOn: $draft.isPersistent)
+                    }
 
-                if existingPassenger != nil {
-                    Section {
-                        Button(role: .destructive) {
-                            showDeleteConfirmation = true
-                        } label: {
-                            Label("Mitfahrende Person löschen", systemImage: "trash")
+                    if existingPassenger != nil {
+                        Section {
+                            Button(role: .destructive) {
+                                showDeleteConfirmation = true
+                            } label: {
+                                Label("Mitfahrende Person löschen", systemImage: "trash")
+                            }
                         }
                     }
                 }
@@ -757,23 +771,30 @@ private struct LoadSettingsFormView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Wasser & Gas") {
-                    Stepper("Frischwasser: \(Int(draft.freshWaterLiters.rounded())) l", value: $draft.freshWaterLiters, in: 0...(vehicle.freshWaterCapacityL ?? 120), step: 5)
-                    Stepper("Grauwasser: \(Int(draft.greyWaterLiters.rounded())) l", value: $draft.greyWaterLiters, in: 0...(vehicle.greyWaterCapacityL ?? 120), step: 5)
-                    Stepper("Gasflaschenfüllstand: \(Int(draft.gasBottleFillPercent.rounded())) %", value: $draft.gasBottleFillPercent, in: 0...100, step: 10)
-                }
+            RoadSheetScaffold(
+                eyebrow: "Gewicht",
+                title: "Beladung festlegen",
+                subtitle: "Wasser, Gas und Zusatzlasten geben dir eine ehrlichere Reserve für diese Reise.",
+                systemImage: "gauge.with.needle.fill"
+            ) {
+                Form {
+                    Section("Wasser & Gas") {
+                        Stepper("Frischwasser: \(Int(draft.freshWaterLiters.rounded())) l", value: $draft.freshWaterLiters, in: 0...(vehicle.freshWaterCapacityL ?? 120), step: 5)
+                        Stepper("Grauwasser: \(Int(draft.greyWaterLiters.rounded())) l", value: $draft.greyWaterLiters, in: 0...(vehicle.greyWaterCapacityL ?? 120), step: 5)
+                        Stepper("Gasflaschenfüllstand: \(Int(draft.gasBottleFillPercent.rounded())) %", value: $draft.gasBottleFillPercent, in: 0...100, step: 10)
+                    }
 
-                Section("Zusatzlasten") {
-                    Stepper("Heckträger: \(Int(draft.rearCarrierLoadKg.rounded())) kg", value: $draft.rearCarrierLoadKg, in: 0...150, step: 2)
-                    Stepper("Dachlast: \(Int(draft.roofLoadKg.rounded())) kg", value: $draft.roofLoadKg, in: 0...150, step: 2)
-                    Stepper("Zusatzlast: \(Int(draft.extraLoadKg.rounded())) kg", value: $draft.extraLoadKg, in: 0...200, step: 2)
-                    Toggle("Fahrräder am Heckträger", isOn: $draft.bikesOnRearCarrier)
-                }
+                    Section("Zusatzlasten") {
+                        Stepper("Heckträger: \(Int(draft.rearCarrierLoadKg.rounded())) kg", value: $draft.rearCarrierLoadKg, in: 0...150, step: 2)
+                        Stepper("Dachlast: \(Int(draft.roofLoadKg.rounded())) kg", value: $draft.roofLoadKg, in: 0...150, step: 2)
+                        Stepper("Zusatzlast: \(Int(draft.extraLoadKg.rounded())) kg", value: $draft.extraLoadKg, in: 0...200, step: 2)
+                        Toggle("Fahrräder am Heckträger", isOn: $draft.bikesOnRearCarrier)
+                    }
 
-                Section("Notiz") {
-                    TextEditor(text: $draft.notes)
-                        .frame(minHeight: 120)
+                    Section("Notiz") {
+                        TextEditor(text: $draft.notes)
+                            .frame(minHeight: 120)
+                    }
                 }
             }
             .navigationTitle("Beladung bearbeiten")
