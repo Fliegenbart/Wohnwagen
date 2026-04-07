@@ -1,11 +1,5 @@
 import SwiftUI
 
-struct UtilityRowContent: Equatable {
-    let title: String
-    let subtitle: String
-    let systemImage: String
-}
-
 struct UtilityRow: View {
     let title: String
     let subtitle: String
@@ -28,22 +22,6 @@ struct UtilityRow: View {
         self.tint = tint
         self.titleColor = titleColor
         self.subtitleColor = subtitleColor
-    }
-
-    init(
-        content: UtilityRowContent,
-        tint: Color,
-        titleColor: Color = AppTheme.ink,
-        subtitleColor: Color = AppTheme.mutedInk
-    ) {
-        self.init(
-            title: content.title,
-            subtitle: content.subtitle,
-            systemImage: content.systemImage,
-            tint: tint,
-            titleColor: titleColor,
-            subtitleColor: subtitleColor
-        )
     }
 
     var body: some View {

@@ -28,6 +28,8 @@
 		646CBC5CE9BAB11A840BF391 /* HomeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE549276AB4C5F3B750C11 /* HomeDashboardView.swift */; };
 		64BCFB32648A3935E7F29D8A /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D8BFE37C24798D60D096A8 /* ExportService.swift */; };
 		64BCFB33648A3935E7F29D8A /* FeatureHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */; };
+		64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */; };
+		64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */; };
 		67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA5325CA425478B4B66B76 /* ChecklistsView.swift */; };
 		6E2C55748B865DB290DE8CFF /* CostEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3562945C27A8645EEBDF2E /* CostEntry.swift */; };
 		75B0CC5F26A910D4B7AA3AE9 /* MaintenanceEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA13573CEB2D95F33B352BE /* MaintenanceEntry.swift */; };
@@ -102,6 +104,8 @@
 		55BA73EAA2C254475D27C23C /* SupportEnums.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SupportEnums.swift; path = CamperReady/Domain/Models/SupportEnums.swift; sourceTree = "<group>"; };
 		5FCE549276AB4C5F3B750C11 /* HomeDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardView.swift; path = CamperReady/Features/Home/HomeDashboardView.swift; sourceTree = "<group>"; };
 		64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FeatureHeader.swift; path = CamperReady/Shared/UI/FeatureHeader.swift; sourceTree = "<group>"; };
+		64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetHeader.swift; path = CamperReady/Shared/UI/RoadSheetHeader.swift; sourceTree = "<group>"; };
+		64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetScaffold.swift; path = CamperReady/Shared/UI/RoadSheetScaffold.swift; sourceTree = "<group>"; };
 		619D4F00AE83955BBF44CC0B /* App-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "App-Debug.xcconfig"; path = "CamperReady/Config/App-Debug.xcconfig"; sourceTree = "<group>"; };
 		6E0DCCFAA435454628133420 /* ReminderPlanner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReminderPlanner.swift; path = CamperReady/Services/ReminderPlanner.swift; sourceTree = "<group>"; };
 		6F01469D5E49EE352F500BE9 /* PackingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PackingItem.swift; path = CamperReady/Domain/Models/PackingItem.swift; sourceTree = "<group>"; };
@@ -389,6 +393,8 @@
 				64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */,
 				8A2CF7EFA56E5E875FCF9792 /* MetricCard.swift */,
 				4E3898B28D9CBBCEAB98CB2C /* ReadinessTile.swift */,
+				64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */,
+				64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */,
 				7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */,
 				1C0F754B4CD6114C82BC706F /* StatusBadge.swift */,
 				93B1C8D47C09134E6733011C /* UtilityRow.swift */,
@@ -559,6 +565,8 @@
 				64BCFB33648A3935E7F29D8A /* FeatureHeader.swift in Sources */,
 				E5BA678B609B9294886F613F /* MetricCard.swift in Sources */,
 				93B1C8D27C09134E6733011C /* ReadinessTile.swift in Sources */,
+				64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */,
+				64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */,
 				501B9A3256268100511CE96A /* SectionCard.swift in Sources */,
 				F8FB0A974C00B7E4E7ADE61F /* StatusBadge.swift in Sources */,
 				93B1C8D37C09134E6733011C /* UtilityRow.swift in Sources */,

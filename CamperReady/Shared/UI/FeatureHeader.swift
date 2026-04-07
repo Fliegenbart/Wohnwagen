@@ -1,11 +1,5 @@
 import SwiftUI
 
-struct FeatureHeaderContent: Equatable {
-    let eyebrow: String
-    let title: String
-    let subtitle: String
-}
-
 struct FeatureHeader: View {
     let eyebrow: String
     let title: String
@@ -28,22 +22,6 @@ struct FeatureHeader: View {
         self.eyebrowColor = eyebrowColor
         self.titleColor = titleColor
         self.subtitleColor = subtitleColor
-    }
-
-    init(
-        content: FeatureHeaderContent,
-        eyebrowColor: Color = AppTheme.mutedInk,
-        titleColor: Color = AppTheme.ink,
-        subtitleColor: Color = AppTheme.mutedInk
-    ) {
-        self.init(
-            eyebrow: content.eyebrow,
-            title: content.title,
-            subtitle: content.subtitle,
-            eyebrowColor: eyebrowColor,
-            titleColor: titleColor,
-            subtitleColor: subtitleColor
-        )
     }
 
     var body: some View {
