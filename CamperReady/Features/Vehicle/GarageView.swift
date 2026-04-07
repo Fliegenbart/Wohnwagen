@@ -163,10 +163,6 @@ struct VehicleSelectionView: View {
 
     @State private var editorContext: VehicleEditorContext?
 
-    private var activeVehicle: VehicleProfile? {
-        activeVehicleStore.activeVehicle(in: vehicles)
-    }
-
     private var orderedVehicles: [VehicleProfile] {
         let presentation = GaragePresentation.make(
             vehicles: vehicles,
@@ -193,28 +189,6 @@ struct VehicleSelectionView: View {
                                 editorContext = VehicleEditorContext(vehicle: nil)
                             }
                         } else {
-                            if let activeVehicle {
-                                AlpineSurface(role: .raised) {
-                                    VStack(alignment: .leading, spacing: 10) {
-                                        HStack {
-                                            Text("Zuletzt aktiv")
-                                                .font(.footnote.weight(.bold))
-                                                .foregroundStyle(AppTheme.accent)
-                                            Spacer()
-                                            GarageTag(title: "Aktiv", isHighlighted: true)
-                                        }
-
-                                        Text(activeVehicle.name)
-                                            .font(.title3.weight(.semibold))
-                                            .foregroundStyle(AppTheme.ink)
-
-                                        Text(vehicleHeadline(activeVehicle))
-                                            .font(.subheadline)
-                                            .foregroundStyle(AppTheme.mutedInk)
-                                    }
-                                }
-                            }
-
                             VStack(alignment: .leading, spacing: 12) {
                                 ForEach(orderedVehicles) { vehicle in
                                     Button {
@@ -222,7 +196,7 @@ struct VehicleSelectionView: View {
                                     } label: {
                                         GarageSelectionCard(
                                             vehicle: vehicle,
-                                            isActive: vehicle.id == activeVehicle?.id
+                                            isActive: false
                                         )
                                     }
                                     .buttonStyle(.plain)

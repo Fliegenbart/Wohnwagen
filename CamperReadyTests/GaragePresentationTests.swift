@@ -10,4 +10,43 @@ final class GaragePresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.orderedVehicleIDs.first, b.id)
     }
+
+    func testGaragePresentationUsesStableIDOrderWhenCreatedAtMatches() {
+        let createdAt = Date(timeIntervalSince1970: 1_234)
+        let earlierID = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+        let laterID = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+
+        let first = makeVehicle(id: laterID, createdAt: createdAt, name: "Berg")
+        let second = makeVehicle(id: earlierID, createdAt: createdAt, name: "Tal")
+
+        let presentation = GaragePresentation.make(vehicles: [first, second], activeVehicleID: nil)
+
+        XCTAssertEqual(presentation.orderedVehicleIDs, [earlierID, laterID])
+    }
+
+    func testGaragePresentationTreatsMissingActiveVehicleLikeNoActiveVehicle() {
+        let createdAt = Date(timeIntervalSince1970: 1_234)
+        let earlierID = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+        let laterID = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+        let missingID = UUID(uuidString: "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")!
+
+        let first = makeVehicle(id: laterID, createdAt: createdAt, name: "Berg")
+        let second = makeVehicle(id: earlierID, createdAt: createdAt, name: "Tal")
+
+        let presentation = GaragePresentation.make(vehicles: [first, second], activeVehicleID: missingID)
+
+        XCTAssertEqual(presentation.orderedVehicleIDs, [earlierID, laterID])
+    }
+
+    private func makeVehicle(id: UUID, createdAt: Date, name: String) -> VehicleProfile {
+        VehicleProfile(
+            id: id,
+            createdAt: createdAt,
+            updatedAt: createdAt,
+            name: name,
+            vehicleKind: .motorhome,
+            brand: "Hymer",
+            model: "ML-T"
+        )
+    }
 }

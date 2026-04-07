@@ -7,7 +7,10 @@ struct GaragePresentation: Equatable {
         let sorted = vehicles.sorted { lhs, rhs in
             if lhs.id == activeVehicleID { return true }
             if rhs.id == activeVehicleID { return false }
-            return lhs.createdAt < rhs.createdAt
+            if lhs.createdAt != rhs.createdAt {
+                return lhs.createdAt < rhs.createdAt
+            }
+            return lhs.id.uuidString < rhs.id.uuidString
         }
 
         return GaragePresentation(orderedVehicleIDs: sorted.map(\.id))
