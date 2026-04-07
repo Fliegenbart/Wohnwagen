@@ -29,11 +29,18 @@ struct WeightView: View {
             passengers: passengers,
             settings: activeSettings
         )
+        let presentation = WeightPresentation.make(assessment: assessment, tripTitle: trip?.title)
 
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 if let vehicle {
-                    hero(vehicle: vehicle, trip: trip, assessment: assessment, settings: activeSettings)
+                    analysisPanel(
+                        vehicle: vehicle,
+                        trip: trip,
+                        assessment: assessment,
+                        presentation: presentation,
+                        settings: activeSettings
+                    )
 
                     weightSection(title: "Beladung", subtitle: "Hier pflegst du Wasser, Gas und Zusatzlasten für diese Fahrt.") {
                         if let activeSettings {
@@ -49,15 +56,6 @@ struct WeightView: View {
                                 }
                                 .buttonStyle(.borderedProminent)
                             }
-                        }
-                    }
-
-                    weightSection(title: "Kurzüberblick", subtitle: "Die wichtigsten Werte für deine Abfahrt.") {
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                            MetricCard(title: "Gesamt", value: assessment.estimatedGrossWeightKg?.kgString ?? "Unklar", systemImage: "truck.box.fill")
-                            MetricCard(title: "Reserve", value: assessment.remainingMarginKg?.kgString ?? "Unklar", systemImage: "checkmark.shield.fill")
-                            MetricCard(title: "Achslast", value: axleLabel(for: assessment.axleRisk), systemImage: "warninglight.fill")
-                            MetricCard(title: "Volles Wasser", value: "+\(Int(assessment.waterComparisonDeltaKg.rounded())) kg", systemImage: "drop.fill")
                         }
                     }
 
@@ -221,89 +219,91 @@ struct WeightView: View {
         }
     }
 
-    private func axleLabel(for risk: LoadRiskLevel) -> String {
-        switch risk {
-        case .low: "Niedrig"
-        case .elevated: "Erhöht"
-        case .measured: "Gemessen"
-        }
-    }
-
-    private func hero(
+    private func analysisPanel(
         vehicle: VehicleProfile,
         trip: Trip?,
         assessment: WeightAssessmentOutput,
+        presentation: WeightPresentation,
         settings: TripLoadSettings?
     ) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(vehicle.name)
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(AppTheme.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.82)
-                    Text(trip?.title ?? "Vor der Fahrt")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(AppTheme.mutedInk)
+        AlpineSurface(role: .focus) {
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(alignment: .top, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Lastanalyse")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(.white.opacity(0.72))
+
+                        Text(presentation.headline)
+                            .font(.system(size: 34, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.82)
+
+                        Text("\(vehicle.name) · \(presentation.support)")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.72))
+                    }
+
+                    Spacer(minLength: 12)
+
+                    StatusBadge(status: assessment.status, text: assessment.status.title)
                 }
 
-                Spacer()
+                Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.82))
+                    .fixedSize(horizontal: false, vertical: true)
 
-                StatusBadge(status: assessment.status, text: assessment.status.title)
-            }
+                VStack(spacing: 12) {
+                    ForEach(presentation.primaryMetrics) { metric in
+                        metricRow(title: metric.title, value: metric.value)
+                    }
+                }
 
-            Text(assessment.summary)
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(AppTheme.ink)
-                .lineLimit(2)
-                .minimumScaleFactor(0.8)
+                Text("Volles Frischwasser bedeutet im Vergleich zur aktuellen Einstellung etwa +\(Int(assessment.waterComparisonDeltaKg.rounded())) kg.")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.70))
 
-            Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(AppTheme.mutedInk)
-                .fixedSize(horizontal: false, vertical: true)
-
-            HStack(spacing: 12) {
-                MetricCard(title: "Reserve", value: assessment.remainingMarginKg?.kgString ?? "Unklar", systemImage: "scalemass")
-                MetricCard(title: "Achslast", value: axleLabel(for: assessment.axleRisk), systemImage: "car.side")
-            }
-
-            if let settings {
-                Text(trip?.title ?? "Einstellungen: Frischwasser \(Int((settings.freshWaterLiters).rounded())) l")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(AppTheme.mutedInk)
+                if let nextAction = assessment.nextAction {
+                    UtilityRow(
+                        title: "Nächster Schritt",
+                        subtitle: nextAction,
+                        systemImage: "arrow.trianglehead.turn.up.right.diamond.fill",
+                        tint: .white.opacity(0.86),
+                        titleColor: .white,
+                        subtitleColor: .white.opacity(0.72),
+                        trailingSystemImage: "arrow.right",
+                        trailingTint: .white.opacity(0.72)
+                    )
+                } else if let settings {
+                    UtilityRow(
+                        title: "Aktive Beladung",
+                        subtitle: "Frischwasser \(Int(settings.freshWaterLiters.rounded())) l, Zusatzlast \(Int(settings.extraLoadKg.rounded())) kg",
+                        systemImage: "shippingbox.fill",
+                        tint: .white.opacity(0.86),
+                        titleColor: .white,
+                        subtitleColor: .white.opacity(0.72)
+                    )
+                }
             }
         }
-        .padding(18)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 16)
     }
 
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+    private func metricRow(title: String, value: String) -> some View {
+        HStack(spacing: 12) {
             Text(title)
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(AppTheme.mutedInk)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.70))
+
+            Spacer()
+
             Text(value)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(AppTheme.ink)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(.white)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
     }
 
     private func weightSupportLine(vehicle: VehicleProfile, trip: Trip?, assessment: WeightAssessmentOutput) -> String {
