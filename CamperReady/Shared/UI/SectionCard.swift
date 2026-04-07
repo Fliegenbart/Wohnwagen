@@ -1,5 +1,20 @@
 import SwiftUI
 
+struct RoadSheetHeaderContent: Equatable {
+    let eyebrow: String
+    let title: String
+    let subtitle: String
+    let systemImage: String
+
+    var featureHeader: FeatureHeaderContent {
+        .init(eyebrow: eyebrow, title: title, subtitle: subtitle)
+    }
+
+    var utilityRow: UtilityRowContent {
+        .init(title: eyebrow, subtitle: subtitle, systemImage: systemImage)
+    }
+}
+
 struct SectionCard<Content: View>: View {
     let title: String
     let subtitle: String?
@@ -37,36 +52,43 @@ struct SectionCard<Content: View>: View {
 }
 
 struct RoadSheetHeader: View {
-    let eyebrow: String
-    let title: String
-    let subtitle: String
-    let systemImage: String
+    let content: RoadSheetHeaderContent
+
+    init(eyebrow: String, title: String, subtitle: String, systemImage: String) {
+        self.content = RoadSheetHeaderContent(
+            eyebrow: eyebrow,
+            title: title,
+            subtitle: subtitle,
+            systemImage: systemImage
+        )
+    }
 
     var body: some View {
         AlpineSurface(role: .focus) {
-            HStack(alignment: .top, spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(eyebrow.uppercased())
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(AppTheme.sand.opacity(0.92))
-                    Text(title)
-                        .font(.system(size: 30, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .lineLimit(2)
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(alignment: .top, spacing: 16) {
+                    FeatureHeader(
+                        content: content.featureHeader,
+                        eyebrowColor: AppTheme.sand.opacity(0.92),
+                        titleColor: .white,
+                        subtitleColor: .white.opacity(0.78)
+                    )
 
-                    Text(subtitle)
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.78))
-                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+
+                    Image(systemName: content.systemImage)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(AppTheme.sand)
+                        .padding(14)
+                        .background(AppTheme.petrolBright.opacity(0.88), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 }
 
-                Spacer()
-
-                Image(systemName: systemImage)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(AppTheme.sand)
-                    .padding(14)
-                    .background(AppTheme.petrolBright.opacity(0.88), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                UtilityRow(
+                    content: content.utilityRow,
+                    tint: AppTheme.sand,
+                    titleColor: .white,
+                    subtitleColor: .white.opacity(0.78)
+                )
             }
         }
     }
