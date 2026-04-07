@@ -18,14 +18,10 @@ struct StatusBadge: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 9)
-        .foregroundStyle(color)
+        .foregroundStyle(AppTheme.ink)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color.white.opacity(0.16))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(color.opacity(0.22), lineWidth: 1)
+            Capsule(style: .continuous)
+                .fill(backgroundColor)
         )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Status")
@@ -35,5 +31,16 @@ struct StatusBadge: View {
 
     private var color: Color {
         AppTheme.statusColor(status)
+    }
+
+    private var backgroundColor: Color {
+        switch status {
+        case .green:
+            AppTheme.green.opacity(0.12)
+        case .yellow:
+            AppTheme.sand
+        case .red:
+            AppTheme.red.opacity(0.12)
+        }
     }
 }

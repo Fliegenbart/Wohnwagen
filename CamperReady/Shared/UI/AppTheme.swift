@@ -1,22 +1,25 @@
 import SwiftUI
 
 enum AppTheme {
-    // Primary accent: ruhiges Petrol mit genügend Sättigung für klare Akzente
-    static let accent = Color(red: 0.07, green: 0.45, blue: 0.63)
-    static let accentSoft = Color(red: 0.61, green: 0.74, blue: 0.82)
-    static let accentWarm = Color(red: 0.94, green: 0.56, blue: 0.37)
-
-    // Ruhiger Canvas ohne Deko-Layer
-    static let canvas = Color(red: 0.97, green: 0.98, blue: 0.99)
-    static let surface = Color.white
-    static let subtleBorder = Color.black.opacity(0.04)
-
-    static let ink = Color(red: 0.09, green: 0.11, blue: 0.14)
+    static let canvas = Color(red: 0.976, green: 0.976, blue: 0.973)
+    static let surfaceLow = Color(red: 0.953, green: 0.957, blue: 0.953)
+    static let surfaceRaised = Color.white
+    static let petrol = Color(red: 0.0, green: 0.275, blue: 0.333)
+    static let petrolBright = Color(red: 0.0, green: 0.372, blue: 0.451)
+    static let sand = Color(red: 0.976, green: 0.941, blue: 0.863)
+    static let ink = Color(red: 0.098, green: 0.110, blue: 0.110)
     static let mutedInk = Color(red: 0.36, green: 0.38, blue: 0.40)
     static let green = Color(red: 0.14, green: 0.70, blue: 0.39)
     static let yellow = Color(red: 0.98, green: 0.74, blue: 0.05)
     static let red = Color(red: 0.90, green: 0.28, blue: 0.22)
     static let asphalt = Color(red: 0.16, green: 0.18, blue: 0.22)
+
+    // Bestehende Screens nutzen diese Namen noch außerhalb dieses Tasks.
+    static let accent = petrolBright
+    static let accentSoft = sand.opacity(0.75)
+    static let accentWarm = sand
+    static let surface = surfaceRaised
+    static let subtleBorder = ink.opacity(0.04)
 
     static let canvasGradient = LinearGradient(
         colors: [canvas, Color.white],

@@ -12,28 +12,26 @@ struct SectionCard<Content: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundStyle(AppTheme.ink)
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 14) {
                 if let subtitle, !subtitle.isEmpty {
-                    Text(subtitle)
-                        .font(.subheadline)
-                        .foregroundStyle(AppTheme.mutedInk)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.system(.title3, design: .rounded, weight: .bold))
+                            .foregroundStyle(AppTheme.ink)
+
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(AppTheme.mutedInk)
+                    }
+                } else {
+                    Text(title)
+                        .font(.system(.title3, design: .rounded, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
                 }
+                content
             }
-            content
         }
-        .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.05), radius: 10, x: 0, y: 6)
         .accessibilityElement(children: .contain)
     }
 }
@@ -45,49 +43,32 @@ struct RoadSheetHeader: View {
     let systemImage: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Capsule()
-                .fill(AppTheme.accent.opacity(0.88))
-                .frame(width: 68, height: 6)
-
-            HStack(alignment: .top, spacing: 14) {
+        AlpineSurface(role: .focus) {
+            HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(eyebrow)
+                    Text(eyebrow.uppercased())
                         .font(.caption.weight(.bold))
-                        .foregroundStyle(AppTheme.accent)
+                        .foregroundStyle(AppTheme.sand.opacity(0.92))
                     Text(title)
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundStyle(AppTheme.ink)
+                        .font(.system(size: 30, weight: .semibold))
+                        .foregroundStyle(.white)
                         .lineLimit(2)
+
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.78))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 Spacer()
 
                 Image(systemName: systemImage)
                     .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(AppTheme.sand)
                     .padding(14)
-                    .background(AppTheme.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .background(AppTheme.petrolBright.opacity(0.88), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             }
-
-            Text(subtitle)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(AppTheme.mutedInk)
-                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 18)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Color.white.opacity(0.74),
-            in: RoundedRectangle(cornerRadius: 30, style: .continuous)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
-        )
-        .shadow(color: AppTheme.ink.opacity(0.06), radius: 16, x: 0, y: 8)
     }
 }
 
