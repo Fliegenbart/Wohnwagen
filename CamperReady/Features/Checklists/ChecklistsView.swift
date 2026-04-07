@@ -25,73 +25,111 @@ struct ChecklistsView: View {
         let requiredItems = selectedItems.filter(\.isRequired)
         let completedRequired = requiredItems.filter(\.isCompleted).count
         let progress = requiredItems.isEmpty ? 0 : Double(completedRequired) / Double(requiredItems.count)
+        let presentation = ChecklistPresentation.make(
+            title: selectedChecklist?.title ?? "Checklisten",
+            state: selectedChecklist?.state ?? .notStarted,
+            completedRequired: completedRequired,
+            requiredCount: requiredItems.count
+        )
+        let heroStatus = selectedChecklist.map(status(for:)) ?? .yellow
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 24) {
                 if vehicleChecklists.isEmpty {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ContentUnavailableView(
-                            "Noch keine Checkliste gestartet",
-                            systemImage: "checklist",
-                            description: Text("Starte eine Checkliste wie Abfahrt oder Einwintern, damit du offene Punkte direkt siehst.")
-                        )
+                    SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Starte einen Modus wie Abfahrt oder Einwintern, damit du offene Punkte direkt siehst.") {
+                        VStack(alignment: .leading, spacing: 16) {
+                            ContentUnavailableView(
+                                "Noch keine Checkliste gestartet",
+                                systemImage: "checklist",
+                                description: Text("Starte eine Checkliste wie Abfahrt oder Einwintern, damit du offene Punkte direkt siehst.")
+                            )
 
-                        if let vehicle {
-                            ForEach(ChecklistMode.allCases) { mode in
-                                Button(mode.title) {
-                                    startChecklist(mode: mode, vehicle: vehicle, trip: trip)
-                                }
-                                .buttonStyle(.borderedProminent)
-                            }
-                        }
-                    }
-                } else {
-                    checklistHero(selectedChecklist: selectedChecklist, progress: progress, completedRequired: completedRequired, requiredCount: requiredItems.count)
-
-                    checklistSection(title: "Checklisten", subtitle: "Wähle die Liste, die gerade zu deiner Situation passt.") {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(vehicleChecklists) { checklist in
-                                    ChecklistModeCard(
-                                        checklist: checklist,
-                                        isSelected: checklist.id == selectedChecklist?.id
-                                    )
-                                    .onTapGesture {
-                                        selectedChecklistID = checklist.id
-                                    }
-                                }
-                            }
-                            .padding(.vertical, 2)
-                        }
-                    }
-
-                    if let selectedChecklist {
-                        checklistSection(title: selectedChecklist.title, subtitle: "Diese Punkte solltest du hier abhaken, bevor du weitermachst.") {
-                            VStack(alignment: .leading, spacing: 14) {
-                                HStack {
-                                    StatusBadge(status: status(for: selectedChecklist), text: stateLabel(for: selectedChecklist.state))
-                                    Spacer()
-                                    Text("\(completedRequired)/\(max(requiredItems.count, 1)) Pflichtpunkte")
-                                        .font(.subheadline.weight(.semibold))
-                                        .foregroundStyle(AppTheme.mutedInk)
-                                }
-
-                                ProgressView(value: progress)
-                                    .progressViewStyle(.linear)
-                                    .tint(AppTheme.statusColor(status(for: selectedChecklist)))
-
-                                HStack(spacing: 12) {
-                                    Button("Punkt hinzufügen") {
-                                        checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
+                            if let vehicle {
+                                ForEach(ChecklistMode.allCases) { mode in
+                                    Button(mode.title) {
+                                        startChecklist(mode: mode, vehicle: vehicle, trip: trip)
                                     }
                                     .buttonStyle(.borderedProminent)
-
-                                    Button(selectedChecklist.isPinned ? "Lösen" : "Anheften") {
-                                        togglePinned(selectedChecklist)
-                                    }
-                                    .buttonStyle(.bordered)
                                 }
+                            }
+                        }
+                    }
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 16)
+                } else {
+                    FeatureHeader(
+                        eyebrow: "Checklist mode",
+                        title: selectedChecklist?.title ?? "Checklisten",
+                        subtitle: presentation.progressText
+                    )
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 10)
 
+                    AlpineSurface(role: .raised) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            StatusBadge(status: heroStatus, text: presentation.stateText)
+
+                            ProgressView(value: progress)
+                                .progressViewStyle(.linear)
+                                .tint(AppTheme.statusColor(heroStatus))
+
+                            HStack(spacing: 12) {
+                                Button("Punkt hinzufügen") {
+                                    guard let selectedChecklist else { return }
+                                    checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
+                                }
+                                .buttonStyle(.borderedProminent)
+
+                                Button(selectedChecklist?.isPinned == true ? "Lösen" : "Anheften") {
+                                    guard let selectedChecklist else { return }
+                                    togglePinned(selectedChecklist)
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                    }
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 16)
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Aktive Modi")
+                            .font(.caption.weight(.semibold))
+                            .textCase(.uppercase)
+                            .foregroundStyle(AppTheme.mutedInk)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(vehicleChecklists) { checklist in
+                                    Button {
+                                        selectedChecklistID = checklist.id
+                                    } label: {
+                                        HStack(spacing: 6) {
+                                            Text(checklist.title)
+                                            if checklist.isPinned {
+                                                Image(systemName: "pin.fill")
+                                                    .font(.caption2)
+                                            }
+                                        }
+                                        .font(.footnote.weight(.semibold))
+                                        .foregroundStyle(checklist.id == selectedChecklist?.id ? AppTheme.petrol : AppTheme.ink)
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 10)
+                                        .background(
+                                            checklist.id == selectedChecklist?.id ? AppTheme.petrol.opacity(0.12) : AppTheme.surfaceLow,
+                                            in: Capsule()
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                    }
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 16)
+
+                    if let selectedChecklist {
+                        SectionCard(title: "Aktive Punkte", subtitle: "Diese Punkte solltest du jetzt abhaken, bevor du weitermachst.") {
+                            VStack(alignment: .leading, spacing: 14) {
                                 if selectedItems.isEmpty {
                                     Text("Diese Checkliste hat noch keine Punkte.")
                                         .foregroundStyle(AppTheme.mutedInk)
@@ -121,6 +159,8 @@ struct ChecklistsView: View {
                                 }
                             }
                         }
+                        .opacity(hasAppeared ? 1 : 0.01)
+                        .offset(y: hasAppeared ? 0 : 18)
                     }
                 }
             }
@@ -207,128 +247,6 @@ struct ChecklistsView: View {
         }
     }
 
-    private func checklistHero(
-        selectedChecklist: ChecklistRun?,
-        progress: Double,
-        completedRequired: Int,
-        requiredCount: Int
-    ) -> some View {
-        let heroStatus = selectedChecklist.map { status(for: $0) } ?? .yellow
-
-        return VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(selectedChecklist?.title ?? "Checklisten")
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(AppTheme.ink)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.82)
-                    Text(selectedChecklist?.mode.title ?? "Modus wählen")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(AppTheme.mutedInk)
-                }
-
-                Spacer()
-
-                StatusBadge(status: heroStatus, text: heroStatus.title)
-            }
-
-            Text(checklistSupportLine(selectedChecklist: selectedChecklist, completedRequired: completedRequired, requiredCount: requiredCount))
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(AppTheme.mutedInk)
-                .fixedSize(horizontal: false, vertical: true)
-
-            ProgressView(value: progress)
-                .progressViewStyle(.linear)
-                .tint(AppTheme.statusColor(heroStatus))
-
-            HStack(spacing: 12) {
-                MetricCard(title: "Fortschritt", value: "\(Int((progress * 100).rounded())) %", systemImage: "checkmark.seal")
-                MetricCard(title: "Pflicht", value: "\(completedRequired)/\(max(requiredCount, 1))", systemImage: "list.bullet")
-            }
-        }
-        .padding(18)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
-        .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 16)
-    }
-
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2.weight(.bold))
-                .textCase(.uppercase)
-                .foregroundStyle(.white.opacity(0.72))
-            Text(value)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(.white)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-    }
-
-    private func heroMeta(label: String, systemImage: String) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: systemImage)
-                .font(.caption.weight(.bold))
-            Text(label)
-                .lineLimit(1)
-        }
-        .font(.footnote.weight(.semibold))
-        .foregroundStyle(.white.opacity(0.88))
-        .padding(.horizontal, 13)
-        .padding(.vertical, 10)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-    }
-
-    private func checklistHeroBackground(status: ReadinessStatus) -> some View {
-        AppTheme.surface
-    }
-
-    private func checklistSupportLine(selectedChecklist: ChecklistRun?, completedRequired: Int, requiredCount: Int) -> String {
-        guard let selectedChecklist else {
-            return "Wähle eine Checkliste aus, damit du Schritt für Schritt prüfen kannst, was noch zu tun ist."
-        }
-
-        if requiredCount == 0 {
-            return "Für \(selectedChecklist.title) sind noch keine Pflichtpunkte hinterlegt. Ergänze Aufgaben, wenn du mehr festhalten möchtest."
-        }
-
-        return "In \(selectedChecklist.title) sind \(completedRequired) von \(requiredCount) Pflichtpunkten erledigt."
-    }
-
-    private func checklistSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(title)
-                    .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundStyle(AppTheme.ink)
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(AppTheme.mutedInk)
-            }
-            content()
-        }
-        .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 18)
-    }
-
     private var deleteChecklistBinding: Binding<Bool> {
         Binding(
             get: { checklistToDelete != nil },
@@ -362,14 +280,6 @@ struct ChecklistsView: View {
         case .complete: .green
         case .inProgress: .yellow
         case .notStarted: .yellow
-        }
-    }
-
-    private func stateLabel(for state: ChecklistState) -> String {
-        switch state {
-        case .notStarted: "Nicht gestartet"
-        case .inProgress: "Läuft"
-        case .complete: "Erledigt"
         }
     }
 
@@ -442,75 +352,6 @@ private struct ChecklistItemFormContext: Identifiable {
     let id = UUID()
     let checklist: ChecklistRun
     let item: ChecklistItemRecord?
-}
-
-private struct ChecklistModeCard: View {
-    let checklist: ChecklistRun
-    let isSelected: Bool
-
-    var body: some View {
-        let tint = AppTheme.statusColor(status)
-
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Image(systemName: checklist.mode.iconName)
-                    .font(.headline)
-                    .foregroundStyle(isSelected ? .white : tint)
-                Spacer()
-                RoundedRectangle(cornerRadius: 999, style: .continuous)
-                    .fill(isSelected ? AnyShapeStyle(.white.opacity(0.92)) : AnyShapeStyle(tint))
-                    .frame(width: 24, height: 6)
-            }
-
-            Text(checklist.mode.title)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(isSelected ? .white : AppTheme.ink)
-
-            HStack(spacing: 8) {
-                Text(stateText)
-                    .font(.caption.weight(.bold))
-                    .textCase(.uppercase)
-                    .foregroundStyle(isSelected ? .white.opacity(0.92) : tint)
-                Text(checklist.updatedAt.shortDateString())
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(isSelected ? .white.opacity(0.82) : AppTheme.mutedInk)
-            }
-        }
-        .padding(16)
-        .frame(width: 176, alignment: .leading)
-        .background(background, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(isSelected ? Color.white.opacity(0.18) : AppTheme.asphalt.opacity(0.08), lineWidth: 1)
-        )
-    }
-
-    private var status: ReadinessStatus {
-        switch checklist.state {
-        case .complete: .green
-        case .inProgress: .yellow
-        case .notStarted: .yellow
-        }
-    }
-
-    private var background: LinearGradient {
-        if isSelected {
-            return AppTheme.statusGradient(status)
-        }
-        return LinearGradient(
-            colors: [Color.white.opacity(0.54), Color.white.opacity(0.46)],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
-    private var stateText: String {
-        switch checklist.state {
-        case .complete: "Erledigt"
-        case .inProgress: "Läuft"
-        case .notStarted: "Offen"
-        }
-    }
 }
 
 private struct ChecklistItemRow: View {

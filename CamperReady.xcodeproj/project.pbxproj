@@ -19,6 +19,8 @@
 		315F9CBA8DA5F11EB9C822EA /* DocumentRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D821CE9A170DF51E35AC11 /* DocumentRecord.swift */; };
 		3E31772264B29C74115E268D /* SampleDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F2C3F0DACDAFE0A5EB0004 /* SampleDataSeeder.swift */; };
 		414123B633FC677CBC89FA29 /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FB86E835C56F10C6B499A /* WeightView.swift */; };
+		4364C95B1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364C95A1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift */; };
+		4364C95D1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364C95C1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift */; };
 		439002C352103179DF5A01CB /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F500305A46D8BA1E45988 /* RootTabView.swift */; };
 		46AAA6EEA74FA34CEDB255A3 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF331AF0952C2861CE91E084 /* PersistenceController.swift */; };
 		4A1D0F5B2CBF4E42A487DC35 /* WeightPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D0F5A2CBF4E42A487DC35 /* WeightPresentation.swift */; };
@@ -85,6 +87,8 @@
 		070DB27DF9A4CBF5D7DBC166 /* ActiveVehicleStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ActiveVehicleStore.swift; path = CamperReady/Services/ActiveVehicleStore.swift; sourceTree = "<group>"; };
 		0816C8B4600A46C8F73C92E0 /* PassengerLoad.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PassengerLoad.swift; path = CamperReady/Domain/Models/PassengerLoad.swift; sourceTree = "<group>"; };
 		0B7FB86E835C56F10C6B499A /* WeightView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightView.swift; path = CamperReady/Features/Weight/WeightView.swift; sourceTree = "<group>"; };
+		4364C95A1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistPresentationTests.swift; path = CamperReadyTests/ChecklistPresentationTests.swift; sourceTree = "<group>"; };
+		4364C95C1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistPresentation.swift; path = CamperReady/Features/Checklists/ChecklistPresentation.swift; sourceTree = "<group>"; };
 		4A1D0F5A2CBF4E42A487DC35 /* WeightPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightPresentation.swift; path = CamperReady/Features/Weight/WeightPresentation.swift; sourceTree = "<group>"; };
 		11596BF20AAD8BF9AADCC988 /* AttachmentStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentStore.swift; path = CamperReady/Services/AttachmentStore.swift; sourceTree = "<group>"; };
 		15EDE0A1E85A85354B2E10EE /* Tests-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Tests-Debug.xcconfig"; path = "CamperReady/Config/Tests-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -213,6 +217,7 @@
 		2D5594E0347C642E47B51401 /* Checklists */ = {
 			isa = PBXGroup;
 			children = (
+				4364C95C1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift */,
 				00BA5325CA425478B4B66B76 /* ChecklistsView.swift */,
 			);
 			name = Checklists;
@@ -382,6 +387,7 @@
 			isa = PBXGroup;
 			children = (
 				D891735DAE7CFC8012FF7927 /* AlpineSurfaceTests.swift */,
+				4364C95A1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift */,
 				C883E5217C6316D400D34026 /* HomeDashboardPresentationTests.swift */,
 				A467FCC3063957057B9F91DE /* ReadinessEngineTests.swift */,
 				824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */,
@@ -554,6 +560,7 @@
 				FDEC4ACD9E58A4CAE7CE0DA3 /* VehicleProfile.swift in Sources */,
 				78F0A7297C6326B700DBA8EE /* ReadinessDimensionMetadata.swift in Sources */,
 				BAA48831344E20E2986C293D /* ReadinessEngine.swift in Sources */,
+				4364C95D1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift in Sources */,
 				67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */,
 				F5A3DC4BA95D22F40ECB405D /* CostsView.swift in Sources */,
 				819E72ECCFBB8F31C84D8C97 /* AppInfoView.swift in Sources */,
@@ -596,6 +603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D891735CAE7CFC8012FF7927 /* AlpineSurfaceTests.swift in Sources */,
+				4364C95B1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift in Sources */,
 				C883E5227C6316D400D34026 /* HomeDashboardPresentationTests.swift in Sources */,
 				D891735BAE7CFC8012FF7927 /* ReadinessEngineTests.swift in Sources */,
 				824A0BA7C1D94555A8AE1A0D /* WeightPresentationTests.swift in Sources */,
