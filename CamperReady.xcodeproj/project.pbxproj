@@ -10,6 +10,7 @@
 		04098A8A603F57BE24AFDFA7 /* CostsPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F700B4BB1B6A5434537106D8 /* CostsPresentationTests.swift */; };
 		1F2E3D4C5B6A7890ABCDEF12 /* AppLaunchCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E3D4C5B6A7890ABCDEF11 /* AppLaunchCopy.swift */; };
 		1F2E3D4C5B6A7890ABCDEF14 /* AppLaunchTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E3D4C5B6A7890ABCDEF13 /* AppLaunchTiming.swift */; };
+		1F2E3D4C5B6A7890ABCDEF16 /* AppLaunchSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E3D4C5B6A7890ABCDEF15 /* AppLaunchSession.swift */; };
 		2AB3C4D5E6F70123456789AB /* StartscreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB3C4D5E6F70123456789AA /* StartscreenView.swift */; };
 		2AB3C4D5E6F70123456789AD /* AppLaunchContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB3C4D5E6F70123456789AC /* AppLaunchContainerView.swift */; };
 		B1C2D3E4F506123456789ABC /* StartscreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60123456789AB /* StartscreenTests.swift */; };
@@ -114,6 +115,7 @@
 		2E08ED75ADF7A85DB49AF319 /* AppReleaseConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppReleaseConfiguration.swift; path = CamperReady/App/AppReleaseConfiguration.swift; sourceTree = "<group>"; };
 		1F2E3D4C5B6A7890ABCDEF11 /* AppLaunchCopy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppLaunchCopy.swift; path = CamperReady/App/AppLaunchCopy.swift; sourceTree = "<group>"; };
 		1F2E3D4C5B6A7890ABCDEF13 /* AppLaunchTiming.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppLaunchTiming.swift; path = CamperReady/App/AppLaunchTiming.swift; sourceTree = "<group>"; };
+		1F2E3D4C5B6A7890ABCDEF15 /* AppLaunchSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppLaunchSession.swift; path = CamperReady/App/AppLaunchSession.swift; sourceTree = "<group>"; };
 		2AB3C4D5E6F70123456789AA /* StartscreenView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StartscreenView.swift; path = CamperReady/App/StartscreenView.swift; sourceTree = "<group>"; };
 		2AB3C4D5E6F70123456789AC /* AppLaunchContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppLaunchContainerView.swift; path = CamperReady/App/AppLaunchContainerView.swift; sourceTree = "<group>"; };
 		2E3F5783304AA59A9C313439 /* CamperReadyApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CamperReadyApp.swift; path = CamperReady/App/CamperReadyApp.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 			children = (
 				2AB3C4D5E6F70123456789AC /* AppLaunchContainerView.swift */,
 				1F2E3D4C5B6A7890ABCDEF11 /* AppLaunchCopy.swift */,
+				1F2E3D4C5B6A7890ABCDEF15 /* AppLaunchSession.swift */,
 				1F2E3D4C5B6A7890ABCDEF13 /* AppLaunchTiming.swift */,
 				EA705745D5EECD9D2E127464 /* AppNavigationState.swift */,
 				2E08ED75ADF7A85DB49AF319 /* AppReleaseConfiguration.swift */,
@@ -585,6 +588,7 @@
 				E24E777F455A9486592AAF84 /* AppNavigationState.swift in Sources */,
 				9F6FFD514F99753338260A26 /* AppReleaseConfiguration.swift in Sources */,
 				1F2E3D4C5B6A7890ABCDEF12 /* AppLaunchCopy.swift in Sources */,
+				1F2E3D4C5B6A7890ABCDEF16 /* AppLaunchSession.swift in Sources */,
 				1F2E3D4C5B6A7890ABCDEF14 /* AppLaunchTiming.swift in Sources */,
 				A656198CCC4134FAC191DDFD /* CamperReadyApp.swift in Sources */,
 				439002C352103179DF5A01CB /* RootTabView.swift in Sources */,
