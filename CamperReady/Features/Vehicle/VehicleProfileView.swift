@@ -112,7 +112,7 @@ struct VehicleProfileView: View {
                     } header: {
                         Text("Service")
                     } footer: {
-                        Text("Nutze `0`, wenn du noch kein festes Intervall pflegen willst.")
+                        Text("Nutze 0, wenn du noch kein festes Intervall pflegen willst.")
                     }
 
                     Section {
