@@ -89,9 +89,6 @@ struct RootTabView: View {
         .task {
             guard !didBootstrap else { return }
             didBootstrap = true
-            if AppReleaseConfiguration.shouldSeedSampleDataOnFirstLaunch {
-                try? SampleDataSeeder.seedIfNeeded(context: modelContext)
-            }
             updatePresentationState()
         }
         .task(id: reminderRefreshKey) {
@@ -121,7 +118,7 @@ struct RootTabView: View {
     }
 
     private func updatePresentationState() {
-        showOnboarding = !AppReleaseConfiguration.shouldSeedSampleDataOnFirstLaunch && vehicles.isEmpty && !hasDismissedOnboarding
+        showOnboarding = vehicles.isEmpty && !hasDismissedOnboarding
         activeVehicleStore.reconcile(with: vehicles)
     }
 

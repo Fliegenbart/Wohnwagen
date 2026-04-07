@@ -199,6 +199,10 @@ final class WorldClassUpgradeTests: XCTestCase {
         XCTAssertEqual(navigation.pendingRoute, .checklist(mode: .departure))
     }
 
+    func testSampleDataIsDisabledForProductionLaunches() {
+        XCTAssertFalse(AppReleaseConfiguration.shouldSeedSampleDataOnFirstLaunch)
+    }
+
     func testActiveVehicleResolverKeepsStoredVehicleWhenItExists() {
         let vehicleA = VehicleProfile(name: "Atlas", vehicleKind: .motorhome, brand: "Hymer", model: "ML-T")
         let vehicleB = VehicleProfile(name: "Nova", vehicleKind: .campervan, brand: "Pössl", model: "Summit")
