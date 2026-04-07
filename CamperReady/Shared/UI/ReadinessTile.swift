@@ -4,29 +4,32 @@ struct ReadinessTile: View {
     let result: ReadinessDimensionResult
 
     var body: some View {
-        AlpineSurface(role: .raised) {
-            VStack(alignment: .leading, spacing: 14) {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .center, spacing: 12) {
                     Image(systemName: iconName)
-                        .font(.subheadline.weight(.semibold))
+                        .font(.subheadline.weight(.medium))
                         .foregroundStyle(accentColor)
                         .frame(width: 28, height: 28)
-                        .background(accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                        .background(accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
 
-                    Text(result.title)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(AppTheme.ink)
-                        .lineLimit(2)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(result.title.uppercased())
+                            .font(.caption.weight(.bold))
+                            .tracking(0.8)
+                            .foregroundStyle(AppTheme.mutedInk)
+                            .lineLimit(1)
+
+                        Text(result.summary)
+                            .font(.title3.weight(.semibold))
+                            .foregroundStyle(AppTheme.ink)
+                            .lineLimit(3)
+                    }
 
                     Spacer()
 
                     StatusBadge(status: result.status, text: result.status.compactTitle)
                 }
-
-                Text(result.summary)
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(AppTheme.ink)
-                    .lineLimit(3)
 
                 if let reason = result.reasons.first {
                     Text(reason)
@@ -37,7 +40,7 @@ struct ReadinessTile: View {
                 }
 
                 if let nextAction = result.nextAction {
-                    Label(nextAction, systemImage: "arrow.right.circle.fill")
+                    Label(nextAction, systemImage: "arrow.up.forward")
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(AppTheme.petrolBright)
                 }
@@ -56,12 +59,12 @@ struct ReadinessTile: View {
 
     private var iconName: String {
         switch result.title {
-        case "Gewicht": "scalemass.fill"
-        case "Gas & Dokumente": "doc.text.fill"
-        case "Wartung": "wrench.and.screwdriver.fill"
-        case "Wasser / Winter": "drop.fill"
-        case "Kosten": "eurosign.circle.fill"
-        default: "circle.grid.2x2.fill"
+        case "Gewicht": "scalemass"
+        case "Gas & Dokumente": "doc.text"
+        case "Wartung": "wrench.and.screwdriver"
+        case "Wasser / Winter": "drop"
+        case "Kosten": "eurosign.circle"
+        default: "circle.grid.2x2"
         }
     }
 }

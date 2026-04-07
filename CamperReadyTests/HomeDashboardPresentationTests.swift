@@ -2,7 +2,7 @@ import XCTest
 @testable import CamperReady
 
 final class HomeDashboardPresentationTests: XCTestCase {
-    func testPresentationPromotesNonGreenDimensionsIntoActionList() {
+    func testPresentationShapesFocusPanelFromHighestPriorityOpenDimension() {
         let snapshot = DashboardSnapshot(
             vehicleName: "Atlas",
             nextTripTitle: "Bodensee",
@@ -20,7 +20,32 @@ final class HomeDashboardPresentationTests: XCTestCase {
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Bodensee")
 
         XCTAssertEqual(presentation.focusTitle, "2 Punkte offen")
+        XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
+        XCTAssertEqual(presentation.focusDetail, "Nachweis erneuern")
+        XCTAssertEqual(presentation.focusContext, "Bodensee")
         XCTAssertEqual(presentation.actionRows.count, 2)
         XCTAssertEqual(presentation.actionRows.first?.title, "Gasprüfung abgelaufen")
+    }
+
+    func testPresentationFallsBackToTripWhenNoOpenDimensionsExist() {
+        let snapshot = DashboardSnapshot(
+            vehicleName: "Atlas",
+            nextTripTitle: "Bodensee",
+            overallStatus: .green,
+            overallHeadline: "Abfahrbereit",
+            openItemsCount: 0,
+            dimensions: [
+                ReadinessDimensionResult(title: "Gewicht", status: .green, summary: "+220 kg Reserve", reasons: [], nextAction: nil),
+                ReadinessDimensionResult(title: "Gas & Dokumente", status: .green, summary: "Alles gültig", reasons: [], nextAction: nil)
+            ],
+            blockingItems: []
+        )
+
+        let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Bodensee")
+
+        XCTAssertEqual(presentation.focusTitle, "Abfahrbereit")
+        XCTAssertEqual(presentation.focusSubtitle, "Bodensee")
+        XCTAssertEqual(presentation.focusDetail, "Atlas ist für Bodensee einsatzbereit.")
+        XCTAssertTrue(presentation.actionRows.isEmpty)
     }
 }

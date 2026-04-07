@@ -55,7 +55,7 @@ struct HomeDashboardView: View {
                     .opacity(hasAppeared ? 1 : 0.01)
                     .offset(y: hasAppeared ? 0 : 10)
 
-                    focusPanel(snapshot: snapshot, trip: trip, presentation: presentation)
+                    focusPanel(snapshot: snapshot, presentation: presentation)
                     actionPanel(presentation: presentation)
                     quickAccessPanel()
                 }
@@ -140,13 +140,13 @@ struct HomeDashboardView: View {
         }
     }
 
-    private func focusPanel(snapshot: DashboardSnapshot, trip: Trip?, presentation: HomeDashboardPresentation) -> some View {
+    private func focusPanel(snapshot: DashboardSnapshot, presentation: HomeDashboardPresentation) -> some View {
         AlpineSurface(role: .focus) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(alignment: .top) {
                     StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.title)
                     Spacer()
-                    Text(presentation.focusSubtitle)
+                    Text(presentation.focusContext)
                         .font(.caption.weight(.bold))
                         .textCase(.uppercase)
                         .tracking(0.8)
@@ -160,7 +160,12 @@ struct HomeDashboardView: View {
                     .lineLimit(3)
                     .minimumScaleFactor(0.82)
 
-                Text(heroSupportLine(snapshot: snapshot, trip: trip))
+                Text(presentation.focusSubtitle)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.94))
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Text(presentation.focusDetail)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.white.opacity(0.82))
                     .fixedSize(horizontal: false, vertical: true)
@@ -289,13 +294,6 @@ struct HomeDashboardView: View {
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 20)
-    }
-
-    private func heroSupportLine(snapshot: DashboardSnapshot, trip: Trip?) -> String {
-        if snapshot.openItemsCount == 0 {
-            return trip.map { "\(snapshot.vehicleName) ist für \($0.title) einsatzbereit." } ?? "\(snapshot.vehicleName) ist fahrbereit. Alle Kernbereiche sind im grünen Bereich."
-        }
-        return "\(snapshot.vehicleName) hat \(snapshot.openItemsCount) offene Bereiche. Jetzt prüfen, bevor du losfährst."
     }
 
     private func sectionHeading(title: String, subtitle: String) -> some View {
