@@ -42,12 +42,6 @@ struct LogbookView: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                hero(
-                    maintenanceCount: vehicleMaintenance.count,
-                    documentCount: vehicleDocuments.count,
-                    placeCount: vehiclePlaces.count
-                )
-
                 Picker("Bereich", selection: $selectedSection) {
                     ForEach(LogbookSection.allCases) { section in
                         Text(section.title).tag(section)
@@ -236,82 +230,6 @@ struct LogbookView: View {
         .onChange(of: navigation.pendingRoute) { _, _ in
             handlePendingRoute()
         }
-    }
-
-    private func hero(maintenanceCount: Int, documentCount: Int, placeCount: Int) -> some View {
-        ZStack(alignment: .bottomLeading) {
-            logbookHeroBackground
-
-            VStack(alignment: .leading, spacing: 18) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("CamperReady")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(.white)
-                        Text("Logbuch")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.78))
-                    }
-
-                    Spacer()
-
-                    Image(systemName: "book.closed.fill")
-                        .font(.system(size: 28))
-                        .foregroundStyle(.white)
-                        .padding(14)
-                        .background(.ultraThinMaterial.opacity(0.58), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                }
-
-                Spacer(minLength: 18)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Alles an einem Ort")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(.white)
-                    Text("Wartung, Fristen und eigene Platznotizen bleiben zusammen, damit du nichts suchen musst.")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                HStack(spacing: 12) {
-                    heroPill(title: "Wartung", value: "\(maintenanceCount)")
-                    heroPill(title: "Dokumente", value: "\(documentCount)")
-                    heroPill(title: "Orte", value: "\(placeCount)")
-                }
-            }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 24)
-        }
-        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
-        .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
-        .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 22)
-    }
-
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2.weight(.bold))
-                .textCase(.uppercase)
-                .foregroundStyle(.white.opacity(0.72))
-            Text(value)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(.white)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-    }
-
-    private var logbookHeroBackground: some View {
-        AppTheme.surface
     }
 
     private func logbookSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
