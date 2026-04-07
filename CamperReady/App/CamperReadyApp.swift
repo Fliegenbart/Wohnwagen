@@ -15,7 +15,7 @@ struct CamperReadyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootTabView()
+            AppLaunchContainerView()
                 .environmentObject(persistenceStatus)
                 .environmentObject(activeVehicleStore)
         }

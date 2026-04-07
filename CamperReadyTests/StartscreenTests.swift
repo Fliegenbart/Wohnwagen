@@ -8,4 +8,12 @@ final class StartscreenTests: XCTestCase {
         XCTAssertEqual(AppLaunchTiming.holdDurationSeconds, 0.85)
         XCTAssertEqual(AppLaunchTiming.fadeDurationSeconds, 0.35)
     }
+
+    func testLaunchHoldDurationUsesShorterPauseWhenReducedMotionIsEnabled() {
+        let defaultDuration = AppLaunchTiming.holdDuration(reduceMotion: false)
+        let reducedMotionDuration = AppLaunchTiming.holdDuration(reduceMotion: true)
+
+        XCTAssertEqual(defaultDuration, AppLaunchTiming.holdDurationSeconds)
+        XCTAssertLessThan(reducedMotionDuration, defaultDuration)
+    }
 }
