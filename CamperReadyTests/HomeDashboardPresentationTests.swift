@@ -23,8 +23,10 @@ final class HomeDashboardPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
         XCTAssertEqual(presentation.focusDetail, "Nachweis erneuern")
         XCTAssertEqual(presentation.focusContext, "Bodensee")
+        XCTAssertEqual(presentation.overviewRows.map(\.title), ["Gewicht", "Gas & Dokumente", "Wartung"])
         XCTAssertEqual(presentation.actionRows.count, 2)
         XCTAssertEqual(presentation.actionRows.first?.title, "Gasprüfung abgelaufen")
+        XCTAssertEqual(presentation.actionRows.first?.systemImage, "doc.text")
     }
 
     func testPresentationFallsBackToTripWhenNoOpenDimensionsExist() {
@@ -46,6 +48,49 @@ final class HomeDashboardPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.focusTitle, "Abfahrbereit")
         XCTAssertEqual(presentation.focusSubtitle, "Bodensee")
         XCTAssertEqual(presentation.focusDetail, "Atlas ist für Bodensee einsatzbereit.")
+        XCTAssertEqual(presentation.overviewRows.count, 2)
         XCTAssertTrue(presentation.actionRows.isEmpty)
+    }
+
+    func testPresentationFallsBackWithoutExplicitTripTitle() {
+        let snapshot = DashboardSnapshot(
+            vehicleName: "Atlas",
+            nextTripTitle: "Keine Reise geplant",
+            overallStatus: .green,
+            overallHeadline: "Abfahrbereit",
+            openItemsCount: 0,
+            dimensions: [
+                ReadinessDimensionResult(title: "Gewicht", status: .green, summary: "+220 kg Reserve", reasons: [], nextAction: nil)
+            ],
+            blockingItems: []
+        )
+
+        let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: nil)
+
+        XCTAssertEqual(presentation.focusContext, "Keine Reise geplant")
+        XCTAssertEqual(presentation.focusSubtitle, "Keine Reise geplant")
+        XCTAssertEqual(presentation.focusDetail, "Atlas ist fahrbereit. Alle Kernbereiche sind im grünen Bereich.")
+    }
+
+    func testPresentationUsesDimensionMetadataForTieBreakingAndActionRows() {
+        let snapshot = DashboardSnapshot(
+            vehicleName: "Atlas",
+            nextTripTitle: "Nordsee",
+            overallStatus: .red,
+            overallHeadline: "Nicht bereit",
+            openItemsCount: 3,
+            dimensions: [
+                ReadinessDimensionResult(title: "Wartung", status: .red, summary: "Service überfällig", reasons: ["Seit 400 km überzogen"], nextAction: "Termin buchen"),
+                ReadinessDimensionResult(title: "Gas & Dokumente", status: .red, summary: "Gasprüfung abgelaufen", reasons: ["Prüfung fehlt"], nextAction: "Nachweis erneuern"),
+                ReadinessDimensionResult(title: "Gewicht", status: .yellow, summary: "Nur noch 50 kg Reserve", reasons: ["Wenig Reserve"], nextAction: "Beladung prüfen")
+            ],
+            blockingItems: ["Prüfung fehlt", "Seit 400 km überzogen"]
+        )
+
+        let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Nordsee")
+
+        XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
+        XCTAssertEqual(presentation.actionRows.map(\.systemImage), ["doc.text", "wrench.and.screwdriver", "scalemass"])
+        XCTAssertEqual(presentation.actionRows.map(\.dimensionTitle), ["Gas & Dokumente", "Wartung", "Gewicht"])
     }
 }

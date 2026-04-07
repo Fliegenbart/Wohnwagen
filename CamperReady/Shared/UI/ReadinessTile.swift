@@ -7,7 +7,7 @@ struct ReadinessTile: View {
         AlpineSurface(role: .section) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .center, spacing: 12) {
-                    Image(systemName: iconName)
+                    Image(systemName: result.metadata.systemImage)
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(accentColor)
                         .frame(width: 28, height: 28)
@@ -55,16 +55,5 @@ struct ReadinessTile: View {
 
     private var accentColor: Color {
         AppTheme.statusColor(result.status)
-    }
-
-    private var iconName: String {
-        switch result.title {
-        case "Gewicht": "scalemass"
-        case "Gas & Dokumente": "doc.text"
-        case "Wartung": "wrench.and.screwdriver"
-        case "Wasser / Winter": "drop"
-        case "Kosten": "eurosign.circle"
-        default: "circle.grid.2x2"
-        }
     }
 }

@@ -31,6 +31,7 @@
 		64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */; };
 		64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */; };
 		67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA5325CA425478B4B66B76 /* ChecklistsView.swift */; };
+		78F0A7297C6326B700DBA8EE /* ReadinessDimensionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */; };
 		6E2C55748B865DB290DE8CFF /* CostEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3562945C27A8645EEBDF2E /* CostEntry.swift */; };
 		75B0CC5F26A910D4B7AA3AE9 /* MaintenanceEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA13573CEB2D95F33B352BE /* MaintenanceEntry.swift */; };
 		763E489DAD73F087C8214499 /* ReminderPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DCCFAA435454628133420 /* ReminderPlanner.swift */; };
@@ -111,6 +112,7 @@
 		619D4F00AE83955BBF44CC0B /* App-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "App-Debug.xcconfig"; path = "CamperReady/Config/App-Debug.xcconfig"; sourceTree = "<group>"; };
 		6E0DCCFAA435454628133420 /* ReminderPlanner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReminderPlanner.swift; path = CamperReady/Services/ReminderPlanner.swift; sourceTree = "<group>"; };
 		6F01469D5E49EE352F500BE9 /* PackingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PackingItem.swift; path = CamperReady/Domain/Models/PackingItem.swift; sourceTree = "<group>"; };
+		78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessDimensionMetadata.swift; path = CamperReady/Domain/Readiness/ReadinessDimensionMetadata.swift; sourceTree = "<group>"; };
 		7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SectionCard.swift; path = CamperReady/Shared/UI/SectionCard.swift; sourceTree = "<group>"; };
 		7AD2371FD6E4614D678C0F09 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = CamperReadyTests/Support/Info.plist; sourceTree = "<group>"; };
 		87B3B2EC7C6316C30067B17E /* HomeDashboardPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardPresentation.swift; path = CamperReady/Features/Home/HomeDashboardPresentation.swift; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 		C5E790C8461D7B820FD3BBD1 /* Readiness */ = {
 			isa = PBXGroup;
 			children = (
+				78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */,
 				3A98E2C0FEC95CE22DB5E0B1 /* ReadinessEngine.swift */,
 			);
 			name = Readiness;
@@ -543,6 +546,7 @@
 				F6430670730B9C6C3793B8B8 /* Trip.swift in Sources */,
 				C6E62D1DDD542604789E18FD /* TripLoadSettings.swift in Sources */,
 				FDEC4ACD9E58A4CAE7CE0DA3 /* VehicleProfile.swift in Sources */,
+				78F0A7297C6326B700DBA8EE /* ReadinessDimensionMetadata.swift in Sources */,
 				BAA48831344E20E2986C293D /* ReadinessEngine.swift in Sources */,
 				67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */,
 				F5A3DC4BA95D22F40ECB405D /* CostsView.swift in Sources */,

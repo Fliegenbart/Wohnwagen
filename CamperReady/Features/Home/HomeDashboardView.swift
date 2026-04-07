@@ -56,6 +56,7 @@ struct HomeDashboardView: View {
                     .offset(y: hasAppeared ? 0 : 10)
 
                     focusPanel(snapshot: snapshot, presentation: presentation)
+                    readinessOverviewPanel(presentation: presentation)
                     actionPanel(presentation: presentation)
                     quickAccessPanel()
                 }
@@ -224,7 +225,7 @@ struct HomeDashboardView: View {
                         )
                     } else {
                         ForEach(Array(presentation.actionRows.enumerated()), id: \.element.id) { index, row in
-                            if let action = actionKind(forDimensionTitle: row.dimensionTitle) {
+                            if let action = row.action {
                                 Button {
                                     navigation.navigate(for: action)
                                 } label: {
@@ -257,6 +258,38 @@ struct HomeDashboardView: View {
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 18)
+    }
+
+    private func readinessOverviewPanel(presentation: HomeDashboardPresentation) -> some View {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 10) {
+                sectionHeading(
+                    title: "Bereitschaft im Überblick",
+                    subtitle: "Alle Bereiche auf einen Blick, auch wenn sie schon im grünen Bereich sind."
+                )
+
+                VStack(spacing: 0) {
+                    ForEach(Array(presentation.overviewRows.enumerated()), id: \.element.id) { index, row in
+                        if let action = row.action {
+                            Button {
+                                navigation.navigate(for: action)
+                            } label: {
+                                overviewRow(row, showsArrow: true)
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            overviewRow(row, showsArrow: false)
+                        }
+
+                        if index != presentation.overviewRows.count - 1 {
+                            Divider()
+                        }
+                    }
+                }
+            }
+        }
+        .opacity(hasAppeared ? 1 : 0.01)
+        .offset(y: hasAppeared ? 0 : 16)
     }
 
     private func quickAccessPanel() -> some View {
@@ -324,21 +357,34 @@ struct HomeDashboardView: View {
         .buttonStyle(.plain)
     }
 
-    private func actionKind(forDimensionTitle title: String) -> ReadinessActionKind? {
-        switch title {
-        case "Gewicht":
-            .weight
-        case "Gas & Dokumente":
-            .documents
-        case "Wartung":
-            .maintenance
-        case "Wasser / Winter":
-            .departureChecklist
-        case "Kosten":
-            .costs
-        default:
-            nil
+    private func overviewRow(_ row: HomeOverviewRow, showsArrow: Bool) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            Image(systemName: row.systemImage)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.statusColor(row.status))
+                .frame(width: 24)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(row.title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                Text(row.summary)
+                    .font(.footnote)
+                    .foregroundStyle(AppTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer()
+
+            StatusBadge(status: row.status, text: row.status.compactTitle)
+
+            if showsArrow {
+                Image(systemName: "arrow.up.forward")
+                    .font(.footnote.weight(.bold))
+                    .foregroundStyle(AppTheme.statusColor(row.status))
+            }
         }
+        .padding(.vertical, 10)
     }
 
     private var emptyStateHero: some View {
