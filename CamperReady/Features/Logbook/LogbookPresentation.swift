@@ -10,11 +10,19 @@ struct SummaryStat: Equatable, Identifiable {
 struct LogbookPresentation: Equatable {
     let stats: [SummaryStat]
 
-    static func make(totalDistance: Double, totalSpend: Double, readinessOpenItems: Int) -> Self {
+    static func make(totalDistance: Double, totalSpend: Double, readinessOpenItems: Int?) -> Self {
         LogbookPresentation(stats: [
             SummaryStat(title: "Distanz", value: "\(Int(totalDistance)) km"),
             SummaryStat(title: "Investition", value: totalSpend.euroString),
-            SummaryStat(title: "Bereitschaft", value: readinessOpenItems == 0 ? "Bereit" : "\(readinessOpenItems) offen")
+            SummaryStat(title: "Bereitschaft", value: readinessValue(for: readinessOpenItems))
         ])
+    }
+
+    private static func readinessValue(for readinessOpenItems: Int?) -> String {
+        guard let readinessOpenItems else {
+            return "Kein Fahrzeug"
+        }
+
+        return readinessOpenItems == 0 ? "Bereit" : "\(readinessOpenItems) offen"
     }
 }

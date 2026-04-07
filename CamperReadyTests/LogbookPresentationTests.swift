@@ -14,4 +14,10 @@ final class LogbookPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.stats.last?.value, "Bereit")
     }
+
+    func testLogbookPresentationUsesNeutralCopyWhenNoVehicleIsAvailable() {
+        let presentation = LogbookPresentation.make(totalDistance: 0, totalSpend: 0, readinessOpenItems: nil)
+
+        XCTAssertEqual(presentation.stats.last?.value, "Kein Fahrzeug")
+    }
 }

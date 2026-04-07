@@ -42,12 +42,14 @@ struct LogbookView: View {
         let vehiclePlaces = AppDataLocator.places(for: vehicle, places: placeNotes)
         let vehicleCosts = AppDataLocator.costs(for: vehicle, costs: costs)
         let currentOdometerKm = AppDataLocator.currentOdometerKm(maintenance: vehicleMaintenance, costs: vehicleCosts)
-        let readinessOpenItems = vehicle == nil ? 0 : [
-            ReadinessEngine.evaluateLegal(documents: vehicleDocuments).status,
-            ReadinessEngine.evaluateMaintenance(entries: vehicleMaintenance, currentOdometerKm: currentOdometerKm).status
-        ]
-        .filter { $0 != .green }
-        .count
+        let readinessOpenItems = vehicle.map { _ in
+            [
+                ReadinessEngine.evaluateLegal(documents: vehicleDocuments).status,
+                ReadinessEngine.evaluateMaintenance(entries: vehicleMaintenance, currentOdometerKm: currentOdometerKm).status
+            ]
+            .filter { $0 != .green }
+            .count
+        }
         let presentation = LogbookPresentation.make(
             totalDistance: currentOdometerKm ?? 0,
             totalSpend: vehicleMaintenance.compactMap(\.costEUR).reduce(0, +),
