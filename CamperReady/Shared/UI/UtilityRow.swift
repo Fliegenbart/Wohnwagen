@@ -7,6 +7,8 @@ struct UtilityRow: View {
     let tint: Color
     let titleColor: Color
     let subtitleColor: Color
+    let trailingSystemImage: String?
+    let trailingTint: Color?
 
     init(
         title: String,
@@ -14,7 +16,9 @@ struct UtilityRow: View {
         systemImage: String,
         tint: Color,
         titleColor: Color = AppTheme.ink,
-        subtitleColor: Color = AppTheme.mutedInk
+        subtitleColor: Color = AppTheme.mutedInk,
+        trailingSystemImage: String? = nil,
+        trailingTint: Color? = nil
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -22,6 +26,8 @@ struct UtilityRow: View {
         self.tint = tint
         self.titleColor = titleColor
         self.subtitleColor = subtitleColor
+        self.trailingSystemImage = trailingSystemImage
+        self.trailingTint = trailingTint
     }
 
     var body: some View {
@@ -40,6 +46,12 @@ struct UtilityRow: View {
             }
 
             Spacer()
+
+            if let trailingSystemImage {
+                Image(systemName: trailingSystemImage)
+                    .font(.footnote.weight(.bold))
+                    .foregroundStyle(trailingTint ?? tint)
+            }
         }
         .padding(.vertical, 10)
     }

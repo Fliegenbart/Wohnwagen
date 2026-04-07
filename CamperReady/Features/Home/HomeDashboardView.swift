@@ -40,62 +40,24 @@ struct HomeDashboardView: View {
             costs: vehicleCosts,
             currentOdometerKm: AppDataLocator.currentOdometerKm(maintenance: vehicleMaintenance, costs: vehicleCosts)
         )
+        let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: trip?.title)
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 24) {
                 if vehicle == nil {
                     emptyStateHero
                 } else {
-                    hero(snapshot: snapshot, trip: trip)
-                    readinessOverview(snapshot: snapshot)
+                    FeatureHeader(
+                        eyebrow: snapshot.vehicleName,
+                        title: "CamperReady",
+                        subtitle: "Dein Fahrzeugstatus vor der Abfahrt."
+                    )
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 10)
 
-                    let actionableResults = snapshot.dimensions.filter { $0.status != .green }
-
-                    if !actionableResults.isEmpty {
-                        plainSection(title: "Jetzt klären", subtitle: "Diese Punkte solltest du vor der Abfahrt erledigen.") {
-                            ForEach(actionableResults) { result in
-                                if let action = actionKind(for: result) {
-                                    Button {
-                                        navigation.navigate(for: action)
-                                    } label: {
-                                        actionRow(
-                                            title: result.summary,
-                                            subtitle: result.nextAction ?? result.reasons.first ?? "Jetzt öffnen",
-                                            systemImage: actionIcon(for: action),
-                                            tint: AppTheme.statusColor(result.status)
-                                        )
-                                    }
-                                    .buttonStyle(.plain)
-                                } else {
-                                    actionRow(
-                                        title: result.summary,
-                                        subtitle: result.reasons.first ?? "Bitte prüfen",
-                                        systemImage: "exclamationmark.triangle.fill",
-                                        tint: AppTheme.statusColor(result.status)
-                                    )
-                                }
-
-                                if result.id != actionableResults.last?.id {
-                                    Divider()
-                                }
-                            }
-                        }
-                    }
-
-                    plainSection(title: "Schnell weiter", subtitle: "Hier kommst du direkt zu den wichtigsten Aufgaben.") {
-                        VStack(alignment: .leading, spacing: 12) {
-                            quickAction("Gewicht anpassen", systemImage: "scalemass", action: .weight)
-                            quickAction("Dokumente prüfen", systemImage: "doc.text", action: .documents)
-                            quickAction("Wartung ansehen", systemImage: "wrench.and.screwdriver", action: .maintenance)
-                            quickAction("Kosten ansehen", systemImage: "eurosign.circle", action: .costs)
-                            Button {
-                                showGarageSheet = true
-                            } label: {
-                                actionRow(title: "Garage öffnen", subtitle: "Fahrzeug wählen und Stammdaten pflegen", systemImage: "car.circle", tint: AppTheme.accent)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
+                    focusPanel(snapshot: snapshot, trip: trip, presentation: presentation)
+                    actionPanel(presentation: presentation)
+                    quickAccessPanel()
                 }
             }
             .padding(.horizontal, 14)
@@ -178,94 +140,155 @@ struct HomeDashboardView: View {
         }
     }
 
-    private func hero(snapshot: DashboardSnapshot, trip: Trip?) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(snapshot.vehicleName)
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(AppTheme.ink)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.82)
-                    Text("Bereitschaft")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(AppTheme.mutedInk)
-                }
-
-                Spacer()
-
-                StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.compactTitle)
-            }
-
-            Text(snapshot.overallHeadline)
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(AppTheme.ink)
-                .lineLimit(3)
-                .minimumScaleFactor(0.82)
-
-            Text(heroSupportLine(snapshot: snapshot, trip: trip))
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(AppTheme.mutedInk)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Button {
-                navigation.navigate(for: .departureChecklist)
-            } label: {
-                HStack(spacing: 12) {
-                    ctaIcon
-                    Text("Vor Abfahrt prüfen")
-                        .fontWeight(.semibold)
+    private func focusPanel(snapshot: DashboardSnapshot, trip: Trip?, presentation: HomeDashboardPresentation) -> some View {
+        AlpineSurface(role: .focus) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(alignment: .top) {
+                    StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.title)
                     Spacer()
-                    Image(systemName: "arrow.right")
-                        .font(.footnote.weight(.bold))
+                    Text(presentation.focusSubtitle)
+                        .font(.caption.weight(.bold))
+                        .textCase(.uppercase)
+                        .tracking(0.8)
+                        .foregroundStyle(.white.opacity(0.72))
+                        .multilineTextAlignment(.trailing)
                 }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 18)
-                .padding(.vertical, 16)
-                .frame(maxWidth: .infinity)
-                .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Vor Abfahrt prüfen")
-            .accessibilityHint("Öffnet die Checklisten für die Abfahrt.")
 
-            if let trip {
-                Text(trip.title)
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(AppTheme.mutedInk)
+                Text(presentation.focusTitle)
+                    .font(.system(size: 32, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(3)
+                    .minimumScaleFactor(0.82)
+
+                Text(heroSupportLine(snapshot: snapshot, trip: trip))
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.82))
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    navigation.navigate(for: .departureChecklist)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "checklist")
+                            .font(.subheadline.weight(.bold))
+                        Text("Vor Abfahrt prüfen")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Image(systemName: "arrow.right")
+                            .font(.footnote.weight(.bold))
+                    }
+                    .foregroundStyle(AppTheme.petrol)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 16)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        LinearGradient(
+                            colors: [Color.white, AppTheme.surfaceLow],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    )
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Vor Abfahrt prüfen")
+                .accessibilityHint("Öffnet die Checklisten für die Abfahrt.")
             }
         }
-        .padding(18)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
         .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 16)
-        .accessibilityElement(children: .contain)
+        .offset(y: hasAppeared ? 0 : 14)
     }
 
-    // Hintergrund entfallen – Oberfläche ist nun bewusst flach und ruhig
+    private func actionPanel(presentation: HomeDashboardPresentation) -> some View {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 10) {
+                sectionHeading(
+                    title: presentation.actionRows.isEmpty ? "Status heute" : "Jetzt klären",
+                    subtitle: presentation.actionRows.isEmpty
+                        ? "Im Moment gibt es keine offenen Bereitschaftspunkte."
+                        : "Die wichtigsten offenen Punkte stehen hier ruhig untereinander."
+                )
 
-    private func heroMeta(label: String, systemImage: String) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: systemImage)
-                .font(.caption.weight(.bold))
-            Text(label)
-                .lineLimit(1)
+                VStack(spacing: 0) {
+                    if presentation.actionRows.isEmpty {
+                        UtilityRow(
+                            title: "Alles im grünen Bereich",
+                            subtitle: "Du musst vor der Abfahrt aktuell nichts zusätzlich erledigen.",
+                            systemImage: "checkmark.circle",
+                            tint: AppTheme.green
+                        )
+                    } else {
+                        ForEach(Array(presentation.actionRows.enumerated()), id: \.element.id) { index, row in
+                            if let action = actionKind(forDimensionTitle: row.dimensionTitle) {
+                                Button {
+                                    navigation.navigate(for: action)
+                                } label: {
+                                    UtilityRow(
+                                        title: row.title,
+                                        subtitle: row.subtitle,
+                                        systemImage: row.systemImage,
+                                        tint: AppTheme.statusColor(row.status),
+                                        trailingSystemImage: "arrow.up.forward",
+                                        trailingTint: AppTheme.statusColor(row.status)
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                            } else {
+                                UtilityRow(
+                                    title: row.title,
+                                    subtitle: row.subtitle,
+                                    systemImage: row.systemImage,
+                                    tint: AppTheme.statusColor(row.status)
+                                )
+                            }
+
+                            if index != presentation.actionRows.count - 1 {
+                                Divider()
+                            }
+                        }
+                    }
+                }
+            }
         }
-        .font(.footnote.weight(.semibold))
-        .foregroundStyle(.white.opacity(0.88))
-        .padding(.horizontal, 13)
-        .padding(.vertical, 10)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
+        .opacity(hasAppeared ? 1 : 0.01)
+        .offset(y: hasAppeared ? 0 : 18)
+    }
+
+    private func quickAccessPanel() -> some View {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 10) {
+                sectionHeading(
+                    title: "Schnellzugriff",
+                    subtitle: "Direkt zu den Bereichen, die du vor der Fahrt am häufigsten öffnest."
+                )
+
+                VStack(spacing: 0) {
+                    quickActionRow("Gewicht anpassen", subtitle: "Packliste und Reserven prüfen", systemImage: "scalemass", action: .weight)
+                    Divider()
+                    quickActionRow("Dokumente prüfen", subtitle: "Fristen und Nachweise ansehen", systemImage: "doc.text", action: .documents)
+                    Divider()
+                    quickActionRow("Wartung ansehen", subtitle: "Service und Kilometer im Blick behalten", systemImage: "wrench.and.screwdriver", action: .maintenance)
+                    Divider()
+                    quickActionRow("Kosten ansehen", subtitle: "Fixkosten und Reisebudget öffnen", systemImage: "eurosign.circle", action: .costs)
+                    Divider()
+                    Button {
+                        showGarageSheet = true
+                    } label: {
+                        UtilityRow(
+                            title: "Garage öffnen",
+                            subtitle: "Fahrzeug wählen und Stammdaten pflegen",
+                            systemImage: "car.circle",
+                            tint: AppTheme.accent,
+                            trailingSystemImage: "arrow.up.forward",
+                            trailingTint: AppTheme.accent
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .opacity(hasAppeared ? 1 : 0.01)
+        .offset(y: hasAppeared ? 0 : 20)
     }
 
     private func heroSupportLine(snapshot: DashboardSnapshot, trip: Trip?) -> String {
@@ -273,54 +296,6 @@ struct HomeDashboardView: View {
             return trip.map { "\(snapshot.vehicleName) ist für \($0.title) einsatzbereit." } ?? "\(snapshot.vehicleName) ist fahrbereit. Alle Kernbereiche sind im grünen Bereich."
         }
         return "\(snapshot.vehicleName) hat \(snapshot.openItemsCount) offene Bereiche. Jetzt prüfen, bevor du losfährst."
-    }
-
-    private func readinessOverview(snapshot: DashboardSnapshot) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            sectionHeading(
-                title: "Auf einen Blick",
-                subtitle: "Hier siehst du sofort, was schon passt und was noch offen ist."
-            )
-
-            VStack(spacing: 0) {
-                ForEach(Array(snapshot.dimensions.enumerated()), id: \.element.id) { index, result in
-                    Group {
-                        if let action = actionKind(for: result) {
-                            Button {
-                                navigation.navigate(for: action)
-                            } label: {
-                                ReadinessStripRow(result: result, isActionable: true)
-                            }
-                            .buttonStyle(.plain)
-                        } else {
-                            ReadinessStripRow(result: result, isActionable: false)
-                        }
-                    }
-                    .padding(.vertical, 14)
-                    .opacity(hasAppeared ? 1 : 0.01)
-                    .offset(y: hasAppeared ? 0 : 18)
-                    .animation(animation(for: index, baseDelay: 0.18), value: hasAppeared)
-
-                    if index != snapshot.dimensions.count - 1 {
-                        Divider()
-                    }
-                }
-            }
-            .padding(.horizontal, 2)
-            .padding(.top, 4)
-        }
-        .padding(.top, 6)
-    }
-
-    private func plainSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            sectionHeading(title: title, subtitle: subtitle)
-            content()
-        }
-        .padding(.top, 8)
-        .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 20)
-        .animation(animation(for: 6, baseDelay: 0.24), value: hasAppeared)
     }
 
     private func sectionHeading(title: String, subtitle: String) -> some View {
@@ -335,45 +310,24 @@ struct HomeDashboardView: View {
         }
     }
 
-    private func quickAction(_ title: String, systemImage: String, action: ReadinessActionKind) -> some View {
+    private func quickActionRow(_ title: String, subtitle: String, systemImage: String, action: ReadinessActionKind) -> some View {
         Button {
             navigation.navigate(for: action)
         } label: {
-            actionRow(title: title, subtitle: "Direkt öffnen", systemImage: systemImage, tint: AppTheme.accent)
+            UtilityRow(
+                title: title,
+                subtitle: subtitle,
+                systemImage: systemImage,
+                tint: AppTheme.accent,
+                trailingSystemImage: "arrow.up.forward",
+                trailingTint: AppTheme.accent
+            )
         }
         .buttonStyle(.plain)
     }
 
-    private func actionRow(title: String, subtitle: String, systemImage: String, tint: Color) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(tint)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(AppTheme.ink)
-                Text(subtitle)
-                    .font(.footnote)
-                    .foregroundStyle(AppTheme.mutedInk)
-            }
-            Spacer()
-            Image(systemName: "arrow.right")
-                .font(.footnote.weight(.bold))
-                .foregroundStyle(tint)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
-    }
-
-    private func actionKind(for result: ReadinessDimensionResult) -> ReadinessActionKind? {
-        switch result.title {
+    private func actionKind(forDimensionTitle title: String) -> ReadinessActionKind? {
+        switch title {
         case "Gewicht":
             .weight
         case "Gas & Dokumente":
@@ -389,94 +343,39 @@ struct HomeDashboardView: View {
         }
     }
 
-    private func actionIcon(for action: ReadinessActionKind) -> String {
-        switch action {
-        case .weight:
-            "scalemass"
-        case .documents:
-            "doc.text"
-        case .maintenance:
-            "wrench.and.screwdriver"
-        case .departureChecklist:
-            "checklist"
-        case .costs:
-            "eurosign.circle"
-        case .places:
-            "map"
-        case .vehicleProfile:
-            "car.circle"
-        }
-    }
-
-    private func animation(for index: Int, baseDelay: Double) -> Animation? {
-        guard !reduceMotion else { return nil }
-        return .easeOut(duration: 0.65).delay(baseDelay + Double(index) * 0.05)
-    }
-
-    @ViewBuilder
-    private var ctaIcon: some View {
-        if reduceMotion {
-            Image(systemName: "play.circle.fill")
-                .font(.headline)
-        } else {
-            Image(systemName: "play.circle.fill")
-                .font(.headline)
-                .symbolEffect(.pulse, options: .repeating.speed(0.55))
-        }
-    }
-
     private var emptyStateHero: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("CamperReady")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(AppTheme.ink)
-                    Text("Los geht's mit deinem Fahrzeug")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(AppTheme.mutedInk)
-                }
-
-                Spacer()
-
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 16) {
                 StatusBadge(status: .yellow, text: "Einrichten")
-            }
 
-            Text("Noch nicht startklar")
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(AppTheme.ink)
+                Text("Noch nicht startklar")
+                    .font(.system(size: 28, weight: .semibold))
+                    .foregroundStyle(AppTheme.ink)
 
-            Text("Lege zuerst dein Fahrzeug an. Danach siehst du vor jeder Fahrt Gewicht, Fristen und wichtige Checks an einem Ort.")
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(AppTheme.mutedInk)
+                Text("Lege zuerst dein Fahrzeug an. Danach siehst du vor jeder Fahrt Gewicht, Fristen und wichtige Checks an einem Ort.")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(AppTheme.mutedInk)
 
-            Button {
-                showGarageSheet = true
-            } label: {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Garage öffnen")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Image(systemName: "arrow.right")
-                        .font(.footnote.weight(.bold))
+                Button {
+                    showGarageSheet = true
+                } label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Garage öffnen")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Image(systemName: "arrow.right")
+                            .font(.footnote.weight(.bold))
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 16)
+                    .frame(maxWidth: .infinity)
+                    .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 18)
-                .padding(.vertical, 16)
-                .frame(maxWidth: .infinity)
-                .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         }
-        .padding(18)
-        .background(AppTheme.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.subtleBorder, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
     }
 
     private func handlePendingRoute() {
@@ -493,68 +392,4 @@ struct HomeDashboardView: View {
             .environmentObject(ActiveVehicleStore())
     }
     .modelContainer(PreviewStore.container)
-}
-
-private struct ReadinessStripRow: View {
-    let result: ReadinessDimensionResult
-    let isActionable: Bool
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(AppTheme.statusColor(result.status))
-                .frame(width: 8, height: 30)
-                .padding(.top, 2)
-
-            VStack(alignment: .leading, spacing: 6) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(result.title)
-                        .font(.footnote.weight(.bold))
-                        .textCase(.uppercase)
-                        .tracking(0.6)
-                        .foregroundStyle(AppTheme.ink)
-                    Spacer()
-                    Text(result.status.title)
-                        .font(.caption2.weight(.bold))
-                        .textCase(.uppercase)
-                        .foregroundStyle(AppTheme.statusColor(result.status))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(AppTheme.statusColor(result.status).opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                }
-
-                Text(result.summary)
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(AppTheme.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                if let reason = result.reasons.first {
-                    Text(reason)
-                        .font(.footnote)
-                        .foregroundStyle(AppTheme.mutedInk)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                if let nextAction = result.nextAction {
-                    Text(nextAction)
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(AppTheme.accent)
-                }
-            }
-
-            if isActionable {
-                Image(systemName: "arrow.right")
-                    .font(.footnote.weight(.bold))
-                    .foregroundStyle(AppTheme.statusColor(result.status))
-                    .padding(.top, 4)
-            }
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(result.title)
-        .accessibilityValue([result.summary, result.reasons.first, result.nextAction]
-            .compactMap { $0 }
-            .joined(separator: ". "))
-    }
 }
