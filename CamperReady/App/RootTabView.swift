@@ -21,7 +21,7 @@ struct RootTabView: View {
         let appearance = UITabBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
-        appearance.backgroundColor = UIColor(AppTheme.panelStrong).withAlphaComponent(0.82)
+        appearance.backgroundColor = UIColor(AppTheme.surface).withAlphaComponent(0.90)
         appearance.stackedLayoutAppearance.selected.iconColor = UIColor(AppTheme.accent)
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(AppTheme.accent)]
         appearance.stackedLayoutAppearance.normal.iconColor = UIColor(AppTheme.mutedInk).withAlphaComponent(0.72)
