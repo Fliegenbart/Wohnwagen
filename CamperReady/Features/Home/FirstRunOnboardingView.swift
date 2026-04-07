@@ -150,56 +150,11 @@ struct FirstRunOnboardingView: View {
     }
 
     private var onboardingBackground: some View {
-        ZStack {
-            Rectangle()
-                .fill(AppTheme.roadHeroGradient)
-
-            Rectangle()
-                .fill(AppTheme.roadFogGradient)
-
-            VStack {
-                Spacer()
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [AppTheme.asphalt.opacity(0.88), Color.black.opacity(0.98)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .frame(height: 190)
-            }
-
-            VStack {
-                HStack {
-                    Spacer()
-                    Image(systemName: "car.side.air.circulate.fill")
-                        .font(.system(size: 152, weight: .black))
-                        .foregroundStyle(.white.opacity(0.16))
-                        .padding(.trailing, 8)
-                        .padding(.top, 18)
-                }
-                Spacer()
-            }
-
-            VStack {
-                Spacer()
-                HStack(spacing: 26) {
-                    ForEach(0..<5, id: \.self) { _ in
-                        Capsule()
-                            .fill(Color.white.opacity(0.50))
-                            .frame(width: 34, height: 4)
-                    }
-                }
-                .offset(y: -28)
-            }
-
-            LinearGradient(
-                colors: [Color.clear, AppTheme.accent.opacity(0.20)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
+        LinearGradient(
+            colors: [AppTheme.surface, AppTheme.surface.opacity(0.96)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private func onboardingMeta(label: String, systemImage: String) -> some View {

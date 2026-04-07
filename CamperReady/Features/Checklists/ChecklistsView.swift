@@ -298,43 +298,7 @@ struct ChecklistsView: View {
     }
 
     private func checklistHeroBackground(status: ReadinessStatus) -> some View {
-        ZStack {
-            Rectangle()
-                .fill(AppTheme.roadHeroGradient)
-
-            Rectangle()
-                .fill(AppTheme.roadFogGradient)
-
-            Circle()
-                .fill(AppTheme.accent.opacity(0.18))
-                .frame(width: 172, height: 172)
-                .blur(radius: 34)
-                .offset(x: 118, y: -102)
-
-            Circle()
-                .fill(AppTheme.accentWarm.opacity(0.12))
-                .frame(width: 150, height: 150)
-                .blur(radius: 38)
-                .offset(x: -104, y: 92)
-
-            LinearGradient(
-                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.28)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Image(systemName: "checklist.checked")
-                        .font(.system(size: 102, weight: .bold))
-                        .foregroundStyle(.white.opacity(0.16))
-                        .padding(.trailing, 18)
-                        .padding(.bottom, 30)
-                }
-            }
-        }
+        AppTheme.surface
     }
 
     private func checklistSupportLine(selectedChecklist: ChecklistRun?, completedRequired: Int, requiredCount: Int) -> String {

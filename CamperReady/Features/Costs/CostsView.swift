@@ -341,43 +341,7 @@ struct CostsView: View {
     }
 
     private var heroBackground: some View {
-        ZStack {
-            Rectangle()
-                .fill(AppTheme.roadHeroGradient)
-
-            Rectangle()
-                .fill(AppTheme.roadFogGradient)
-
-            Circle()
-                .fill(AppTheme.accent.opacity(0.18))
-                .frame(width: 170, height: 170)
-                .blur(radius: 34)
-                .offset(x: 116, y: -100)
-
-            Circle()
-                .fill(AppTheme.accentWarm.opacity(0.12))
-                .frame(width: 150, height: 150)
-                .blur(radius: 38)
-                .offset(x: -100, y: 92)
-
-            LinearGradient(
-                colors: [Color.clear, AppTheme.green.opacity(0.16)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Image(systemName: "eurosign.circle.fill")
-                        .font(.system(size: 106, weight: .bold))
-                        .foregroundStyle(.white.opacity(0.16))
-                        .padding(.trailing, 18)
-                        .padding(.bottom, 30)
-                }
-            }
-        }
+        AppTheme.surface
     }
 
     private func costHeadline(tripTitle: String?, tripTotal: Double, hasTripCosts: Bool) -> String {
