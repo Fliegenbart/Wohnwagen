@@ -58,7 +58,7 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
                 } else {
                     FeatureHeader(
-                        eyebrow: "Checklist mode",
+                        eyebrow: "Checklisten-Modus",
                         title: selectedChecklist?.title ?? "Checklisten",
                         subtitle: presentation.progressText
                     )
@@ -103,11 +103,23 @@ struct ChecklistsView: View {
                                     Button {
                                         selectedChecklistID = checklist.id
                                     } label: {
-                                        HStack(spacing: 6) {
-                                            Text(checklist.title)
-                                            if checklist.isPinned {
-                                                Image(systemName: "pin.fill")
-                                                    .font(.caption2)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            HStack(spacing: 6) {
+                                                Text(checklist.title)
+                                                if checklist.isPinned {
+                                                    Image(systemName: "pin.fill")
+                                                        .font(.caption2)
+                                                }
+                                            }
+
+                                            HStack(spacing: 6) {
+                                                Circle()
+                                                    .fill(AppTheme.statusColor(status(for: checklist)))
+                                                    .frame(width: 6, height: 6)
+
+                                                Text(chipStateText(for: checklist.state))
+                                                    .font(.caption2.weight(.semibold))
+                                                    .foregroundStyle(AppTheme.mutedInk)
                                             }
                                         }
                                         .font(.footnote.weight(.semibold))
@@ -280,6 +292,14 @@ struct ChecklistsView: View {
         case .complete: .green
         case .inProgress: .yellow
         case .notStarted: .yellow
+        }
+    }
+
+    private func chipStateText(for state: ChecklistState) -> String {
+        switch state {
+        case .notStarted: "Offen"
+        case .inProgress: "Läuft"
+        case .complete: "Fertig"
         }
     }
 

@@ -12,10 +12,21 @@ struct ChecklistPresentation: Equatable {
         case .complete: "Fertig"
         }
 
+        let progressText: String
+        if requiredCount == 0 {
+            progressText = switch state {
+            case .notStarted: "Keine Pflichtpunkte hinterlegt"
+            case .inProgress: "Keine Pflichtpunkte hinterlegt, allgemeine Punkte in Arbeit"
+            case .complete: "Keine Pflichtpunkte hinterlegt, allgemeine Punkte erledigt"
+            }
+        } else {
+            progressText = "\(completedRequired) von \(requiredCount) Pflichtpunkten erledigt"
+        }
+
         return ChecklistPresentation(
             title: title,
             stateText: stateText,
-            progressText: "\(completedRequired) von \(requiredCount) Pflichtpunkten erledigt"
+            progressText: progressText
         )
     }
 }
