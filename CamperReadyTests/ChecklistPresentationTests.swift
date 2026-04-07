@@ -35,15 +35,24 @@ final class ChecklistPresentationTests: XCTestCase {
         }
     }
 
-    func testChecklistPresentationUsesHelpfulCopyWhenNoRequiredItemsExist() {
-        let presentation = ChecklistPresentation.make(
-            title: "Kurzstopp",
-            state: .complete,
-            completedRequired: 0,
-            requiredCount: 0
-        )
+    func testChecklistPresentationUsesTruthfulCopyWhenNoRequiredItemsExist() {
+        let cases: [(ChecklistState, String)] = [
+            (.notStarted, "Keine Pflichtpunkte hinterlegt"),
+            (.inProgress, "Keine Pflichtpunkte hinterlegt, Checkliste in Arbeit"),
+            (.complete, "Keine Pflichtpunkte hinterlegt, Checkliste als fertig markiert")
+        ]
 
-        XCTAssertEqual(presentation.progressText, "Keine Pflichtpunkte hinterlegt, allgemeine Punkte erledigt")
-        XCTAssertFalse(presentation.progressText.contains("0 von 0"))
+        for (state, expectedProgressText) in cases {
+            let presentation = ChecklistPresentation.make(
+                title: "Kurzstopp",
+                state: state,
+                completedRequired: 0,
+                requiredCount: 0
+            )
+
+            XCTAssertEqual(presentation.title, "Kurzstopp")
+            XCTAssertEqual(presentation.progressText, expectedProgressText)
+            XCTAssertFalse(presentation.progressText.contains("0 von 0"))
+        }
     }
 }
