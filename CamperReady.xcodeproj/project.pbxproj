@@ -47,6 +47,8 @@
 		819E72ECCFBB8F31C84D8C97 /* AppInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF752E46A53E7B70AC652BFF /* AppInfoView.swift */; };
 		81E607A50A770265248D8A69 /* VehicleProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E66A38C29962414DBC7A3D5 /* VehicleProfileView.swift */; };
 		824A0BA7C1D94555A8AE1A0D /* WeightPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */; };
+		8573F4A11C4E4B5D8A9F0011 /* SheetHeaderCopyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573F4A01C4E4B5D8A9F0011 /* SheetHeaderCopyTests.swift */; };
+		8573F4A31C4E4B5D8A9F0011 /* SheetCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573F4A21C4E4B5D8A9F0011 /* SheetCopy.swift */; };
 		87B3B2ED7C6316C30067B17E /* HomeDashboardPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3B2EC7C6316C30067B17E /* HomeDashboardPresentation.swift */; };
 		8E3B4222714B128D77A48171 /* PackingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F01469D5E49EE352F500BE9 /* PackingItem.swift */; };
 		8F31C7A24B6D9E1001AA22BB /* GaragePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F31C7A14B6D9E1001AA22BB /* GaragePresentationTests.swift */; };
@@ -132,6 +134,8 @@
 		80C10BB06EFD332A4317BC86 /* ChecklistItemRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistItemRecord.swift; path = CamperReady/Domain/Models/ChecklistItemRecord.swift; sourceTree = "<group>"; };
 		80F2C3F0DACDAFE0A5EB0004 /* SampleDataSeeder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SampleDataSeeder.swift; path = CamperReady/Services/SampleDataSeeder.swift; sourceTree = "<group>"; };
 		824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightPresentationTests.swift; path = CamperReadyTests/WeightPresentationTests.swift; sourceTree = "<group>"; };
+		8573F4A01C4E4B5D8A9F0011 /* SheetHeaderCopyTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SheetHeaderCopyTests.swift; path = CamperReadyTests/SheetHeaderCopyTests.swift; sourceTree = "<group>"; };
+		8573F4A21C4E4B5D8A9F0011 /* SheetCopy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SheetCopy.swift; path = CamperReady/Shared/UI/SheetCopy.swift; sourceTree = "<group>"; };
 		87B3B2EC7C6316C30067B17E /* HomeDashboardPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardPresentation.swift; path = CamperReady/Features/Home/HomeDashboardPresentation.swift; sourceTree = "<group>"; };
 		8A2CF7EFA56E5E875FCF9792 /* MetricCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MetricCard.swift; path = CamperReady/Shared/UI/MetricCard.swift; sourceTree = "<group>"; };
 		8CA8D0FFE77E1A5C20F1F545 /* CostsPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsPresentation.swift; path = CamperReady/Features/Costs/CostsPresentation.swift; sourceTree = "<group>"; };
@@ -407,6 +411,7 @@
 				8F31C7A14B6D9E1001AA22BB /* GaragePresentationTests.swift */,
 				C883E5217C6316D400D34026 /* HomeDashboardPresentationTests.swift */,
 				A467FCC3063957057B9F91DE /* ReadinessEngineTests.swift */,
+				8573F4A01C4E4B5D8A9F0011 /* SheetHeaderCopyTests.swift */,
 				824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */,
 				D651F4BE2028223B5583B495 /* WorldClassUpgradeTests.swift */,
 			);
@@ -431,6 +436,7 @@
 				64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */,
 				8A2CF7EFA56E5E875FCF9792 /* MetricCard.swift */,
 				4E3898B28D9CBBCEAB98CB2C /* ReadinessTile.swift */,
+				8573F4A21C4E4B5D8A9F0011 /* SheetCopy.swift */,
 				64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */,
 				64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */,
 				7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */,
@@ -609,6 +615,7 @@
 				64BCFB33648A3935E7F29D8A /* FeatureHeader.swift in Sources */,
 				E5BA678B609B9294886F613F /* MetricCard.swift in Sources */,
 				93B1C8D27C09134E6733011C /* ReadinessTile.swift in Sources */,
+				8573F4A31C4E4B5D8A9F0011 /* SheetCopy.swift in Sources */,
 				64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */,
 				64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */,
 				501B9A3256268100511CE96A /* SectionCard.swift in Sources */,
@@ -628,6 +635,7 @@
 				8F31C7A24B6D9E1001AA22BB /* GaragePresentationTests.swift in Sources */,
 				C883E5227C6316D400D34026 /* HomeDashboardPresentationTests.swift in Sources */,
 				D891735BAE7CFC8012FF7927 /* ReadinessEngineTests.swift in Sources */,
+				8573F4A11C4E4B5D8A9F0011 /* SheetHeaderCopyTests.swift in Sources */,
 				824A0BA7C1D94555A8AE1A0D /* WeightPresentationTests.swift in Sources */,
 				C32BF77BAABCE733BDC6C761 /* WorldClassUpgradeTests.swift in Sources */,
 				BAD43E8262D9B76E43F89E8A /* LogbookPresentationTests.swift in Sources */,

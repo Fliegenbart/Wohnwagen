@@ -43,14 +43,14 @@ struct CostsView: View {
                     FeatureHeader(
                         eyebrow: vehicle.name,
                         title: "Kosten",
-                        subtitle: trip?.title ?? "Kosten ohne aktive Reise"
+                        subtitle: trip?.title ?? "Reise- und laufende Kosten pro Fahrzeug"
                     )
                     .opacity(hasAppeared ? 1 : 0.01)
                     .offset(y: hasAppeared ? 0 : 10)
 
                     summaryStats(presentation.stats, emphasisTitle: "Diese Reise")
 
-                    costSection(title: "Reise", subtitle: trip == nil ? "Lege eine Reise an, damit du Kosten unterwegs getrennt erfassen kannst." : "Die aktive Reise bestimmt, welche Kosten hier oben zusammenlaufen.") {
+                    costSection(title: "Reise", subtitle: trip == nil ? "Lege eine Reise an, um Kosten getrennt zuzuordnen." : "Die aktive Reise bestimmt die Zuordnung der laufenden Kosten.") {
                         if let trip {
                             VStack(alignment: .leading, spacing: 12) {
                                 Button {
@@ -108,7 +108,7 @@ struct CostsView: View {
                         title: trip == nil ? "Kosten ohne Reise" : "Kosten dieser Reise",
                         subtitle: trip == nil
                             ? "Diese Einträge sind noch keiner aktiven Reise zugeordnet."
-                            : "Hier siehst du alle Einträge, die zu deiner aktiven Reise gehören."
+                            : "Alle Einträge der aktiven Reise."
                     ) {
                         VStack(alignment: .leading, spacing: 12) {
                             Button(trip == nil ? "Kosten erfassen" : "Kosten für diese Reise erfassen") {
@@ -136,7 +136,7 @@ struct CostsView: View {
                         }
                     }
 
-                    costSection(title: "Regelmäßige Kosten", subtitle: "Diese Kosten fallen unabhängig von einer einzelnen Reise an.") {
+                    costSection(title: "Regelmäßige Kosten", subtitle: "Wiederkehrende Kosten unabhängig von einer Reise.") {
                         VStack(alignment: .leading, spacing: 12) {
                             Button("Regelmäßige Kosten hinzufügen") {
                                 costFormContext = CostFormContext(cost: nil, startsAsFixedCost: true)
@@ -456,7 +456,7 @@ private struct TripFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Kosten",
                 title: existingTrip == nil ? "Reise anlegen" : "Reise anpassen",
-                subtitle: "Ein klarer Reiseeintrag hilft dir, Kosten und Notizen später schnell wiederzufinden.",
+                subtitle: SheetCopy.tripSubtitle,
                 systemImage: "road.lanes"
             ) {
                 Form {
@@ -608,7 +608,7 @@ private struct CostEntryFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Kosten",
                 title: existingCost == nil ? "Kosten erfassen" : "Kosten anpassen",
-                subtitle: "So behältst du auf Reisen und übers Jahr ein ehrliches Bild deiner Ausgaben.",
+                subtitle: SheetCopy.costEntrySubtitle,
                 systemImage: "eurosign.circle.fill"
             ) {
                 Form {

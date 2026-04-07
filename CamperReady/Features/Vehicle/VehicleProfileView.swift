@@ -62,36 +62,30 @@ struct VehicleProfileView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Fahrzeug",
-                title: vehicle == nil ? "Dein Camper in wenigen Angaben." : "Dein Fahrzeug auf einen Blick.",
-                subtitle: "Trag zuerst nur das ein, was du sicher weißt. Den Rest kannst du später ergänzen.",
+                title: vehicle == nil ? "Fahrzeug anlegen" : "Fahrzeugprofil",
+                subtitle: SheetCopy.vehicleProfileSubtitle,
                 systemImage: "car.side.fill"
             ) {
                 Form {
                     Section {
-                        Text("Für den Start reicht ein Fahrzeugname. Alles andere kannst du auch später ergänzen.")
-                            .font(.footnote)
-                            .foregroundStyle(AppTheme.mutedInk)
-                    }
-
-                    Section {
-                        TextField("z. B. Unser Kastenwagen", text: nameBinding)
+                        TextField("Fahrzeugname", text: nameBinding)
                         Picker("Typ", selection: vehicleKindBinding) {
                             ForEach(VehicleKind.allCases) { kind in
                                 Text(kind.title).tag(kind)
                             }
                         }
-                        TextField("z. B. Pössl", text: brandBinding)
-                        TextField("z. B. Summit 600", text: modelBinding)
-                        TextField("z. B. M-AB 1234", text: licensePlateBinding)
+                        TextField("Marke", text: brandBinding)
+                        TextField("Modell", text: modelBinding)
+                        TextField("Kennzeichen", text: licensePlateBinding)
                         Picker("Land", selection: countryBinding) {
                             ForEach(CountryPreset.allCases) { country in
                                 Text(country.title).tag(country)
                             }
                         }
                     } header: {
-                        Text("Für den Start")
+                        Text("Basisdaten")
                     } footer: {
-                        Text("Wenn du etwas noch nicht weißt, ist das kein Problem. Du kannst es später ergänzen.")
+                        Text("Ein Name reicht für den Start. Fehlende Angaben kannst du später ergänzen.")
                     }
 
                     Section {
@@ -107,9 +101,9 @@ struct VehicleProfileView: View {
                         TextField("Flaschengröße (kg)", value: gasBottleSizeBinding, format: .number)
                             .keyboardType(.decimalPad)
                     } header: {
-                        Text("Gewicht, Wasser und Gas")
+                        Text("Gewichte & Kapazitäten")
                     } footer: {
-                        Text("Trag nur die Werte ein, die du sicher kennst. Die App funktioniert auch mit unvollständigen Angaben.")
+                        Text("Trag hier nur Werte ein, die du sicher kennst.")
                     }
 
                     Section {
@@ -118,7 +112,7 @@ struct VehicleProfileView: View {
                     } header: {
                         Text("Service")
                     } footer: {
-                        Text("Wenn du keine festen Intervalle nutzt, kannst du diese Werte auch später anpassen.")
+                        Text("Nutze `0`, wenn du noch kein festes Intervall pflegen willst.")
                     }
 
                     Section {
@@ -126,8 +120,6 @@ struct VehicleProfileView: View {
                             .frame(minHeight: 120)
                     } header: {
                         Text("Notizen")
-                    } footer: {
-                        Text("Zum Beispiel Besonderheiten zu Gewicht, Gas oder wiederkehrenden Aufgaben.")
                     }
                 }
             }

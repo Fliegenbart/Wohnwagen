@@ -36,7 +36,7 @@ struct ChecklistsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 if vehicleChecklists.isEmpty {
-                    SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Starte einen Modus wie Abfahrt oder Einwintern, damit du offene Punkte direkt siehst.") {
+                    SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Starte einen Modus, um offene Punkte zu sammeln.") {
                         VStack(alignment: .leading, spacing: 16) {
                             ContentUnavailableView(
                                 "Noch keine Checkliste gestartet",
@@ -58,7 +58,7 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
                 } else {
                     FeatureHeader(
-                        eyebrow: "Checklisten-Modus",
+                        eyebrow: "Checklisten",
                         title: selectedChecklist?.title ?? "Checklisten",
                         subtitle: presentation.progressText
                     )
@@ -140,7 +140,7 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
 
                     if let selectedChecklist {
-                        SectionCard(title: "Aktive Punkte", subtitle: "Diese Punkte solltest du jetzt abhaken, bevor du weitermachst.") {
+                        SectionCard(title: "Aktive Punkte", subtitle: "Diese Punkte gehören zur aktuellen Liste.") {
                             VStack(alignment: .leading, spacing: 14) {
                                 if selectedItems.isEmpty {
                                     Text("Diese Checkliste hat noch keine Punkte.")
@@ -456,7 +456,7 @@ private struct ChecklistItemFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Checkliste",
                 title: existingItem == nil ? "Punkt ergänzen" : "Punkt anpassen",
-                subtitle: "Halte fest, was bei diesem Modus wirklich geprüft werden soll.",
+                subtitle: SheetCopy.checklistItemSubtitle,
                 systemImage: "checklist.checked"
             ) {
                 Form {

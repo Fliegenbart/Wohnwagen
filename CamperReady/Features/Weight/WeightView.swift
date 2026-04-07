@@ -42,7 +42,7 @@ struct WeightView: View {
                         settings: activeSettings
                     )
 
-                    weightSection(title: "Beladung", subtitle: "Hier pflegst du Wasser, Gas und Zusatzlasten für diese Fahrt.") {
+                    weightSection(title: "Beladung", subtitle: "Pflege Wasser, Gas und Zusatzlasten für diese Fahrt.") {
                         if let activeSettings {
                             LoadSettingsSummaryCard(vehicle: vehicle, loadSettings: activeSettings) {
                                 loadSettingsFormContext = LoadSettingsFormContext(settings: activeSettings, trip: trip)
@@ -59,7 +59,7 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Das wiegt am meisten", subtitle: "Hier kannst du am schnellsten Gewicht sparen.") {
+                    weightSection(title: "Das wiegt am meisten", subtitle: "Die größten Lasten stehen hier zuerst.") {
                         let topContributors = Array(assessment.contributors.prefix(6))
                         if topContributors.isEmpty {
                             Text("Bisher sind noch keine größeren Gewichte erfasst.")
@@ -77,7 +77,7 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Packliste", subtitle: "Hier legst du fest, was für diese Fahrt mitkommt.") {
+                    weightSection(title: "Packliste", subtitle: "Pflege Packstücke und Gewichte für diese Fahrt.") {
                         Button("Packstück hinzufügen") {
                             packingItemFormContext = PackingItemFormContext(item: nil, trip: trip)
                         }
@@ -102,7 +102,7 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Mitfahrende", subtitle: "Personen zählen beim Gewicht natürlich mit.") {
+                    weightSection(title: "Mitfahrende", subtitle: "Pflege Personen und Gewichte für diese Fahrt.") {
                         Button("Mitfahrende hinzufügen") {
                             passengerFormContext = PassengerFormContext(passenger: nil, trip: trip)
                         }
@@ -123,7 +123,7 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Worauf du achten solltest", subtitle: "Diese Hinweise helfen dir bei einer sicheren Einschätzung.") {
+                    weightSection(title: "Hinweise", subtitle: "Hinweise aus den hinterlegten Daten.") {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Die Berechnung ist absichtlich vorsichtig. Achslasten bewerten wir nur mit echten Messwerten oder bei klaren Risikomustern.")
                                 .font(.footnote)
@@ -501,7 +501,7 @@ private struct PackingItemFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Gewicht",
                 title: existingItem == nil ? "Packstück hinzufügen" : "Packstück anpassen",
-                subtitle: "Halte fest, was bei dieser Reise wirklich mitfährt.",
+                subtitle: SheetCopy.packingItemSubtitle,
                 systemImage: "shippingbox.fill"
             ) {
                 Form {
@@ -620,7 +620,7 @@ private struct PassengerFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Gewicht",
                 title: existingPassenger == nil ? "Mitfahrende hinzufügen" : "Mitfahrende anpassen",
-                subtitle: "Auch Personen gehören zur ehrlichen Beladung dazu.",
+                subtitle: SheetCopy.passengerSubtitle,
                 systemImage: "person.2.fill"
             ) {
                 Form {
@@ -726,7 +726,7 @@ private struct LoadSettingsFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Gewicht",
                 title: "Beladung festlegen",
-                subtitle: "Wasser, Gas und Zusatzlasten geben dir eine ehrlichere Reserve für diese Reise.",
+                subtitle: SheetCopy.loadSettingsSubtitle,
                 systemImage: "gauge.with.needle.fill"
             ) {
                 Form {

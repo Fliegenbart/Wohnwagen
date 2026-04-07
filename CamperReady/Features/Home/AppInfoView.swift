@@ -16,9 +16,13 @@ struct AppInfoView: View {
             AppCanvas {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        hero
+                        FeatureHeader(
+                            eyebrow: "Info",
+                            title: "App & Hinweise",
+                            subtitle: "Version, Erinnerungen, Rechtliches und Kontakt an einer Stelle."
+                        )
 
-                        SectionCard(title: "App") {
+                        SectionCard(title: "App", subtitle: "Version, Sprache und Anbieter.") {
                             VStack(alignment: .leading, spacing: 10) {
                                 infoRow(title: "Version", value: AppReleaseConfiguration.appVersionDescription)
                                 infoRow(title: "Speicherort", value: "Lokal auf diesem iPhone")
@@ -27,22 +31,22 @@ struct AppInfoView: View {
                             }
                         }
 
-                        SectionCard(title: "Erinnerungen") {
+                        SectionCard(title: "Erinnerungen", subtitle: "Status und Zugriff auf Mitteilungen.") {
                             VStack(alignment: .leading, spacing: 12) {
                                 infoRow(title: "Status", value: notificationStatusLabel)
 
                                 if notificationStatus == .denied {
-                                    Button("Mitteilungen in den Einstellungen öffnen") {
+                                    Button("Einstellungen öffnen") {
                                         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                                             openURL(settingsURL)
                                         }
                                     }
-                                    .buttonStyle(.borderedProminent)
+                                    .buttonStyle(.bordered)
                                 } else {
                                     Button(isUpdatingNotifications ? "Aktualisiere…" : reminderActionTitle) {
                                         Task { await updateNotifications() }
                                     }
-                                    .buttonStyle(.borderedProminent)
+                                    .buttonStyle(.bordered)
                                     .disabled(isUpdatingNotifications)
                                 }
 
@@ -52,7 +56,7 @@ struct AppInfoView: View {
                             }
                         }
 
-                        SectionCard(title: "Rechtliches") {
+                        SectionCard(title: "Rechtliches", subtitle: "Anbieter und rechtliche Hinweise.") {
                             VStack(alignment: .leading, spacing: 10) {
                                 infoRow(title: "Anbieter", value: AppReleaseConfiguration.providerName)
                                 infoRow(title: "Adresse", value: AppReleaseConfiguration.providerAddress)
@@ -63,7 +67,7 @@ struct AppInfoView: View {
                             }
                         }
 
-                        SectionCard(title: "Links") {
+                        SectionCard(title: "Links", subtitle: "Support, Datenschutz und Website.") {
                             VStack(alignment: .leading, spacing: 12) {
                                 configuredLinkRow(title: "Support", url: AppReleaseConfiguration.supportURL)
                                 configuredLinkRow(title: "Datenschutz", url: AppReleaseConfiguration.privacyPolicyURL)
@@ -88,73 +92,6 @@ struct AppInfoView: View {
                 notificationStatus = await NotificationManager.shared.notificationStatus()
             }
         }
-    }
-
-    private var hero: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Info")
-                        .font(.caption.weight(.bold))
-                        .textCase(.uppercase)
-                        .tracking(0.8)
-                        .foregroundStyle(.white.opacity(0.78))
-                    Text("CamperReady")
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text("Alles Wichtige zu App, Erinnerungen und Kontakt.")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.82))
-                }
-
-                Spacer()
-
-                Image(systemName: "info.circle.fill")
-                    .font(.system(size: 28))
-                    .foregroundStyle(.white)
-                    .padding(14)
-                    .background(.white.opacity(0.14), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-            }
-
-            HStack(spacing: 10) {
-                heroPill(title: "Version", value: AppReleaseConfiguration.appVersionDescription)
-                heroPill(title: "Kontakt", value: "Per E-Mail")
-                heroPill(title: "Privatsphäre", value: "Lokal")
-            }
-        }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [AppTheme.accent.opacity(0.95), Color(red: 0.20, green: 0.58, blue: 0.92)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 30, style: .continuous)
-        )
-        .shadow(color: AppTheme.accent.opacity(0.24), radius: 28, x: 0, y: 16)
-    }
-
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2.weight(.bold))
-                .textCase(.uppercase)
-                .foregroundStyle(.white.opacity(0.72))
-            Text(value)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(.white)
-                .lineLimit(2)
-                .minimumScaleFactor(0.8)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
     }
 
     private func infoRow(title: String, value: String) -> some View {
@@ -206,7 +143,7 @@ struct AppInfoView: View {
         case .notDetermined:
             "Erinnerungen aktivieren"
         case .denied:
-            "Mitteilungen aktivieren"
+            "Einstellungen öffnen"
         @unknown default:
             "Erinnerungen prüfen"
         }

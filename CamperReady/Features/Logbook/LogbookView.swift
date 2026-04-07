@@ -59,9 +59,9 @@ struct LogbookView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 FeatureHeader(
-                    eyebrow: "Journey history",
+                    eyebrow: "Logbuch",
                     title: "Logbuch",
-                    subtitle: "Wartung, Dokumente und Orte in einer ruhigen Chronologie."
+                    subtitle: "Wartung, Dokumente und Orte pro Fahrzeug."
                 )
                 .opacity(hasAppeared ? 1 : 0.01)
                 .offset(y: hasAppeared ? 0 : 10)
@@ -79,7 +79,7 @@ struct LogbookView: View {
 
                 switch selectedSection {
                 case .maintenance:
-                    logbookSection(title: "Wartung", subtitle: "Hier siehst du, was gemacht wurde und was als Nächstes ansteht.") {
+                    logbookSection(title: "Wartung", subtitle: "Einträge, Kosten und nächste Fälligkeiten.") {
                         VStack(alignment: .leading, spacing: 12) {
                             if vehicle != nil {
                                 Button("Wartung eintragen") {
@@ -109,7 +109,7 @@ struct LogbookView: View {
                     }
 
                 case .documents:
-                    logbookSection(title: "Dokumente & Fristen", subtitle: "Hier behältst du wichtige Nachweise und Termine im Blick.") {
+                    logbookSection(title: "Dokumente & Fristen", subtitle: "Nachweise, Fristen und Erinnerungen für dieses Fahrzeug.") {
                         VStack(alignment: .leading, spacing: 12) {
                             if vehicle != nil {
                                 Button("Dokument hinzufügen") {
@@ -143,7 +143,7 @@ struct LogbookView: View {
                     }
 
                 case .places:
-                    logbookSection(title: "Eigene Platznotizen", subtitle: "Hier sammelst du deine eigenen Erfahrungen zu Orten.") {
+                    logbookSection(title: "Eigene Platznotizen", subtitle: "Orte, Koordinaten und eigene Hinweise.") {
                         VStack(alignment: .leading, spacing: 12) {
                             if vehicle != nil {
                                 Button("Ort hinzufügen") {
@@ -617,7 +617,7 @@ private struct MaintenanceEntryFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Logbuch",
                 title: existingEntry == nil ? "Wartung eintragen" : "Wartung anpassen",
-                subtitle: "Halte fest, was erledigt wurde und wann der nächste Schritt fällig ist.",
+                subtitle: SheetCopy.maintenanceEntrySubtitle,
                 systemImage: "wrench.adjustable.fill"
             ) {
                 Form {
@@ -775,7 +775,7 @@ private struct DocumentRecordFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Logbuch",
                 title: existingDocument == nil ? "Dokument hinzufügen" : "Dokument anpassen",
-                subtitle: "Speichere Fristen und Nachweise so, dass du sie vor der Abfahrt schnell wiederfindest.",
+                subtitle: SheetCopy.documentSubtitle,
                 systemImage: "doc.text.fill"
             ) {
                 Form {
@@ -945,7 +945,7 @@ private struct PlaceNoteFormView: View {
             RoadSheetScaffold(
                 eyebrow: "Logbuch",
                 title: existingPlace == nil ? "Ort merken" : "Ort anpassen",
-                subtitle: "Speichere gute Stopps, Ver- und Entsorgung oder eigene Hinweise für später.",
+                subtitle: SheetCopy.placeSubtitle,
                 systemImage: "mappin.and.ellipse"
             ) {
                 Form {
