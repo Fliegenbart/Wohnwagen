@@ -13,81 +13,92 @@ struct GarageView: View {
 
     @State private var editorContext: VehicleEditorContext?
 
+    private var activeVehicle: VehicleProfile? {
+        activeVehicleStore.activeVehicle(in: vehicles)
+    }
+
+    private var orderedVehicles: [VehicleProfile] {
+        let presentation = GaragePresentation.make(
+            vehicles: vehicles,
+            activeVehicleID: activeVehicleStore.selectedVehicleID
+        )
+        let lookup = Dictionary(uniqueKeysWithValues: vehicles.map { ($0.id, $0) })
+        return presentation.orderedVehicleIDs.compactMap { lookup[$0] }
+    }
+
     var body: some View {
         NavigationStack {
             AppCanvas {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Garage")
-                                .font(.system(size: 34, weight: .bold))
-                                .foregroundStyle(AppTheme.ink)
-                            Text("Hier wechselst du dein aktives Fahrzeug und pflegst die wichtigsten Basisdaten.")
-                                .font(.subheadline)
-                                .foregroundStyle(AppTheme.mutedInk)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                    VStack(alignment: .leading, spacing: 18) {
+                        FeatureHeader(
+                            eyebrow: "Fahrzeugwahl",
+                            title: "Garage",
+                            subtitle: "Wähle dein aktives Fahrzeug und pflege die wichtigsten Basisdaten ohne Umwege."
+                        )
                         .padding(.top, 8)
 
-                        if let activeVehicle = activeVehicleStore.activeVehicle(in: vehicles) {
-                            SectionCard(title: "Aktives Fahrzeug", subtitle: "Mit diesem Fahrzeug arbeiten Home, Gewicht, Checklisten, Logbuch und Kosten.") {
-                                VStack(alignment: .leading, spacing: 14) {
-                                    GarageActiveVehicleRow(vehicle: activeVehicle)
-
-                                    HStack(spacing: 12) {
-                                        Button("Basisdaten bearbeiten") {
-                                            editorContext = VehicleEditorContext(vehicle: activeVehicle)
-                                        }
-                                        .buttonStyle(.borderedProminent)
-
-                                        Button("Neues Fahrzeug") {
-                                            editorContext = VehicleEditorContext(vehicle: nil)
-                                        }
-                                        .buttonStyle(.bordered)
+                        if vehicles.isEmpty {
+                            GarageEmptyState {
+                                editorContext = VehicleEditorContext(vehicle: nil)
+                            }
+                        } else {
+                            if let activeVehicle {
+                                GarageCurrentVehicleCard(
+                                    vehicle: activeVehicle,
+                                    onEdit: {
+                                        editorContext = VehicleEditorContext(vehicle: activeVehicle)
+                                    },
+                                    onAddVehicle: {
+                                        editorContext = VehicleEditorContext(vehicle: nil)
                                     }
-                                }
+                                )
                             }
 
-                            SectionCard(title: "Garage", subtitle: "Wähle hier aus, mit welchem Fahrzeug du gerade unterwegs bist.") {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    ForEach(vehicles) { vehicle in
-                                        GarageVehicleRow(
-                                            vehicle: vehicle,
-                                            isActive: vehicle.id == activeVehicle.id,
-                                            onSelect: {
-                                                activeVehicleStore.select(vehicle)
-                                            },
-                                            onEdit: {
-                                                editorContext = VehicleEditorContext(vehicle: vehicle)
-                                            }
-                                        )
-                                    }
+                            GarageFleetSection(
+                                vehicles: orderedVehicles,
+                                activeVehicleID: activeVehicle?.id,
+                                onSelect: { vehicle in
+                                    activeVehicleStore.select(vehicle)
+                                },
+                                onEdit: { vehicle in
+                                    editorContext = VehicleEditorContext(vehicle: vehicle)
+                                },
+                                onAddVehicle: {
+                                    editorContext = VehicleEditorContext(vehicle: nil)
                                 }
-                            }
+                            )
 
-                            SectionCard(title: "Basisdaten", subtitle: "Die wichtigsten Stammdaten deines aktiven Fahrzeugs.") {
-                                VStack(alignment: .leading, spacing: 12) {
+                            if let activeVehicle {
+                                GarageDetailSection(
+                                    title: "Basisdaten",
+                                    subtitle: "Diese Angaben nutzt die App für Auswahl, Dokumente und Einordnung."
+                                ) {
                                     GarageInfoRow(label: "Fahrzeug", value: activeVehicle.name)
                                     GarageInfoRow(label: "Marke", value: joinedValue(activeVehicle.brand, activeVehicle.model))
                                     GarageInfoRow(label: "Kennzeichen", value: activeVehicle.licensePlate.fallback("Noch offen"))
                                     GarageInfoRow(label: "Land", value: activeVehicle.country.title)
+                                    GarageInfoRow(label: "Typ", value: activeVehicle.vehicleKind.title)
                                 }
-                            }
 
-                            SectionCard(title: "Kapazitäten & Gewicht", subtitle: "Diese Werte nutzt die App für Gewicht, Wasser, Gas und Bereitschaft.") {
-                                VStack(alignment: .leading, spacing: 12) {
+                                GarageDetailSection(
+                                    title: "Kapazitäten & Gewicht",
+                                    subtitle: "So rechnet die App bei Gewicht, Wasser und Gas mit den Werten deines Campers."
+                                ) {
                                     GarageInfoRow(label: "zGG", value: numberValue(activeVehicle.gvwrKg, suffix: "kg"))
                                     GarageInfoRow(label: "Leergewicht", value: numberValue(activeVehicle.preferredBaseWeightKg, suffix: "kg"))
                                     GarageInfoRow(label: "Frischwasser", value: numberValue(activeVehicle.freshWaterCapacityL, suffix: "l"))
                                     GarageInfoRow(label: "Grauwasser", value: numberValue(activeVehicle.greyWaterCapacityL, suffix: "l"))
                                     GarageInfoRow(label: "Gas", value: gasSummary(for: activeVehicle))
                                 }
-                            }
 
-                            SectionCard(title: "Service", subtitle: "Damit du Wartung und Fristen realistisch planen kannst.") {
-                                VStack(alignment: .leading, spacing: 12) {
+                                GarageDetailSection(
+                                    title: "Service",
+                                    subtitle: "Damit Wartung, Fristen und Notizen beim richtigen Fahrzeug bleiben."
+                                ) {
                                     GarageInfoRow(label: "Intervall Zeit", value: activeVehicle.serviceIntervalMonths.map { "\($0) Monate" } ?? "Nicht hinterlegt")
                                     GarageInfoRow(label: "Intervall Kilometer", value: activeVehicle.serviceIntervalKm.map { "\($0.formatted()) km" } ?? "Nicht hinterlegt")
+
                                     if !activeVehicle.notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                         VStack(alignment: .leading, spacing: 6) {
                                             Text("Notizen")
@@ -98,15 +109,9 @@ struct GarageView: View {
                                                 .foregroundStyle(AppTheme.ink)
                                                 .fixedSize(horizontal: false, vertical: true)
                                         }
+                                        .padding(.top, 4)
                                     }
                                 }
-                            }
-                        } else {
-                            SectionCard(title: "Noch kein Fahrzeug", subtitle: "Lege zuerst einen Camper an. Danach merkt sich die App dein zuletzt genutztes Fahrzeug automatisch.") {
-                                Button("Fahrzeug anlegen") {
-                                    editorContext = VehicleEditorContext(vehicle: nil)
-                                }
-                                .buttonStyle(.borderedProminent)
                             }
                         }
                     }
@@ -158,42 +163,81 @@ struct VehicleSelectionView: View {
 
     @State private var editorContext: VehicleEditorContext?
 
+    private var activeVehicle: VehicleProfile? {
+        activeVehicleStore.activeVehicle(in: vehicles)
+    }
+
+    private var orderedVehicles: [VehicleProfile] {
+        let presentation = GaragePresentation.make(
+            vehicles: vehicles,
+            activeVehicleID: activeVehicleStore.selectedVehicleID
+        )
+        let lookup = Dictionary(uniqueKeysWithValues: vehicles.map { ($0.id, $0) })
+        return presentation.orderedVehicleIDs.compactMap { lookup[$0] }
+    }
+
     var body: some View {
         NavigationStack {
             AppCanvas {
-                VStack(alignment: .leading, spacing: 20) {
-                    Spacer(minLength: 20)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 18) {
+                        FeatureHeader(
+                            eyebrow: "Fahrzeugwahl",
+                            title: "Welches Fahrzeug nutzt du jetzt?",
+                            subtitle: "Deine Daten bleiben pro Fahrzeug getrennt. Wähle einfach den richtigen Camper aus und arbeite direkt weiter."
+                        )
+                        .padding(.top, 20)
 
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Welches Fahrzeug nutzt du jetzt?")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundStyle(AppTheme.ink)
-                        Text("Deine Daten bleiben pro Fahrzeug erhalten. Wähle einfach deinen Camper aus und arbeite direkt weiter.")
-                            .font(.subheadline)
-                            .foregroundStyle(AppTheme.mutedInk)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        ForEach(vehicles) { vehicle in
-                            Button {
-                                activeVehicleStore.select(vehicle)
-                            } label: {
-                                GarageSelectionRow(vehicle: vehicle)
+                        if vehicles.isEmpty {
+                            GarageEmptyState {
+                                editorContext = VehicleEditorContext(vehicle: nil)
                             }
-                            .buttonStyle(.plain)
+                        } else {
+                            if let activeVehicle {
+                                AlpineSurface(role: .raised) {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        HStack {
+                                            Text("Zuletzt aktiv")
+                                                .font(.footnote.weight(.bold))
+                                                .foregroundStyle(AppTheme.accent)
+                                            Spacer()
+                                            GarageTag(title: "Aktiv", isHighlighted: true)
+                                        }
+
+                                        Text(activeVehicle.name)
+                                            .font(.title3.weight(.semibold))
+                                            .foregroundStyle(AppTheme.ink)
+
+                                        Text(vehicleHeadline(activeVehicle))
+                                            .font(.subheadline)
+                                            .foregroundStyle(AppTheme.mutedInk)
+                                    }
+                                }
+                            }
+
+                            VStack(alignment: .leading, spacing: 12) {
+                                ForEach(orderedVehicles) { vehicle in
+                                    Button {
+                                        activeVehicleStore.select(vehicle)
+                                    } label: {
+                                        GarageSelectionCard(
+                                            vehicle: vehicle,
+                                            isActive: vehicle.id == activeVehicle?.id
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+
+                            Button("Neues Fahrzeug anlegen") {
+                                editorContext = VehicleEditorContext(vehicle: nil)
+                            }
+                            .buttonStyle(.bordered)
                         }
                     }
-
-                    Button("Neues Fahrzeug anlegen") {
-                        editorContext = VehicleEditorContext(vehicle: nil)
-                    }
-                    .buttonStyle(.bordered)
-
-                    Spacer()
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 24)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 24)
             }
             .navigationTitle("Fahrzeug wählen")
             .navigationBarTitleDisplayMode(.inline)
@@ -210,122 +254,254 @@ struct VehicleSelectionView: View {
     }
 }
 
-private struct GarageActiveVehicleRow: View {
-    let vehicle: VehicleProfile
+private struct GarageEmptyState: View {
+    let onCreateVehicle: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(vehicle.name)
-                .font(.title3.weight(.bold))
-                .foregroundStyle(AppTheme.ink)
-            Text([vehicle.brand, vehicle.model].filter { !$0.isEmpty }.joined(separator: " "))
-                .font(.subheadline)
-                .foregroundStyle(AppTheme.mutedInk)
-            Text(vehicle.licensePlate.fallback("Kennzeichen noch offen"))
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(AppTheme.accent)
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Noch kein Fahrzeug angelegt")
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(AppTheme.ink)
+
+                Text("Lege zuerst deinen Camper an. Danach merkt sich die App automatisch, welches Fahrzeug zuletzt aktiv war.")
+                    .font(.subheadline)
+                    .foregroundStyle(AppTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button("Fahrzeug anlegen", action: onCreateVehicle)
+                    .buttonStyle(.borderedProminent)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(18)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Color.white.opacity(0.78))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(AppTheme.accent.opacity(0.18), lineWidth: 1)
-        )
     }
 }
 
-private struct GarageVehicleRow: View {
+private struct GarageCurrentVehicleCard: View {
+    let vehicle: VehicleProfile
+    let onEdit: () -> Void
+    let onAddVehicle: () -> Void
+
+    var body: some View {
+        AlpineSurface(role: .focus) {
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Aktives Fahrzeug")
+                            .font(.caption.weight(.bold))
+                            .textCase(.uppercase)
+                            .tracking(1.1)
+                            .foregroundStyle(AppTheme.sand.opacity(0.86))
+
+                        Text(vehicle.name)
+                            .font(.system(size: 30, weight: .semibold))
+                            .foregroundStyle(.white)
+
+                        Text(vehicleHeadline(vehicle))
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.82))
+                    }
+
+                    Spacer()
+
+                    GarageTag(title: "Aktiv", isHighlighted: false)
+                }
+
+                HStack(spacing: 10) {
+                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                    GarageTag(title: vehicle.country.title, isHighlighted: false)
+                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                }
+
+                HStack(spacing: 12) {
+                    Button("Basisdaten bearbeiten", action: onEdit)
+                        .buttonStyle(.borderedProminent)
+                        .tint(AppTheme.sand)
+                        .foregroundStyle(AppTheme.ink)
+
+                    Button("Neues Fahrzeug", action: onAddVehicle)
+                        .buttonStyle(.bordered)
+                        .tint(.white.opacity(0.82))
+                }
+            }
+        }
+    }
+}
+
+private struct GarageFleetSection: View {
+    let vehicles: [VehicleProfile]
+    let activeVehicleID: UUID?
+    let onSelect: (VehicleProfile) -> Void
+    let onEdit: (VehicleProfile) -> Void
+    let onAddVehicle: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Deine Fahrzeuge")
+                        .font(.system(.title3, design: .rounded, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
+                    Text("Das aktive Fahrzeug steht immer zuerst, damit du schnell weiterkommst.")
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.mutedInk)
+                }
+
+                Spacer()
+
+                Button("Neu", action: onAddVehicle)
+                    .buttonStyle(.bordered)
+            }
+
+            ForEach(vehicles) { vehicle in
+                GarageFleetCard(
+                    vehicle: vehicle,
+                    isActive: vehicle.id == activeVehicleID,
+                    onSelect: { onSelect(vehicle) },
+                    onEdit: { onEdit(vehicle) }
+                )
+            }
+        }
+    }
+}
+
+private struct GarageFleetCard: View {
     let vehicle: VehicleProfile
     let isActive: Bool
     let onSelect: () -> Void
     let onEdit: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
-            Button(action: onSelect) {
-                HStack(spacing: 12) {
-                    Circle()
-                        .fill(isActive ? AppTheme.accent : AppTheme.asphalt.opacity(0.10))
-                        .frame(width: 12, height: 12)
-
-                    VStack(alignment: .leading, spacing: 4) {
+        AlpineSurface(role: isActive ? .raised : .section) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
                         Text(vehicle.name)
-                            .font(.subheadline.weight(.semibold))
+                            .font(.title3.weight(.semibold))
                             .foregroundStyle(AppTheme.ink)
-                        Text([vehicle.brand, vehicle.model].filter { !$0.isEmpty }.joined(separator: " ").fallback("Fahrzeugdaten ergänzen"))
-                            .font(.footnote)
+
+                        Text(vehicleHeadline(vehicle))
+                            .font(.subheadline)
                             .foregroundStyle(AppTheme.mutedInk)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
 
                     Spacer()
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
 
-            Button(action: onEdit) {
-                Image(systemName: "square.and.pencil")
-                    .font(.footnote.weight(.bold))
-                    .foregroundStyle(AppTheme.accent)
-                    .frame(width: 34, height: 34)
-                    .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    if isActive {
+                        GarageTag(title: "Aktiv", isHighlighted: true)
+                    }
+                }
+
+                HStack(spacing: 10) {
+                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
+                    GarageTag(title: vehicle.country.title, isHighlighted: false)
+                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                }
+
+                HStack(spacing: 12) {
+                    if isActive {
+                        Button("Ausgewählt") {}
+                            .buttonStyle(.borderedProminent)
+                            .disabled(true)
+                    } else {
+                        Button("Auswählen", action: onSelect)
+                            .buttonStyle(.borderedProminent)
+                    }
+
+                    Button("Bearbeiten", action: onEdit)
+                        .buttonStyle(.bordered)
+                }
             }
-            .buttonStyle(.plain)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(isActive ? AppTheme.accent.opacity(0.08) : Color.white.opacity(0.54))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(isActive ? AppTheme.accent.opacity(0.22) : AppTheme.asphalt.opacity(0.08), lineWidth: 1)
-        )
     }
 }
 
-private struct GarageSelectionRow: View {
+private struct GarageSelectionCard: View {
     let vehicle: VehicleProfile
+    let isActive: Bool
 
     var body: some View {
-        HStack(spacing: 12) {
-            Circle()
-                .fill(AppTheme.accent.opacity(0.16))
-                .frame(width: 12, height: 12)
+        AlpineSurface(role: isActive ? .raised : .section) {
+            HStack(alignment: .top, spacing: 14) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 10) {
+                        Text(vehicle.name)
+                            .font(.title3.weight(.semibold))
+                            .foregroundStyle(AppTheme.ink)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(vehicle.name)
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(AppTheme.ink)
-                Text([vehicle.brand, vehicle.model].filter { !$0.isEmpty }.joined(separator: " ").fallback("Fahrzeugdaten ergänzen"))
-                    .font(.subheadline)
-                    .foregroundStyle(AppTheme.mutedInk)
-                Text(vehicle.licensePlate.fallback("Kennzeichen noch offen"))
-                    .font(.footnote.weight(.semibold))
+                        if isActive {
+                            GarageTag(title: "Aktiv", isHighlighted: true)
+                        }
+                    }
+
+                    Text(vehicleHeadline(vehicle))
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.mutedInk)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    HStack(spacing: 10) {
+                        GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
+                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                    }
+                }
+
+                Spacer()
+
+                Image(systemName: "arrow.right")
+                    .font(.footnote.weight(.bold))
                     .foregroundStyle(AppTheme.accent)
+                    .padding(.top, 6)
             }
-
-            Spacer()
-
-            Image(systemName: "arrow.right")
-                .font(.footnote.weight(.bold))
-                .foregroundStyle(AppTheme.accent)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 16)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Color.white.opacity(0.74))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
-        )
+    }
+}
+
+private struct GarageDetailSection<Content: View>: View {
+    let title: String
+    let subtitle: String
+    let content: Content
+
+    init(title: String, subtitle: String, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.subtitle = subtitle
+        self.content = content()
+    }
+
+    var body: some View {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(.title3, design: .rounded, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
+
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.mutedInk)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                content
+            }
+        }
+    }
+}
+
+private struct GarageTag: View {
+    let title: String
+    let isHighlighted: Bool
+
+    var body: some View {
+        Text(title)
+            .font(.footnote.weight(.semibold))
+            .foregroundStyle(isHighlighted ? AppTheme.petrol : AppTheme.mutedInk)
+            .lineLimit(1)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                isHighlighted ? AppTheme.sand : AppTheme.surfaceRaised,
+                in: Capsule()
+            )
     }
 }
 
@@ -345,6 +521,13 @@ private struct GarageInfoRow: View {
                 .multilineTextAlignment(.trailing)
         }
     }
+}
+
+private func vehicleHeadline(_ vehicle: VehicleProfile) -> String {
+    [vehicle.brand, vehicle.model]
+        .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        .joined(separator: " ")
+        .fallback("Fahrzeugdaten ergänzen")
 }
 
 private extension String {
