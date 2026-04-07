@@ -3,501 +3,501 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01D5EC0C160428C1EC7B6302 /* LogbookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D3FECEFD99A8E705D0407C /* LogbookView.swift */; };
-		0743591789C21EB1E1FC8236 /* AttachmentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F495BF8F56BD7504FA3DC42C /* AttachmentSection.swift */; };
-		105E6D6F3AE75E65698ED517 /* LogbookPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EE0F7165B5FA74E202CB47 /* LogbookPresentation.swift */; };
-		13857847EFC9811AD828C5F6 /* VehicleProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900D84F1121E8A3079962462 /* VehicleProfileView.swift */; };
-		13EC7F883F999202E58506B0 /* PlaceNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEB96A61FEB2E04551088A4 /* PlaceNote.swift */; };
-		1B542B31D98056EDDB01BEB0 /* PassengerLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDF2BBB38C1952CE8495EF8 /* PassengerLoad.swift */; };
-		1DE0086F796E5A8451885B2F /* SupportEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3004ADDAD81987C56BFABCC4 /* SupportEnums.swift */; };
-		21DFE45751515CB5E671C09F /* MetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31A16C83DAFBCFCF5558F5F /* MetricCard.swift */; };
-		29FCB0489CDE689564525856 /* FirstRunOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180CFA21187DF2C40E44DC68 /* FirstRunOnboardingView.swift */; };
-		318A4E4AEF78D34432EABE57 /* AlpineSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1E9D36B9589317C6BDE107 /* AlpineSurface.swift */; };
-		3213759D64C744B92716DD15 /* ChecklistEditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5E2A871780EF3FB21330CB /* ChecklistEditorService.swift */; };
-		32A6BFD7DE541779AEF8552F /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49328837D269EFAECB56E9B /* PersistenceController.swift */; };
-		34894AF369FBFF0069F4937B /* UtilityRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E9A63EB3018BE7D3DFC40C /* UtilityRow.swift */; };
-		36C225059A528685D52757AF /* AlpineSurfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E727B067D5C8A84BE9BB9F /* AlpineSurfaceTests.swift */; };
-		36DC7389140DC3C5ABE1A7DB /* PreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2612477FFE74D7A6A8AD87B3 /* PreviewStore.swift */; };
-		3940E77BF41D5807CF1B50BD /* GarageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3700EE48F8E39F6461F5E2 /* GarageView.swift */; };
-		3AB727A3D31EF0DCED87BF06 /* ReminderPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2005F4CB05A32D2F99C1A7C9 /* ReminderPlanner.swift */; };
-		3DB493A3632D71F2D203914A /* RoadSheetScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B288B0DE8893440C7A24B4 /* RoadSheetScaffold.swift */; };
-		430F44D3C30FC75CCB4A8466 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C62B6E66A49BCCE1BB3D6E7 /* Foundation.framework */; };
-		44A9DD4CBC479D77A9B65805 /* MaintenanceEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099E0918165569D8F0336E3 /* MaintenanceEntry.swift */; };
-		47DD80D5A4658F8EB2D7AAFA /* ChecklistTemplateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F252B5E54AA15D969F9FE /* ChecklistTemplateLibrary.swift */; };
-		506AD021E40A190AD0373A64 /* SampleDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2C6DC99F42A4E48834A2E1 /* SampleDataSeeder.swift */; };
-		51826FCDC5FB86194325921F /* VehicleProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E3DF6CFBC75B97D32BB62C /* VehicleProfile.swift */; };
-		519451A04720B573807E8D83 /* WorldClassUpgradeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349DEA8F1A3A0AC9EE2BBA16 /* WorldClassUpgradeTests.swift */; };
-		5BD1B88B068B04B50A5ACFBE /* AppDataLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489EA4CF8E06689013D43A96 /* AppDataLocator.swift */; };
-		62B65551B6D72DB226B98096 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EA58310A7871957A569F1E /* RootTabView.swift */; };
-		64D7C0A953D69454F3F9B6FA /* GaragePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342753BD99B786DA79A7B241 /* GaragePresentationTests.swift */; };
-		6D173A836286E2A512B59465 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 243FBFCD1C4C7A8BA46C1827 /* Assets.xcassets */; };
-		70BD58327D49B3BA082B3C0E /* AppNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5E87F5488E65F2D01841F /* AppNavigationState.swift */; };
-		732FD808E1EF77C4E378B92C /* PackingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6478D3E8478CC1E98BB68104 /* PackingItem.swift */; };
-		7C0DF7FA1F4EB9BAFEFAAAB6 /* ChecklistRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = E138AA065A5559DD62AFA28C /* ChecklistRun.swift */; };
-		7D465795F8AC41F40D5E1332 /* ReadinessEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1E66FF174D815E944A9AD9 /* ReadinessEngine.swift */; };
-		806A0608BD7077746841A9E3 /* CostsPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E870DDDB39FF707A491DF93D /* CostsPresentation.swift */; };
-		82B465264FD87EE610AB5D46 /* ChecklistPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B90E757DA4EE45E85CF8E6 /* ChecklistPresentationTests.swift */; };
-		8618F9C7C284F41619A39775 /* ChecklistPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF556C1EFFD26617274146 /* ChecklistPresentation.swift */; };
-		881208EEC0D9B17A25A97C6E /* TripLoadSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0B9362A65BD4773F43E4AB /* TripLoadSettings.swift */; };
-		8C0CF0F17CC46717C0933667 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D415B499B4E03423A97BDD48 /* StatusBadge.swift */; };
-		90FCB54CFC5774CCA72DA1CD /* AppReleaseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A095C7695CE2EB0DB257DD /* AppReleaseConfiguration.swift */; };
-		927FF08C89379109EF729E30 /* ReadinessEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C06438E382D5132656BF35 /* ReadinessEngineTests.swift */; };
-		933138D16653EEA415AFEC2F /* SectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0520A62BA5BD4823E5E1FDF0 /* SectionCard.swift */; };
-		95854D4D9A5A80C317B10070 /* WeightPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB164932DDB148AC568482AD /* WeightPresentationTests.swift */; };
-		98889A9E6D20590EC46B7875 /* CostsPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECAA764A3C441A22039CF67 /* CostsPresentationTests.swift */; };
-		A3CB3701B235E9B640BFFA05 /* RoadSheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E72497F0836E7926CAB3721 /* RoadSheetHeader.swift */; };
-		A57704C04817D552E6E92F98 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDDC3AAC8D9FB1863AE017A /* ExportService.swift */; };
-		A8024ED58D4773D0985D0AFB /* CostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AC1EECEB540AFE032D5D17 /* CostsView.swift */; };
-		AE23985FD3CE36E6E0A8D6B6 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAEAA579DB8F6322E94B725 /* NotificationManager.swift */; };
-		B2273E5F4509D75776953625 /* ReadinessDimensionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5133D4665E8949B3D383AE /* ReadinessDimensionMetadata.swift */; };
-		B7D2FB08DF3C6783BF602F62 /* ActiveVehicleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6938BE42F0D04D01C5A4A8 /* ActiveVehicleStore.swift */; };
-		BD57F666AC251896E63EF9BD /* WeightEditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D8E2B7E68C268DE6E0D137 /* WeightEditorService.swift */; };
-		BFC8B4D75EBC097E221E9D5A /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EE5552F520F4C9F6C45033 /* WeightView.swift */; };
-		BFDC917BB6666F113226C9D7 /* CamperReadyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56956906C01E67259DFB419B /* CamperReadyApp.swift */; };
-		C30FB321E4FF5CDE1C6B181C /* HomeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDC16D0B96DD5C621163423 /* HomeDashboardView.swift */; };
-		C73C96BBD450EF8C0CB8BB84 /* HomeDashboardPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540FDA1C5EBE4407B85CAA54 /* HomeDashboardPresentationTests.swift */; };
-		C75C7BB5165023F6552A0BA7 /* ChecklistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB3FC102BD3AD9A42E20F6B /* ChecklistsView.swift */; };
-		CC3E6D58F767786E29E59F26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C62B6E66A49BCCE1BB3D6E7 /* Foundation.framework */; };
-		CF81F57BAB08F866549900B3 /* ReadinessTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E3602D512EB3FBF3BF7DB6 /* ReadinessTile.swift */; };
-		D231604963BB0AB6995624E0 /* ChecklistItemRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE5EBDA4D56C14C7ADB3B7F /* ChecklistItemRecord.swift */; };
-		D2DD48737680B2DCEBD7B482 /* DocumentRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1D676E1C919E85E0D7436 /* DocumentRecord.swift */; };
-		DDDA211173D4B550D17ABEAB /* WeightPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DC78D82E7D9301638ECCBD /* WeightPresentation.swift */; };
-		DE32A233F5EAB9CFD465A89C /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4608A9370171FF178BB66DBB /* AppTheme.swift */; };
-		E275D604945C5C63183283FB /* AppInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192B2531194B70BD1B0354CD /* AppInfoView.swift */; };
-		E349E997802E8B2347657B0E /* CostEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C04AB971BC0334EF92BB96 /* CostEntry.swift */; };
-		E8B1378DFF4E9A88ED6DC687 /* GaragePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC824C13EE904C73E749257 /* GaragePresentation.swift */; };
-		EDB9F545ED65FFF5980972DB /* HomeDashboardPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EFACEF06B0549C6DF3556E5 /* HomeDashboardPresentation.swift */; };
-		EF5DB1F49AC5768EF2F62BE2 /* FeatureHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B232E5374B3B2922818706F /* FeatureHeader.swift */; };
-		F2E9D6B1A36286C48006253B /* AttachmentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D59FF45C97121E560F4D54 /* AttachmentStore.swift */; };
-		F6F53830B63F52F9A84B486D /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950F2B6ACF4114746103DCE9 /* Trip.swift */; };
-		F7FE29CDB5ED6547D8397CC8 /* LogbookPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3E52F03EE127EBAB3FD13F /* LogbookPresentationTests.swift */; };
+		04098A8A603F57BE24AFDFA7 /* CostsPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F700B4BB1B6A5434537106D8 /* CostsPresentationTests.swift */; };
+		0764BF792F2C55A4837A675C /* WeightEditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E26E078CFA42C6464F876E /* WeightEditorService.swift */; };
+		094C56DB9704A322A5E83C82 /* PlaceNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08B2C4994A86155453A90BD /* PlaceNote.swift */; };
+		154840F13400A93704D6C8B3 /* PreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50E66C575E6602A48111F28 /* PreviewStore.swift */; };
+		1778EC41111A19716A85BE3B /* PassengerLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0816C8B4600A46C8F73C92E0 /* PassengerLoad.swift */; };
+		1868CFF95E0F8AF9BD94C431 /* ActiveVehicleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070DB27DF9A4CBF5D7DBC166 /* ActiveVehicleStore.swift */; };
+		1DA2330AC7403B44E33BFFE5 /* AttachmentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11596BF20AAD8BF9AADCC988 /* AttachmentStore.swift */; };
+		2625F3C21802E93D3863CFF3 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCEF40AFF897646BC655FB5 /* AppTheme.swift */; };
+		26A1B602D56E4A6BAE6A1001 /* AlpineSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A1B601D56E4A6BAE6A1001 /* AlpineSurface.swift */; };
+		29EDC37ED25DB9355A5437E9 /* LogbookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A223E5A2DB886208C8A1DF69 /* LogbookView.swift */; };
+		315F9CBA8DA5F11EB9C822EA /* DocumentRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D821CE9A170DF51E35AC11 /* DocumentRecord.swift */; };
+		3E31772264B29C74115E268D /* SampleDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F2C3F0DACDAFE0A5EB0004 /* SampleDataSeeder.swift */; };
+		414123B633FC677CBC89FA29 /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FB86E835C56F10C6B499A /* WeightView.swift */; };
+		4364C95B1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364C95A1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift */; };
+		4364C95D1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364C95C1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift */; };
+		439002C352103179DF5A01CB /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F500305A46D8BA1E45988 /* RootTabView.swift */; };
+		46AAA6EEA74FA34CEDB255A3 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF331AF0952C2861CE91E084 /* PersistenceController.swift */; };
+		4A1D0F5B2CBF4E42A487DC35 /* WeightPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D0F5A2CBF4E42A487DC35 /* WeightPresentation.swift */; };
+		501B9A3256268100511CE96A /* SectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */; };
+		50A5DB6C4E634694F41B936E /* LogbookPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0DF80B783FCBE0307C70BC /* LogbookPresentation.swift */; };
+		51C02195ECF0B103C95E0B83 /* SupportEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA73EAA2C254475D27C23C /* SupportEnums.swift */; };
+		52CAA69665416B4F9AEC3E7C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96E09889B917378ACD7854D0 /* Foundation.framework */; };
+		61C223F4936C503C457C121E /* ChecklistRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BC442AD1717472CCF4A269 /* ChecklistRun.swift */; };
+		646CBC5CE9BAB11A840BF391 /* HomeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE549276AB4C5F3B750C11 /* HomeDashboardView.swift */; };
+		64BCFB32648A3935E7F29D8A /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D8BFE37C24798D60D096A8 /* ExportService.swift */; };
+		64BCFB33648A3935E7F29D8A /* FeatureHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */; };
+		64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */; };
+		64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */; };
+		67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA5325CA425478B4B66B76 /* ChecklistsView.swift */; };
+		6E2C55748B865DB290DE8CFF /* CostEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3562945C27A8645EEBDF2E /* CostEntry.swift */; };
+		75B0CC5F26A910D4B7AA3AE9 /* MaintenanceEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA13573CEB2D95F33B352BE /* MaintenanceEntry.swift */; };
+		763E489DAD73F087C8214499 /* ReminderPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DCCFAA435454628133420 /* ReminderPlanner.swift */; };
+		782C335455DEC728E523209D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96E09889B917378ACD7854D0 /* Foundation.framework */; };
+		78F0A7297C6326B700DBA8EE /* ReadinessDimensionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */; };
+		7B9B3194960E038EE2F4B049 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BB566625B2F371CB57CA9E /* NotificationManager.swift */; };
+		7BBABA7ED3AE7CBCCAB360DA /* ChecklistEditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4003BEE30B7BA73871A8CB7 /* ChecklistEditorService.swift */; };
+		7C3E4503CB0B034BE26CAD91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3F40B616F3353C004E91E71 /* Assets.xcassets */; };
+		819E72ECCFBB8F31C84D8C97 /* AppInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF752E46A53E7B70AC652BFF /* AppInfoView.swift */; };
+		81E607A50A770265248D8A69 /* VehicleProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E66A38C29962414DBC7A3D5 /* VehicleProfileView.swift */; };
+		824A0BA7C1D94555A8AE1A0D /* WeightPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */; };
+		87B3B2ED7C6316C30067B17E /* HomeDashboardPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3B2EC7C6316C30067B17E /* HomeDashboardPresentation.swift */; };
+		8E3B4222714B128D77A48171 /* PackingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F01469D5E49EE352F500BE9 /* PackingItem.swift */; };
+		8F31C7A24B6D9E1001AA22BB /* GaragePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F31C7A14B6D9E1001AA22BB /* GaragePresentationTests.swift */; };
+		8F31C7A34B6D9E1001AA22BB /* GaragePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F31C7A04B6D9E1001AA22BB /* GaragePresentation.swift */; };
+		93B1C8D27C09134E6733011C /* ReadinessTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3898B28D9CBBCEAB98CB2C /* ReadinessTile.swift */; };
+		93B1C8D37C09134E6733011C /* UtilityRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B1C8D47C09134E6733011C /* UtilityRow.swift */; };
+		9C3070815601C79DC63B94C9 /* CostsPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8D0FFE77E1A5C20F1F545 /* CostsPresentation.swift */; };
+		9EEEA3311C8B5591FF9AEA35 /* FirstRunOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93452A8066C72B47A2D8B805 /* FirstRunOnboardingView.swift */; };
+		9F6FFD514F99753338260A26 /* AppReleaseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E08ED75ADF7A85DB49AF319 /* AppReleaseConfiguration.swift */; };
+		A656198CCC4134FAC191DDFD /* CamperReadyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3F5783304AA59A9C313439 /* CamperReadyApp.swift */; };
+		B4E0D77F55A767FDD44E0C30 /* ChecklistItemRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C10BB06EFD332A4317BC86 /* ChecklistItemRecord.swift */; };
+		B4E79430C5724F32AFC6B2A2 /* AppDataLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449043F96A9A510DB8CB8C22 /* AppDataLocator.swift */; };
+		B910E37D5866DABC58CEC10D /* AttachmentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3E693AFB5B78E96CC75473 /* AttachmentSection.swift */; };
+		BAA48831344E20E2986C293D /* ReadinessEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A98E2C0FEC95CE22DB5E0B1 /* ReadinessEngine.swift */; };
+		BAD43E8262D9B76E43F89E8A /* LogbookPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF29A864428BB0840DAC81F /* LogbookPresentationTests.swift */; };
+		C32BF77BAABCE733BDC6C761 /* WorldClassUpgradeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D651F4BE2028223B5583B495 /* WorldClassUpgradeTests.swift */; };
+		C6E62D1DDD542604789E18FD /* TripLoadSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D30929A0F9062A982D23B4 /* TripLoadSettings.swift */; };
+		C883E5227C6316D400D34026 /* HomeDashboardPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C883E5217C6316D400D34026 /* HomeDashboardPresentationTests.swift */; };
+		D891735BAE7CFC8012FF7927 /* ReadinessEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A467FCC3063957057B9F91DE /* ReadinessEngineTests.swift */; };
+		D891735CAE7CFC8012FF7927 /* AlpineSurfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891735DAE7CFC8012FF7927 /* AlpineSurfaceTests.swift */; };
+		E04F13DC65C9B8E8EC338DA2 /* GarageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9921E2EEFB33BCCD7289E143 /* GarageView.swift */; };
+		E24E777F455A9486592AAF84 /* AppNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA705745D5EECD9D2E127464 /* AppNavigationState.swift */; };
+		E5BA678B609B9294886F613F /* MetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CF7EFA56E5E875FCF9792 /* MetricCard.swift */; };
+		F5A3DC4BA95D22F40ECB405D /* CostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163EC13B896018827EEEE525 /* CostsView.swift */; };
+		F6430670730B9C6C3793B8B8 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0400C0A2F62E47F3A722BBF5 /* Trip.swift */; };
+		F8FB0A974C00B7E4E7ADE61F /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0F754B4CD6114C82BC706F /* StatusBadge.swift */; };
+		FBABDFAD2D9D796F23158F53 /* ChecklistTemplateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD879B637AD776A09BE8614 /* ChecklistTemplateLibrary.swift */; };
+		FDEC4ACD9E58A4CAE7CE0DA3 /* VehicleProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FBD867AAF5381ED20D7CF3 /* VehicleProfile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D4AC93806FA14EA7C4E65AA3 /* PBXContainerItemProxy */ = {
+		4995B1D063DD2F70D94B1B96 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D5D3B1E87A90DF0320F6ABFE /* Project object */;
+			containerPortal = 07F19CDEFD8B9D90AA47B321 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A420B4271FACC3B66357C5D4;
+			remoteGlobalIDString = CDE6126702E6C5B686C3A3AA;
 			remoteInfo = CamperReady;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0099E0918165569D8F0336E3 /* MaintenanceEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MaintenanceEntry.swift; path = CamperReady/Domain/Models/MaintenanceEntry.swift; sourceTree = "<group>"; };
-		01EE0F7165B5FA74E202CB47 /* LogbookPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LogbookPresentation.swift; path = CamperReady/Features/Logbook/LogbookPresentation.swift; sourceTree = "<group>"; };
-		02C04AB971BC0334EF92BB96 /* CostEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostEntry.swift; path = CamperReady/Domain/Models/CostEntry.swift; sourceTree = "<group>"; };
-		0520A62BA5BD4823E5E1FDF0 /* SectionCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SectionCard.swift; path = CamperReady/Shared/UI/SectionCard.swift; sourceTree = "<group>"; };
-		0EFACEF06B0549C6DF3556E5 /* HomeDashboardPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardPresentation.swift; path = CamperReady/Features/Home/HomeDashboardPresentation.swift; sourceTree = "<group>"; };
-		12A29418A3396510B57C875B /* Shared.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Shared.xcconfig; path = CamperReady/Config/Shared.xcconfig; sourceTree = "<group>"; };
-		15C06438E382D5132656BF35 /* ReadinessEngineTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessEngineTests.swift; path = CamperReadyTests/ReadinessEngineTests.swift; sourceTree = "<group>"; };
-		180CFA21187DF2C40E44DC68 /* FirstRunOnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FirstRunOnboardingView.swift; path = CamperReady/Features/Home/FirstRunOnboardingView.swift; sourceTree = "<group>"; };
-		18E727B067D5C8A84BE9BB9F /* AlpineSurfaceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlpineSurfaceTests.swift; path = CamperReadyTests/AlpineSurfaceTests.swift; sourceTree = "<group>"; };
-		192B2531194B70BD1B0354CD /* AppInfoView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppInfoView.swift; path = CamperReady/Features/Home/AppInfoView.swift; sourceTree = "<group>"; };
-		1DE0660C729BFAF176BBF83B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = CamperReady/Support/Info.plist; sourceTree = "<group>"; };
-		2005F4CB05A32D2F99C1A7C9 /* ReminderPlanner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReminderPlanner.swift; path = CamperReady/Services/ReminderPlanner.swift; sourceTree = "<group>"; };
-		243FBFCD1C4C7A8BA46C1827 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = CamperReady/Resources/Assets.xcassets; sourceTree = "<group>"; };
-		2612477FFE74D7A6A8AD87B3 /* PreviewStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreviewStore.swift; path = CamperReady/Services/PreviewStore.swift; sourceTree = "<group>"; };
-		29B8EC86970AACE16075197C /* CamperReadyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CamperReadyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2B232E5374B3B2922818706F /* FeatureHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FeatureHeader.swift; path = CamperReady/Shared/UI/FeatureHeader.swift; sourceTree = "<group>"; };
-		2BE5EBDA4D56C14C7ADB3B7F /* ChecklistItemRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistItemRecord.swift; path = CamperReady/Domain/Models/ChecklistItemRecord.swift; sourceTree = "<group>"; };
-		2D5133D4665E8949B3D383AE /* ReadinessDimensionMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessDimensionMetadata.swift; path = CamperReady/Domain/Readiness/ReadinessDimensionMetadata.swift; sourceTree = "<group>"; };
-		2F1E66FF174D815E944A9AD9 /* ReadinessEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessEngine.swift; path = CamperReady/Domain/Readiness/ReadinessEngine.swift; sourceTree = "<group>"; };
-		3004ADDAD81987C56BFABCC4 /* SupportEnums.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SupportEnums.swift; path = CamperReady/Domain/Models/SupportEnums.swift; sourceTree = "<group>"; };
-		342753BD99B786DA79A7B241 /* GaragePresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GaragePresentationTests.swift; path = CamperReadyTests/GaragePresentationTests.swift; sourceTree = "<group>"; };
-		349DEA8F1A3A0AC9EE2BBA16 /* WorldClassUpgradeTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WorldClassUpgradeTests.swift; path = CamperReadyTests/WorldClassUpgradeTests.swift; sourceTree = "<group>"; };
-		36D3FECEFD99A8E705D0407C /* LogbookView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LogbookView.swift; path = CamperReady/Features/Logbook/LogbookView.swift; sourceTree = "<group>"; };
-		3BB3FC102BD3AD9A42E20F6B /* ChecklistsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistsView.swift; path = CamperReady/Features/Checklists/ChecklistsView.swift; sourceTree = "<group>"; };
-		4608A9370171FF178BB66DBB /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppTheme.swift; path = CamperReady/Shared/UI/AppTheme.swift; sourceTree = "<group>"; };
-		489EA4CF8E06689013D43A96 /* AppDataLocator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDataLocator.swift; path = CamperReady/Services/AppDataLocator.swift; sourceTree = "<group>"; };
-		4C6938BE42F0D04D01C5A4A8 /* ActiveVehicleStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ActiveVehicleStore.swift; path = CamperReady/Services/ActiveVehicleStore.swift; sourceTree = "<group>"; };
-		4E2C6DC99F42A4E48834A2E1 /* SampleDataSeeder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SampleDataSeeder.swift; path = CamperReady/Services/SampleDataSeeder.swift; sourceTree = "<group>"; };
-		540FDA1C5EBE4407B85CAA54 /* HomeDashboardPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardPresentationTests.swift; path = CamperReadyTests/HomeDashboardPresentationTests.swift; sourceTree = "<group>"; };
-		56956906C01E67259DFB419B /* CamperReadyApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CamperReadyApp.swift; path = CamperReady/App/CamperReadyApp.swift; sourceTree = "<group>"; };
-		58E3602D512EB3FBF3BF7DB6 /* ReadinessTile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessTile.swift; path = CamperReady/Shared/UI/ReadinessTile.swift; sourceTree = "<group>"; };
-		5BDF2BBB38C1952CE8495EF8 /* PassengerLoad.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PassengerLoad.swift; path = CamperReady/Domain/Models/PassengerLoad.swift; sourceTree = "<group>"; };
-		6478D3E8478CC1E98BB68104 /* PackingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PackingItem.swift; path = CamperReady/Domain/Models/PackingItem.swift; sourceTree = "<group>"; };
-		6832613474C92269BF17F5B3 /* Tests-Release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Tests-Release.xcconfig"; path = "CamperReady/Config/Tests-Release.xcconfig"; sourceTree = "<group>"; };
-		6C38B4828FFCADD3862AE8BD /* App-Release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "App-Release.xcconfig"; path = "CamperReady/Config/App-Release.xcconfig"; sourceTree = "<group>"; };
-		6F5E2A871780EF3FB21330CB /* ChecklistEditorService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistEditorService.swift; path = CamperReady/Services/ChecklistEditorService.swift; sourceTree = "<group>"; };
-		7BAEAA579DB8F6322E94B725 /* NotificationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NotificationManager.swift; path = CamperReady/Services/NotificationManager.swift; sourceTree = "<group>"; };
-		7C62B6E66A49BCCE1BB3D6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		86A095C7695CE2EB0DB257DD /* AppReleaseConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppReleaseConfiguration.swift; path = CamperReady/App/AppReleaseConfiguration.swift; sourceTree = "<group>"; };
-		8BB1D676E1C919E85E0D7436 /* DocumentRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DocumentRecord.swift; path = CamperReady/Domain/Models/DocumentRecord.swift; sourceTree = "<group>"; };
-		8DC824C13EE904C73E749257 /* GaragePresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GaragePresentation.swift; path = CamperReady/Features/Vehicle/GaragePresentation.swift; sourceTree = "<group>"; };
-		8E44225C3BA6801E39147B93 /* Tests-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Tests-Debug.xcconfig"; path = "CamperReady/Config/Tests-Debug.xcconfig"; sourceTree = "<group>"; };
-		8E72497F0836E7926CAB3721 /* RoadSheetHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetHeader.swift; path = CamperReady/Shared/UI/RoadSheetHeader.swift; sourceTree = "<group>"; };
-		900D84F1121E8A3079962462 /* VehicleProfileView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VehicleProfileView.swift; path = CamperReady/Features/Vehicle/VehicleProfileView.swift; sourceTree = "<group>"; };
-		91DC78D82E7D9301638ECCBD /* WeightPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightPresentation.swift; path = CamperReady/Features/Weight/WeightPresentation.swift; sourceTree = "<group>"; };
-		91EE5552F520F4C9F6C45033 /* WeightView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightView.swift; path = CamperReady/Features/Weight/WeightView.swift; sourceTree = "<group>"; };
-		950F2B6ACF4114746103DCE9 /* Trip.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Trip.swift; path = CamperReady/Domain/Models/Trip.swift; sourceTree = "<group>"; };
-		97D59FF45C97121E560F4D54 /* AttachmentStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentStore.swift; path = CamperReady/Services/AttachmentStore.swift; sourceTree = "<group>"; };
-		98B90E757DA4EE45E85CF8E6 /* ChecklistPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistPresentationTests.swift; path = CamperReadyTests/ChecklistPresentationTests.swift; sourceTree = "<group>"; };
-		9BDDC3AAC8D9FB1863AE017A /* ExportService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExportService.swift; path = CamperReady/Services/ExportService.swift; sourceTree = "<group>"; };
-		9E1E9D36B9589317C6BDE107 /* AlpineSurface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlpineSurface.swift; path = CamperReady/Shared/UI/AlpineSurface.swift; sourceTree = "<group>"; };
-		A31A16C83DAFBCFCF5558F5F /* MetricCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MetricCard.swift; path = CamperReady/Shared/UI/MetricCard.swift; sourceTree = "<group>"; };
-		A3E3DF6CFBC75B97D32BB62C /* VehicleProfile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VehicleProfile.swift; path = CamperReady/Domain/Models/VehicleProfile.swift; sourceTree = "<group>"; };
-		A5B5E87F5488E65F2D01841F /* AppNavigationState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppNavigationState.swift; path = CamperReady/App/AppNavigationState.swift; sourceTree = "<group>"; };
-		A6AC1EECEB540AFE032D5D17 /* CostsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsView.swift; path = CamperReady/Features/Costs/CostsView.swift; sourceTree = "<group>"; };
-		A6C45C75EEB723F67CC1E323 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = CamperReady/Support/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		A8D8E2B7E68C268DE6E0D137 /* WeightEditorService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEditorService.swift; path = CamperReady/Services/WeightEditorService.swift; sourceTree = "<group>"; };
-		AE3E52F03EE127EBAB3FD13F /* LogbookPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LogbookPresentationTests.swift; path = CamperReadyTests/LogbookPresentationTests.swift; sourceTree = "<group>"; };
-		B49328837D269EFAECB56E9B /* PersistenceController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PersistenceController.swift; path = CamperReady/Services/PersistenceController.swift; sourceTree = "<group>"; };
-		BF0B9362A65BD4773F43E4AB /* TripLoadSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TripLoadSettings.swift; path = CamperReady/Domain/Models/TripLoadSettings.swift; sourceTree = "<group>"; };
-		C0F71F4053C155CD2676536B /* App-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "App-Debug.xcconfig"; path = "CamperReady/Config/App-Debug.xcconfig"; sourceTree = "<group>"; };
-		C5EA58310A7871957A569F1E /* RootTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootTabView.swift; path = CamperReady/App/RootTabView.swift; sourceTree = "<group>"; };
-		CC3700EE48F8E39F6461F5E2 /* GarageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GarageView.swift; path = CamperReady/Features/Vehicle/GarageView.swift; sourceTree = "<group>"; };
-		D1B288B0DE8893440C7A24B4 /* RoadSheetScaffold.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetScaffold.swift; path = CamperReady/Shared/UI/RoadSheetScaffold.swift; sourceTree = "<group>"; };
-		D2E9A63EB3018BE7D3DFC40C /* UtilityRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UtilityRow.swift; path = CamperReady/Shared/UI/UtilityRow.swift; sourceTree = "<group>"; };
-		D415B499B4E03423A97BDD48 /* StatusBadge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StatusBadge.swift; path = CamperReady/Shared/UI/StatusBadge.swift; sourceTree = "<group>"; };
-		DCDC16D0B96DD5C621163423 /* HomeDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardView.swift; path = CamperReady/Features/Home/HomeDashboardView.swift; sourceTree = "<group>"; };
-		DDEB96A61FEB2E04551088A4 /* PlaceNote.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlaceNote.swift; path = CamperReady/Domain/Models/PlaceNote.swift; sourceTree = "<group>"; };
-		E138AA065A5559DD62AFA28C /* ChecklistRun.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistRun.swift; path = CamperReady/Domain/Models/ChecklistRun.swift; sourceTree = "<group>"; };
-		E57F252B5E54AA15D969F9FE /* ChecklistTemplateLibrary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistTemplateLibrary.swift; path = CamperReady/Services/ChecklistTemplateLibrary.swift; sourceTree = "<group>"; };
-		E870DDDB39FF707A491DF93D /* CostsPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsPresentation.swift; path = CamperReady/Features/Costs/CostsPresentation.swift; sourceTree = "<group>"; };
-		EB164932DDB148AC568482AD /* WeightPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightPresentationTests.swift; path = CamperReadyTests/WeightPresentationTests.swift; sourceTree = "<group>"; };
-		ED594B1EA323D3D62CE74B10 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = CamperReadyTests/Support/Info.plist; sourceTree = "<group>"; };
-		F0FF556C1EFFD26617274146 /* ChecklistPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistPresentation.swift; path = CamperReady/Features/Checklists/ChecklistPresentation.swift; sourceTree = "<group>"; };
-		F495BF8F56BD7504FA3DC42C /* AttachmentSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentSection.swift; path = CamperReady/Shared/UI/AttachmentSection.swift; sourceTree = "<group>"; };
-		FE3ED9E45540BECBE12288AF /* CamperReady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CamperReady.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FECAA764A3C441A22039CF67 /* CostsPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsPresentationTests.swift; path = CamperReadyTests/CostsPresentationTests.swift; sourceTree = "<group>"; };
+		00BA5325CA425478B4B66B76 /* ChecklistsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistsView.swift; path = CamperReady/Features/Checklists/ChecklistsView.swift; sourceTree = "<group>"; };
+		0400C0A2F62E47F3A722BBF5 /* Trip.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Trip.swift; path = CamperReady/Domain/Models/Trip.swift; sourceTree = "<group>"; };
+		070DB27DF9A4CBF5D7DBC166 /* ActiveVehicleStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ActiveVehicleStore.swift; path = CamperReady/Services/ActiveVehicleStore.swift; sourceTree = "<group>"; };
+		0816C8B4600A46C8F73C92E0 /* PassengerLoad.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PassengerLoad.swift; path = CamperReady/Domain/Models/PassengerLoad.swift; sourceTree = "<group>"; };
+		0B7FB86E835C56F10C6B499A /* WeightView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightView.swift; path = CamperReady/Features/Weight/WeightView.swift; sourceTree = "<group>"; };
+		11596BF20AAD8BF9AADCC988 /* AttachmentStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentStore.swift; path = CamperReady/Services/AttachmentStore.swift; sourceTree = "<group>"; };
+		15EDE0A1E85A85354B2E10EE /* Tests-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Tests-Debug.xcconfig"; path = "CamperReady/Config/Tests-Debug.xcconfig"; sourceTree = "<group>"; };
+		163EC13B896018827EEEE525 /* CostsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsView.swift; path = CamperReady/Features/Costs/CostsView.swift; sourceTree = "<group>"; };
+		1C0F754B4CD6114C82BC706F /* StatusBadge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StatusBadge.swift; path = CamperReady/Shared/UI/StatusBadge.swift; sourceTree = "<group>"; };
+		1E2EF635D8B6861311D7CD61 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = CamperReady/Support/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		1E66A38C29962414DBC7A3D5 /* VehicleProfileView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VehicleProfileView.swift; path = CamperReady/Features/Vehicle/VehicleProfileView.swift; sourceTree = "<group>"; };
+		213F688A902A9BB727B57E8D /* App-Release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "App-Release.xcconfig"; path = "CamperReady/Config/App-Release.xcconfig"; sourceTree = "<group>"; };
+		24420C207D1A91E00F7781C4 /* CamperReadyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CamperReadyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		25D821CE9A170DF51E35AC11 /* DocumentRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DocumentRecord.swift; path = CamperReady/Domain/Models/DocumentRecord.swift; sourceTree = "<group>"; };
+		26A1B601D56E4A6BAE6A1001 /* AlpineSurface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlpineSurface.swift; path = CamperReady/Shared/UI/AlpineSurface.swift; sourceTree = "<group>"; };
+		2CA13573CEB2D95F33B352BE /* MaintenanceEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MaintenanceEntry.swift; path = CamperReady/Domain/Models/MaintenanceEntry.swift; sourceTree = "<group>"; };
+		2E08ED75ADF7A85DB49AF319 /* AppReleaseConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppReleaseConfiguration.swift; path = CamperReady/App/AppReleaseConfiguration.swift; sourceTree = "<group>"; };
+		2E3F5783304AA59A9C313439 /* CamperReadyApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CamperReadyApp.swift; path = CamperReady/App/CamperReadyApp.swift; sourceTree = "<group>"; };
+		3A98E2C0FEC95CE22DB5E0B1 /* ReadinessEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessEngine.swift; path = CamperReady/Domain/Readiness/ReadinessEngine.swift; sourceTree = "<group>"; };
+		3AD879B637AD776A09BE8614 /* ChecklistTemplateLibrary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistTemplateLibrary.swift; path = CamperReady/Services/ChecklistTemplateLibrary.swift; sourceTree = "<group>"; };
+		4364C95A1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistPresentationTests.swift; path = CamperReadyTests/ChecklistPresentationTests.swift; sourceTree = "<group>"; };
+		4364C95C1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistPresentation.swift; path = CamperReady/Features/Checklists/ChecklistPresentation.swift; sourceTree = "<group>"; };
+		449043F96A9A510DB8CB8C22 /* AppDataLocator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppDataLocator.swift; path = CamperReady/Services/AppDataLocator.swift; sourceTree = "<group>"; };
+		47BB566625B2F371CB57CA9E /* NotificationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NotificationManager.swift; path = CamperReady/Services/NotificationManager.swift; sourceTree = "<group>"; };
+		4A1D0F5A2CBF4E42A487DC35 /* WeightPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightPresentation.swift; path = CamperReady/Features/Weight/WeightPresentation.swift; sourceTree = "<group>"; };
+		4B3E693AFB5B78E96CC75473 /* AttachmentSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentSection.swift; path = CamperReady/Shared/UI/AttachmentSection.swift; sourceTree = "<group>"; };
+		4D0DF80B783FCBE0307C70BC /* LogbookPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LogbookPresentation.swift; path = CamperReady/Features/Logbook/LogbookPresentation.swift; sourceTree = "<group>"; };
+		4E3898B28D9CBBCEAB98CB2C /* ReadinessTile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessTile.swift; path = CamperReady/Shared/UI/ReadinessTile.swift; sourceTree = "<group>"; };
+		4F3562945C27A8645EEBDF2E /* CostEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostEntry.swift; path = CamperReady/Domain/Models/CostEntry.swift; sourceTree = "<group>"; };
+		531F500305A46D8BA1E45988 /* RootTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootTabView.swift; path = CamperReady/App/RootTabView.swift; sourceTree = "<group>"; };
+		55BA73EAA2C254475D27C23C /* SupportEnums.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SupportEnums.swift; path = CamperReady/Domain/Models/SupportEnums.swift; sourceTree = "<group>"; };
+		5FCE549276AB4C5F3B750C11 /* HomeDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardView.swift; path = CamperReady/Features/Home/HomeDashboardView.swift; sourceTree = "<group>"; };
+		619D4F00AE83955BBF44CC0B /* App-Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "App-Debug.xcconfig"; path = "CamperReady/Config/App-Debug.xcconfig"; sourceTree = "<group>"; };
+		64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FeatureHeader.swift; path = CamperReady/Shared/UI/FeatureHeader.swift; sourceTree = "<group>"; };
+		64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetHeader.swift; path = CamperReady/Shared/UI/RoadSheetHeader.swift; sourceTree = "<group>"; };
+		64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetScaffold.swift; path = CamperReady/Shared/UI/RoadSheetScaffold.swift; sourceTree = "<group>"; };
+		6E0DCCFAA435454628133420 /* ReminderPlanner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReminderPlanner.swift; path = CamperReady/Services/ReminderPlanner.swift; sourceTree = "<group>"; };
+		6F01469D5E49EE352F500BE9 /* PackingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PackingItem.swift; path = CamperReady/Domain/Models/PackingItem.swift; sourceTree = "<group>"; };
+		78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessDimensionMetadata.swift; path = CamperReady/Domain/Readiness/ReadinessDimensionMetadata.swift; sourceTree = "<group>"; };
+		7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SectionCard.swift; path = CamperReady/Shared/UI/SectionCard.swift; sourceTree = "<group>"; };
+		7AD2371FD6E4614D678C0F09 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = CamperReadyTests/Support/Info.plist; sourceTree = "<group>"; };
+		80C10BB06EFD332A4317BC86 /* ChecklistItemRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistItemRecord.swift; path = CamperReady/Domain/Models/ChecklistItemRecord.swift; sourceTree = "<group>"; };
+		80F2C3F0DACDAFE0A5EB0004 /* SampleDataSeeder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SampleDataSeeder.swift; path = CamperReady/Services/SampleDataSeeder.swift; sourceTree = "<group>"; };
+		824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightPresentationTests.swift; path = CamperReadyTests/WeightPresentationTests.swift; sourceTree = "<group>"; };
+		87B3B2EC7C6316C30067B17E /* HomeDashboardPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardPresentation.swift; path = CamperReady/Features/Home/HomeDashboardPresentation.swift; sourceTree = "<group>"; };
+		8A2CF7EFA56E5E875FCF9792 /* MetricCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MetricCard.swift; path = CamperReady/Shared/UI/MetricCard.swift; sourceTree = "<group>"; };
+		8CA8D0FFE77E1A5C20F1F545 /* CostsPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsPresentation.swift; path = CamperReady/Features/Costs/CostsPresentation.swift; sourceTree = "<group>"; };
+		8F31C7A04B6D9E1001AA22BB /* GaragePresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GaragePresentation.swift; path = CamperReady/Features/Vehicle/GaragePresentation.swift; sourceTree = "<group>"; };
+		8F31C7A14B6D9E1001AA22BB /* GaragePresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GaragePresentationTests.swift; path = CamperReadyTests/GaragePresentationTests.swift; sourceTree = "<group>"; };
+		921D3C033B7A48C8AD441F44 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = CamperReady/Support/Info.plist; sourceTree = "<group>"; };
+		93452A8066C72B47A2D8B805 /* FirstRunOnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FirstRunOnboardingView.swift; path = CamperReady/Features/Home/FirstRunOnboardingView.swift; sourceTree = "<group>"; };
+		93B1C8D47C09134E6733011C /* UtilityRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UtilityRow.swift; path = CamperReady/Shared/UI/UtilityRow.swift; sourceTree = "<group>"; };
+		96E09889B917378ACD7854D0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		9921E2EEFB33BCCD7289E143 /* GarageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GarageView.swift; path = CamperReady/Features/Vehicle/GarageView.swift; sourceTree = "<group>"; };
+		9EF29A864428BB0840DAC81F /* LogbookPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LogbookPresentationTests.swift; path = CamperReadyTests/LogbookPresentationTests.swift; sourceTree = "<group>"; };
+		9FCEF40AFF897646BC655FB5 /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppTheme.swift; path = CamperReady/Shared/UI/AppTheme.swift; sourceTree = "<group>"; };
+		A223E5A2DB886208C8A1DF69 /* LogbookView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LogbookView.swift; path = CamperReady/Features/Logbook/LogbookView.swift; sourceTree = "<group>"; };
+		A467FCC3063957057B9F91DE /* ReadinessEngineTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessEngineTests.swift; path = CamperReadyTests/ReadinessEngineTests.swift; sourceTree = "<group>"; };
+		A50E66C575E6602A48111F28 /* PreviewStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreviewStore.swift; path = CamperReady/Services/PreviewStore.swift; sourceTree = "<group>"; };
+		A9D30929A0F9062A982D23B4 /* TripLoadSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TripLoadSettings.swift; path = CamperReady/Domain/Models/TripLoadSettings.swift; sourceTree = "<group>"; };
+		AE77FD683FC15A4B42887B58 /* CamperReady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CamperReady.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08B2C4994A86155453A90BD /* PlaceNote.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlaceNote.swift; path = CamperReady/Domain/Models/PlaceNote.swift; sourceTree = "<group>"; };
+		B2D8BFE37C24798D60D096A8 /* ExportService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExportService.swift; path = CamperReady/Services/ExportService.swift; sourceTree = "<group>"; };
+		B8430C3CCA5C79A27BA0A5C0 /* Tests-Release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Tests-Release.xcconfig"; path = "CamperReady/Config/Tests-Release.xcconfig"; sourceTree = "<group>"; };
+		C5FBD867AAF5381ED20D7CF3 /* VehicleProfile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VehicleProfile.swift; path = CamperReady/Domain/Models/VehicleProfile.swift; sourceTree = "<group>"; };
+		C883E5217C6316D400D34026 /* HomeDashboardPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HomeDashboardPresentationTests.swift; path = CamperReadyTests/HomeDashboardPresentationTests.swift; sourceTree = "<group>"; };
+		CC99200772A7B9007435EDB5 /* Shared.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Shared.xcconfig; path = CamperReady/Config/Shared.xcconfig; sourceTree = "<group>"; };
+		D0BC442AD1717472CCF4A269 /* ChecklistRun.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistRun.swift; path = CamperReady/Domain/Models/ChecklistRun.swift; sourceTree = "<group>"; };
+		D4003BEE30B7BA73871A8CB7 /* ChecklistEditorService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChecklistEditorService.swift; path = CamperReady/Services/ChecklistEditorService.swift; sourceTree = "<group>"; };
+		D4E26E078CFA42C6464F876E /* WeightEditorService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEditorService.swift; path = CamperReady/Services/WeightEditorService.swift; sourceTree = "<group>"; };
+		D651F4BE2028223B5583B495 /* WorldClassUpgradeTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WorldClassUpgradeTests.swift; path = CamperReadyTests/WorldClassUpgradeTests.swift; sourceTree = "<group>"; };
+		D891735DAE7CFC8012FF7927 /* AlpineSurfaceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlpineSurfaceTests.swift; path = CamperReadyTests/AlpineSurfaceTests.swift; sourceTree = "<group>"; };
+		DF752E46A53E7B70AC652BFF /* AppInfoView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppInfoView.swift; path = CamperReady/Features/Home/AppInfoView.swift; sourceTree = "<group>"; };
+		E3F40B616F3353C004E91E71 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = CamperReady/Resources/Assets.xcassets; sourceTree = "<group>"; };
+		EA705745D5EECD9D2E127464 /* AppNavigationState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppNavigationState.swift; path = CamperReady/App/AppNavigationState.swift; sourceTree = "<group>"; };
+		EF331AF0952C2861CE91E084 /* PersistenceController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PersistenceController.swift; path = CamperReady/Services/PersistenceController.swift; sourceTree = "<group>"; };
+		F700B4BB1B6A5434537106D8 /* CostsPresentationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CostsPresentationTests.swift; path = CamperReadyTests/CostsPresentationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		26F3F507BD664F8ACCF8E7BB /* Frameworks */ = {
+		3C24CF756B6597C9C0B0F035 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				430F44D3C30FC75CCB4A8466 /* Foundation.framework in Frameworks */,
+				782C335455DEC728E523209D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		881B56001791A4F52FC67B84 /* Frameworks */ = {
+		47CEF2CACD66C4FEADDFC82C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC3E6D58F767786E29E59F26 /* Foundation.framework in Frameworks */,
+				52CAA69665416B4F9AEC3E7C /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1E1075E7CFCB10CDAAC07F28 /* Services */ = {
+		02A0A1ED0CB41A0E5E672613 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4C6938BE42F0D04D01C5A4A8 /* ActiveVehicleStore.swift */,
-				489EA4CF8E06689013D43A96 /* AppDataLocator.swift */,
-				97D59FF45C97121E560F4D54 /* AttachmentStore.swift */,
-				6F5E2A871780EF3FB21330CB /* ChecklistEditorService.swift */,
-				E57F252B5E54AA15D969F9FE /* ChecklistTemplateLibrary.swift */,
-				9BDDC3AAC8D9FB1863AE017A /* ExportService.swift */,
-				7BAEAA579DB8F6322E94B725 /* NotificationManager.swift */,
-				B49328837D269EFAECB56E9B /* PersistenceController.swift */,
-				2612477FFE74D7A6A8AD87B3 /* PreviewStore.swift */,
-				2005F4CB05A32D2F99C1A7C9 /* ReminderPlanner.swift */,
-				4E2C6DC99F42A4E48834A2E1 /* SampleDataSeeder.swift */,
-				A8D8E2B7E68C268DE6E0D137 /* WeightEditorService.swift */,
-			);
-			name = Services;
-			sourceTree = "<group>";
-		};
-		1EECCF2D944855A058488978 /* CamperReady */ = {
-			isa = PBXGroup;
-			children = (
-				8072162F36D7904C45F5D9AB /* App */,
-				F6ACB0C589931EA3CD0A1547 /* Domain */,
-				A2CAD595E148BAEF2097C9D7 /* Features */,
-				1E1075E7CFCB10CDAAC07F28 /* Services */,
-				231D8A84273B29D0F8C3F30D /* Shared */,
-				77AED0DE08DD2A5C768B118A /* Resources */,
-				4321DADDE4F4A2508798CBEF /* Config */,
-				597B9FB45EC9EEAEA8D2BED8 /* Support */,
-			);
-			name = CamperReady;
-			sourceTree = "<group>";
-		};
-		231D8A84273B29D0F8C3F30D /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				FC2C5A9CFC6D27589EB1CFA0 /* UI */,
-			);
-			name = Shared;
-			sourceTree = "<group>";
-		};
-		42C38BBCBF014D74E3ABBCD2 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				7C62B6E66A49BCCE1BB3D6E7 /* Foundation.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		4321DADDE4F4A2508798CBEF /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				C0F71F4053C155CD2676536B /* App-Debug.xcconfig */,
-				6C38B4828FFCADD3862AE8BD /* App-Release.xcconfig */,
-				12A29418A3396510B57C875B /* Shared.xcconfig */,
-				8E44225C3BA6801E39147B93 /* Tests-Debug.xcconfig */,
-				6832613474C92269BF17F5B3 /* Tests-Release.xcconfig */,
-			);
-			name = Config;
-			sourceTree = "<group>";
-		};
-		46D9E4B4168DB7B63EE95D34 /* Vehicle */ = {
-			isa = PBXGroup;
-			children = (
-				8DC824C13EE904C73E749257 /* GaragePresentation.swift */,
-				CC3700EE48F8E39F6461F5E2 /* GarageView.swift */,
-				900D84F1121E8A3079962462 /* VehicleProfileView.swift */,
-			);
-			name = Vehicle;
-			sourceTree = "<group>";
-		};
-		597B9FB45EC9EEAEA8D2BED8 /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				1DE0660C729BFAF176BBF83B /* Info.plist */,
-				A6C45C75EEB723F67CC1E323 /* PrivacyInfo.xcprivacy */,
-			);
-			name = Support;
-			sourceTree = "<group>";
-		};
-		66EC19A66FAA9EAA79341EA9 = {
-			isa = PBXGroup;
-			children = (
-				FCDC51434B65C3B3FDF421A4 /* Products */,
-				EC51D8E87B6EC2BE544B278D /* Frameworks */,
-				1EECCF2D944855A058488978 /* CamperReady */,
-				DCD4828D7AE5ACE2BFC2726A /* CamperReadyTests */,
-				77DD908101C3C4D2495CD883 /* Scripts */,
-			);
-			sourceTree = "<group>";
-		};
-		7439A97D3DAD47D29F80C75B /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				2BE5EBDA4D56C14C7ADB3B7F /* ChecklistItemRecord.swift */,
-				E138AA065A5559DD62AFA28C /* ChecklistRun.swift */,
-				02C04AB971BC0334EF92BB96 /* CostEntry.swift */,
-				8BB1D676E1C919E85E0D7436 /* DocumentRecord.swift */,
-				0099E0918165569D8F0336E3 /* MaintenanceEntry.swift */,
-				6478D3E8478CC1E98BB68104 /* PackingItem.swift */,
-				5BDF2BBB38C1952CE8495EF8 /* PassengerLoad.swift */,
-				DDEB96A61FEB2E04551088A4 /* PlaceNote.swift */,
-				3004ADDAD81987C56BFABCC4 /* SupportEnums.swift */,
-				950F2B6ACF4114746103DCE9 /* Trip.swift */,
-				BF0B9362A65BD4773F43E4AB /* TripLoadSettings.swift */,
-				A3E3DF6CFBC75B97D32BB62C /* VehicleProfile.swift */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
-		77AED0DE08DD2A5C768B118A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				243FBFCD1C4C7A8BA46C1827 /* Assets.xcassets */,
+				E3F40B616F3353C004E91E71 /* Assets.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		77DD908101C3C4D2495CD883 /* Scripts */ = {
+		0AB60CC7CC76B48461F4CBB3 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				3A1E99EC9D467A9B2121ED35 /* Models */,
+				C5E790C8461D7B820FD3BBD1 /* Readiness */,
+			);
+			name = Domain;
+			sourceTree = "<group>";
+		};
+		1A1CEEDA1FBB91E1856E8A60 /* Weight */ = {
+			isa = PBXGroup;
+			children = (
+				4A1D0F5A2CBF4E42A487DC35 /* WeightPresentation.swift */,
+				0B7FB86E835C56F10C6B499A /* WeightView.swift */,
+			);
+			name = Weight;
+			sourceTree = "<group>";
+		};
+		1B3019C15079F93D2A02ACB0 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				2D5594E0347C642E47B51401 /* Checklists */,
+				FDA02FA1F2EAF6033E3B02E4 /* Costs */,
+				47EEFCC01CCBA8500912B07D /* Home */,
+				75F4FD9B09781D7949DC8C1B /* Logbook */,
+				4517300E3CDD7A2E74E70909 /* Vehicle */,
+				1A1CEEDA1FBB91E1856E8A60 /* Weight */,
+			);
+			name = Features;
+			sourceTree = "<group>";
+		};
+		2D5594E0347C642E47B51401 /* Checklists */ = {
+			isa = PBXGroup;
+			children = (
+				4364C95C1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift */,
+				00BA5325CA425478B4B66B76 /* ChecklistsView.swift */,
+			);
+			name = Checklists;
+			sourceTree = "<group>";
+		};
+		30310B4D5897C8B6D63E3AF9 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				96E09889B917378ACD7854D0 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		3A1E99EC9D467A9B2121ED35 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				80C10BB06EFD332A4317BC86 /* ChecklistItemRecord.swift */,
+				D0BC442AD1717472CCF4A269 /* ChecklistRun.swift */,
+				4F3562945C27A8645EEBDF2E /* CostEntry.swift */,
+				25D821CE9A170DF51E35AC11 /* DocumentRecord.swift */,
+				2CA13573CEB2D95F33B352BE /* MaintenanceEntry.swift */,
+				6F01469D5E49EE352F500BE9 /* PackingItem.swift */,
+				0816C8B4600A46C8F73C92E0 /* PassengerLoad.swift */,
+				B08B2C4994A86155453A90BD /* PlaceNote.swift */,
+				55BA73EAA2C254475D27C23C /* SupportEnums.swift */,
+				0400C0A2F62E47F3A722BBF5 /* Trip.swift */,
+				A9D30929A0F9062A982D23B4 /* TripLoadSettings.swift */,
+				C5FBD867AAF5381ED20D7CF3 /* VehicleProfile.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		4517300E3CDD7A2E74E70909 /* Vehicle */ = {
+			isa = PBXGroup;
+			children = (
+				9921E2EEFB33BCCD7289E143 /* GarageView.swift */,
+				8F31C7A04B6D9E1001AA22BB /* GaragePresentation.swift */,
+				1E66A38C29962414DBC7A3D5 /* VehicleProfileView.swift */,
+			);
+			name = Vehicle;
+			sourceTree = "<group>";
+		};
+		47EEFCC01CCBA8500912B07D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				DF752E46A53E7B70AC652BFF /* AppInfoView.swift */,
+				93452A8066C72B47A2D8B805 /* FirstRunOnboardingView.swift */,
+				87B3B2EC7C6316C30067B17E /* HomeDashboardPresentation.swift */,
+				5FCE549276AB4C5F3B750C11 /* HomeDashboardView.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		52EBA6171DAACF0DF3D4A8FA /* CamperReadyTests */ = {
+			isa = PBXGroup;
+			children = (
+				C9E05FD36A347ED579228BD6 /* CamperReadyTests */,
+				6B53018F8B6680960F8F16E1 /* Support */,
+				9EF29A864428BB0840DAC81F /* LogbookPresentationTests.swift */,
+				F700B4BB1B6A5434537106D8 /* CostsPresentationTests.swift */,
+			);
+			name = CamperReadyTests;
+			sourceTree = "<group>";
+		};
+		5527A70B393D95F751E39342 = {
+			isa = PBXGroup;
+			children = (
+				DB9117206669FE67625B30D8 /* Products */,
+				5BFBD240F0E9A14432BE0758 /* Frameworks */,
+				75869800E7F8609ECE04AE52 /* CamperReady */,
+				52EBA6171DAACF0DF3D4A8FA /* CamperReadyTests */,
+				BB2528C655D72C83757DF446 /* Scripts */,
+			);
+			sourceTree = "<group>";
+		};
+		5BFBD240F0E9A14432BE0758 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				30310B4D5897C8B6D63E3AF9 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5D337913CDE7E94985D02774 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				EA705745D5EECD9D2E127464 /* AppNavigationState.swift */,
+				2E08ED75ADF7A85DB49AF319 /* AppReleaseConfiguration.swift */,
+				2E3F5783304AA59A9C313439 /* CamperReadyApp.swift */,
+				531F500305A46D8BA1E45988 /* RootTabView.swift */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		6367D79E7082183B60EEF3F0 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				DEE29724643517E16C73A810 /* UI */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		6B53018F8B6680960F8F16E1 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				7AD2371FD6E4614D678C0F09 /* Info.plist */,
+			);
+			name = Support;
+			sourceTree = "<group>";
+		};
+		75869800E7F8609ECE04AE52 /* CamperReady */ = {
+			isa = PBXGroup;
+			children = (
+				5D337913CDE7E94985D02774 /* App */,
+				0AB60CC7CC76B48461F4CBB3 /* Domain */,
+				1B3019C15079F93D2A02ACB0 /* Features */,
+				B1056A0E38014B48066C9ECC /* Services */,
+				6367D79E7082183B60EEF3F0 /* Shared */,
+				02A0A1ED0CB41A0E5E672613 /* Resources */,
+				E8E9C4642A2EF7FA7C5B01A8 /* Config */,
+				F534471DA1D3DA9C6BC73175 /* Support */,
+			);
+			name = CamperReady;
+			sourceTree = "<group>";
+		};
+		75F4FD9B09781D7949DC8C1B /* Logbook */ = {
+			isa = PBXGroup;
+			children = (
+				A223E5A2DB886208C8A1DF69 /* LogbookView.swift */,
+				4D0DF80B783FCBE0307C70BC /* LogbookPresentation.swift */,
+			);
+			name = Logbook;
+			sourceTree = "<group>";
+		};
+		B1056A0E38014B48066C9ECC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				070DB27DF9A4CBF5D7DBC166 /* ActiveVehicleStore.swift */,
+				449043F96A9A510DB8CB8C22 /* AppDataLocator.swift */,
+				11596BF20AAD8BF9AADCC988 /* AttachmentStore.swift */,
+				D4003BEE30B7BA73871A8CB7 /* ChecklistEditorService.swift */,
+				3AD879B637AD776A09BE8614 /* ChecklistTemplateLibrary.swift */,
+				B2D8BFE37C24798D60D096A8 /* ExportService.swift */,
+				47BB566625B2F371CB57CA9E /* NotificationManager.swift */,
+				EF331AF0952C2861CE91E084 /* PersistenceController.swift */,
+				A50E66C575E6602A48111F28 /* PreviewStore.swift */,
+				6E0DCCFAA435454628133420 /* ReminderPlanner.swift */,
+				80F2C3F0DACDAFE0A5EB0004 /* SampleDataSeeder.swift */,
+				D4E26E078CFA42C6464F876E /* WeightEditorService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		BB2528C655D72C83757DF446 /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Scripts;
 			sourceTree = "<group>";
 		};
-		8072162F36D7904C45F5D9AB /* App */ = {
+		C5E790C8461D7B820FD3BBD1 /* Readiness */ = {
 			isa = PBXGroup;
 			children = (
-				A5B5E87F5488E65F2D01841F /* AppNavigationState.swift */,
-				86A095C7695CE2EB0DB257DD /* AppReleaseConfiguration.swift */,
-				56956906C01E67259DFB419B /* CamperReadyApp.swift */,
-				C5EA58310A7871957A569F1E /* RootTabView.swift */,
-			);
-			name = App;
-			sourceTree = "<group>";
-		};
-		A1F323B999DA3BBE48420B10 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				192B2531194B70BD1B0354CD /* AppInfoView.swift */,
-				180CFA21187DF2C40E44DC68 /* FirstRunOnboardingView.swift */,
-				0EFACEF06B0549C6DF3556E5 /* HomeDashboardPresentation.swift */,
-				DCDC16D0B96DD5C621163423 /* HomeDashboardView.swift */,
-			);
-			name = Home;
-			sourceTree = "<group>";
-		};
-		A2CAD595E148BAEF2097C9D7 /* Features */ = {
-			isa = PBXGroup;
-			children = (
-				EC98EE589DFFDF78213235A4 /* Checklists */,
-				FB31F6E37F2C5E5C45AA3A98 /* Costs */,
-				A1F323B999DA3BBE48420B10 /* Home */,
-				E289FF554EB54B9F3C7A02DF /* Logbook */,
-				46D9E4B4168DB7B63EE95D34 /* Vehicle */,
-				AB6EE53AFEAA90E747FDF02B /* Weight */,
-			);
-			name = Features;
-			sourceTree = "<group>";
-		};
-		AB6EE53AFEAA90E747FDF02B /* Weight */ = {
-			isa = PBXGroup;
-			children = (
-				91DC78D82E7D9301638ECCBD /* WeightPresentation.swift */,
-				91EE5552F520F4C9F6C45033 /* WeightView.swift */,
-			);
-			name = Weight;
-			sourceTree = "<group>";
-		};
-		C25DE89F0E42AA036DCD42E9 /* Readiness */ = {
-			isa = PBXGroup;
-			children = (
-				2D5133D4665E8949B3D383AE /* ReadinessDimensionMetadata.swift */,
-				2F1E66FF174D815E944A9AD9 /* ReadinessEngine.swift */,
+				78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */,
+				3A98E2C0FEC95CE22DB5E0B1 /* ReadinessEngine.swift */,
 			);
 			name = Readiness;
 			sourceTree = "<group>";
 		};
-		C6753D705526A9792D8981D2 /* Support */ = {
+		C9E05FD36A347ED579228BD6 /* CamperReadyTests */ = {
 			isa = PBXGroup;
 			children = (
-				ED594B1EA323D3D62CE74B10 /* Info.plist */,
-			);
-			name = Support;
-			sourceTree = "<group>";
-		};
-		D3E47C1EB69EE39FCF111FC9 /* CamperReadyTests */ = {
-			isa = PBXGroup;
-			children = (
-				18E727B067D5C8A84BE9BB9F /* AlpineSurfaceTests.swift */,
-				98B90E757DA4EE45E85CF8E6 /* ChecklistPresentationTests.swift */,
-				FECAA764A3C441A22039CF67 /* CostsPresentationTests.swift */,
-				342753BD99B786DA79A7B241 /* GaragePresentationTests.swift */,
-				540FDA1C5EBE4407B85CAA54 /* HomeDashboardPresentationTests.swift */,
-				AE3E52F03EE127EBAB3FD13F /* LogbookPresentationTests.swift */,
-				15C06438E382D5132656BF35 /* ReadinessEngineTests.swift */,
-				EB164932DDB148AC568482AD /* WeightPresentationTests.swift */,
-				349DEA8F1A3A0AC9EE2BBA16 /* WorldClassUpgradeTests.swift */,
+				D891735DAE7CFC8012FF7927 /* AlpineSurfaceTests.swift */,
+				4364C95A1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift */,
+				8F31C7A14B6D9E1001AA22BB /* GaragePresentationTests.swift */,
+				C883E5217C6316D400D34026 /* HomeDashboardPresentationTests.swift */,
+				A467FCC3063957057B9F91DE /* ReadinessEngineTests.swift */,
+				824A0BA6C1D94555A8AE1A0D /* WeightPresentationTests.swift */,
+				D651F4BE2028223B5583B495 /* WorldClassUpgradeTests.swift */,
 			);
 			name = CamperReadyTests;
 			sourceTree = "<group>";
 		};
-		DCD4828D7AE5ACE2BFC2726A /* CamperReadyTests */ = {
+		DB9117206669FE67625B30D8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D3E47C1EB69EE39FCF111FC9 /* CamperReadyTests */,
-				C6753D705526A9792D8981D2 /* Support */,
+				AE77FD683FC15A4B42887B58 /* CamperReady.app */,
+				24420C207D1A91E00F7781C4 /* CamperReadyTests.xctest */,
 			);
-			name = CamperReadyTests;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		E289FF554EB54B9F3C7A02DF /* Logbook */ = {
+		DEE29724643517E16C73A810 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				01EE0F7165B5FA74E202CB47 /* LogbookPresentation.swift */,
-				36D3FECEFD99A8E705D0407C /* LogbookView.swift */,
-			);
-			name = Logbook;
-			sourceTree = "<group>";
-		};
-		EC51D8E87B6EC2BE544B278D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				42C38BBCBF014D74E3ABBCD2 /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EC98EE589DFFDF78213235A4 /* Checklists */ = {
-			isa = PBXGroup;
-			children = (
-				F0FF556C1EFFD26617274146 /* ChecklistPresentation.swift */,
-				3BB3FC102BD3AD9A42E20F6B /* ChecklistsView.swift */,
-			);
-			name = Checklists;
-			sourceTree = "<group>";
-		};
-		F6ACB0C589931EA3CD0A1547 /* Domain */ = {
-			isa = PBXGroup;
-			children = (
-				7439A97D3DAD47D29F80C75B /* Models */,
-				C25DE89F0E42AA036DCD42E9 /* Readiness */,
-			);
-			name = Domain;
-			sourceTree = "<group>";
-		};
-		FB31F6E37F2C5E5C45AA3A98 /* Costs */ = {
-			isa = PBXGroup;
-			children = (
-				E870DDDB39FF707A491DF93D /* CostsPresentation.swift */,
-				A6AC1EECEB540AFE032D5D17 /* CostsView.swift */,
-			);
-			name = Costs;
-			sourceTree = "<group>";
-		};
-		FC2C5A9CFC6D27589EB1CFA0 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				9E1E9D36B9589317C6BDE107 /* AlpineSurface.swift */,
-				4608A9370171FF178BB66DBB /* AppTheme.swift */,
-				F495BF8F56BD7504FA3DC42C /* AttachmentSection.swift */,
-				2B232E5374B3B2922818706F /* FeatureHeader.swift */,
-				A31A16C83DAFBCFCF5558F5F /* MetricCard.swift */,
-				58E3602D512EB3FBF3BF7DB6 /* ReadinessTile.swift */,
-				8E72497F0836E7926CAB3721 /* RoadSheetHeader.swift */,
-				D1B288B0DE8893440C7A24B4 /* RoadSheetScaffold.swift */,
-				0520A62BA5BD4823E5E1FDF0 /* SectionCard.swift */,
-				D415B499B4E03423A97BDD48 /* StatusBadge.swift */,
-				D2E9A63EB3018BE7D3DFC40C /* UtilityRow.swift */,
+				26A1B601D56E4A6BAE6A1001 /* AlpineSurface.swift */,
+				9FCEF40AFF897646BC655FB5 /* AppTheme.swift */,
+				4B3E693AFB5B78E96CC75473 /* AttachmentSection.swift */,
+				64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */,
+				8A2CF7EFA56E5E875FCF9792 /* MetricCard.swift */,
+				4E3898B28D9CBBCEAB98CB2C /* ReadinessTile.swift */,
+				64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */,
+				64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */,
+				7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */,
+				1C0F754B4CD6114C82BC706F /* StatusBadge.swift */,
+				93B1C8D47C09134E6733011C /* UtilityRow.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
 		};
-		FCDC51434B65C3B3FDF421A4 /* Products */ = {
+		E8E9C4642A2EF7FA7C5B01A8 /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				FE3ED9E45540BECBE12288AF /* CamperReady.app */,
-				29B8EC86970AACE16075197C /* CamperReadyTests.xctest */,
+				619D4F00AE83955BBF44CC0B /* App-Debug.xcconfig */,
+				213F688A902A9BB727B57E8D /* App-Release.xcconfig */,
+				CC99200772A7B9007435EDB5 /* Shared.xcconfig */,
+				15EDE0A1E85A85354B2E10EE /* Tests-Debug.xcconfig */,
+				B8430C3CCA5C79A27BA0A5C0 /* Tests-Release.xcconfig */,
 			);
-			name = Products;
+			name = Config;
+			sourceTree = "<group>";
+		};
+		F534471DA1D3DA9C6BC73175 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				921D3C033B7A48C8AD441F44 /* Info.plist */,
+				1E2EF635D8B6861311D7CD61 /* PrivacyInfo.xcprivacy */,
+			);
+			name = Support;
+			sourceTree = "<group>";
+		};
+		FDA02FA1F2EAF6033E3B02E4 /* Costs */ = {
+			isa = PBXGroup;
+			children = (
+				163EC13B896018827EEEE525 /* CostsView.swift */,
+				8CA8D0FFE77E1A5C20F1F545 /* CostsPresentation.swift */,
+			);
+			name = Costs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9B8F57BE0A83868D1FF2D021 /* CamperReadyTests */ = {
+		6718EE1773572C3881847C0B /* CamperReadyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6ECFBC49BDBC2F3A56BECA9D /* Build configuration list for PBXNativeTarget "CamperReadyTests" */;
+			buildConfigurationList = 03A210E899134904F27E1CE9 /* Build configuration list for PBXNativeTarget "CamperReadyTests" */;
 			buildPhases = (
-				44130427D780175F51884402 /* Sources */,
-				26F3F507BD664F8ACCF8E7BB /* Frameworks */,
-				BBD27D2CB9946B42097F38F7 /* Resources */,
+				BFA2C9A51ED4171A185EA438 /* Sources */,
+				47CEF2CACD66C4FEADDFC82C /* Frameworks */,
+				F301B94D7098667A63321F93 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				635AFB833B67282B1501A12B /* PBXTargetDependency */,
+				FB60CCAA7C903BEB3DE36265 /* PBXTargetDependency */,
 			);
 			name = CamperReadyTests;
 			productName = CamperReadyTests;
-			productReference = 29B8EC86970AACE16075197C /* CamperReadyTests.xctest */;
+			productReference = 24420C207D1A91E00F7781C4 /* CamperReadyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A420B4271FACC3B66357C5D4 /* CamperReady */ = {
+		CDE6126702E6C5B686C3A3AA /* CamperReady */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43DD5ABADCE5F1A9CDFA75E4 /* Build configuration list for PBXNativeTarget "CamperReady" */;
+			buildConfigurationList = 0F2678E421CE8C6A0E5234D6 /* Build configuration list for PBXNativeTarget "CamperReady" */;
 			buildPhases = (
-				E895ACBBE6A3B901D1388553 /* Sources */,
-				881B56001791A4F52FC67B84 /* Frameworks */,
-				C61A32C306424BBCA9DCABA6 /* Resources */,
+				0F208AA94DE612CD080ACF63 /* Sources */,
+				3C24CF756B6597C9C0B0F035 /* Frameworks */,
+				7A92CDDC3A5609D2F587DEB6 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -505,21 +505,20 @@
 			);
 			name = CamperReady;
 			productName = CamperReady;
-			productReference = FE3ED9E45540BECBE12288AF /* CamperReady.app */;
+			productReference = AE77FD683FC15A4B42887B58 /* CamperReady.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D5D3B1E87A90DF0320F6ABFE /* Project object */ = {
+		07F19CDEFD8B9D90AA47B321 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 2600;
-				TargetAttributes = {
-				};
+				LastUpgradeCheck = 2630;
 			};
-			buildConfigurationList = 7918746A4B94A4D955046062 /* Build configuration list for PBXProject "CamperReady" */;
+			buildConfigurationList = 1912B863DB74E9DF4CDAFA50 /* Build configuration list for PBXProject "CamperReady" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -527,141 +526,171 @@
 				en,
 				Base,
 			);
-			mainGroup = 66EC19A66FAA9EAA79341EA9;
-			minimizedProjectReferenceProxies = 0;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = FCDC51434B65C3B3FDF421A4 /* Products */;
+			mainGroup = 5527A70B393D95F751E39342;
+			productRefGroup = DB9117206669FE67625B30D8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A420B4271FACC3B66357C5D4 /* CamperReady */,
-				9B8F57BE0A83868D1FF2D021 /* CamperReadyTests */,
+				CDE6126702E6C5B686C3A3AA /* CamperReady */,
+				6718EE1773572C3881847C0B /* CamperReadyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		BBD27D2CB9946B42097F38F7 /* Resources */ = {
+		7A92CDDC3A5609D2F587DEB6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C3E4503CB0B034BE26CAD91 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C61A32C306424BBCA9DCABA6 /* Resources */ = {
+		F301B94D7098667A63321F93 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D173A836286E2A512B59465 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		44130427D780175F51884402 /* Sources */ = {
+		0F208AA94DE612CD080ACF63 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36C225059A528685D52757AF /* AlpineSurfaceTests.swift in Sources */,
-				82B465264FD87EE610AB5D46 /* ChecklistPresentationTests.swift in Sources */,
-				98889A9E6D20590EC46B7875 /* CostsPresentationTests.swift in Sources */,
-				64D7C0A953D69454F3F9B6FA /* GaragePresentationTests.swift in Sources */,
-				C73C96BBD450EF8C0CB8BB84 /* HomeDashboardPresentationTests.swift in Sources */,
-				F7FE29CDB5ED6547D8397CC8 /* LogbookPresentationTests.swift in Sources */,
-				927FF08C89379109EF729E30 /* ReadinessEngineTests.swift in Sources */,
-				95854D4D9A5A80C317B10070 /* WeightPresentationTests.swift in Sources */,
-				519451A04720B573807E8D83 /* WorldClassUpgradeTests.swift in Sources */,
+				E24E777F455A9486592AAF84 /* AppNavigationState.swift in Sources */,
+				9F6FFD514F99753338260A26 /* AppReleaseConfiguration.swift in Sources */,
+				A656198CCC4134FAC191DDFD /* CamperReadyApp.swift in Sources */,
+				439002C352103179DF5A01CB /* RootTabView.swift in Sources */,
+				B4E0D77F55A767FDD44E0C30 /* ChecklistItemRecord.swift in Sources */,
+				61C223F4936C503C457C121E /* ChecklistRun.swift in Sources */,
+				6E2C55748B865DB290DE8CFF /* CostEntry.swift in Sources */,
+				315F9CBA8DA5F11EB9C822EA /* DocumentRecord.swift in Sources */,
+				75B0CC5F26A910D4B7AA3AE9 /* MaintenanceEntry.swift in Sources */,
+				8E3B4222714B128D77A48171 /* PackingItem.swift in Sources */,
+				1778EC41111A19716A85BE3B /* PassengerLoad.swift in Sources */,
+				094C56DB9704A322A5E83C82 /* PlaceNote.swift in Sources */,
+				51C02195ECF0B103C95E0B83 /* SupportEnums.swift in Sources */,
+				F6430670730B9C6C3793B8B8 /* Trip.swift in Sources */,
+				C6E62D1DDD542604789E18FD /* TripLoadSettings.swift in Sources */,
+				FDEC4ACD9E58A4CAE7CE0DA3 /* VehicleProfile.swift in Sources */,
+				78F0A7297C6326B700DBA8EE /* ReadinessDimensionMetadata.swift in Sources */,
+				BAA48831344E20E2986C293D /* ReadinessEngine.swift in Sources */,
+				4364C95D1A8B4B6CA1C2D3E4 /* ChecklistPresentation.swift in Sources */,
+				67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */,
+				F5A3DC4BA95D22F40ECB405D /* CostsView.swift in Sources */,
+				819E72ECCFBB8F31C84D8C97 /* AppInfoView.swift in Sources */,
+				9EEEA3311C8B5591FF9AEA35 /* FirstRunOnboardingView.swift in Sources */,
+				87B3B2ED7C6316C30067B17E /* HomeDashboardPresentation.swift in Sources */,
+				646CBC5CE9BAB11A840BF391 /* HomeDashboardView.swift in Sources */,
+				29EDC37ED25DB9355A5437E9 /* LogbookView.swift in Sources */,
+				E04F13DC65C9B8E8EC338DA2 /* GarageView.swift in Sources */,
+				8F31C7A34B6D9E1001AA22BB /* GaragePresentation.swift in Sources */,
+				81E607A50A770265248D8A69 /* VehicleProfileView.swift in Sources */,
+				4A1D0F5B2CBF4E42A487DC35 /* WeightPresentation.swift in Sources */,
+				414123B633FC677CBC89FA29 /* WeightView.swift in Sources */,
+				1868CFF95E0F8AF9BD94C431 /* ActiveVehicleStore.swift in Sources */,
+				B4E79430C5724F32AFC6B2A2 /* AppDataLocator.swift in Sources */,
+				1DA2330AC7403B44E33BFFE5 /* AttachmentStore.swift in Sources */,
+				7BBABA7ED3AE7CBCCAB360DA /* ChecklistEditorService.swift in Sources */,
+				FBABDFAD2D9D796F23158F53 /* ChecklistTemplateLibrary.swift in Sources */,
+				64BCFB32648A3935E7F29D8A /* ExportService.swift in Sources */,
+				7B9B3194960E038EE2F4B049 /* NotificationManager.swift in Sources */,
+				46AAA6EEA74FA34CEDB255A3 /* PersistenceController.swift in Sources */,
+				154840F13400A93704D6C8B3 /* PreviewStore.swift in Sources */,
+				763E489DAD73F087C8214499 /* ReminderPlanner.swift in Sources */,
+				3E31772264B29C74115E268D /* SampleDataSeeder.swift in Sources */,
+				0764BF792F2C55A4837A675C /* WeightEditorService.swift in Sources */,
+				26A1B602D56E4A6BAE6A1001 /* AlpineSurface.swift in Sources */,
+				2625F3C21802E93D3863CFF3 /* AppTheme.swift in Sources */,
+				B910E37D5866DABC58CEC10D /* AttachmentSection.swift in Sources */,
+				64BCFB33648A3935E7F29D8A /* FeatureHeader.swift in Sources */,
+				E5BA678B609B9294886F613F /* MetricCard.swift in Sources */,
+				93B1C8D27C09134E6733011C /* ReadinessTile.swift in Sources */,
+				64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */,
+				64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */,
+				501B9A3256268100511CE96A /* SectionCard.swift in Sources */,
+				F8FB0A974C00B7E4E7ADE61F /* StatusBadge.swift in Sources */,
+				93B1C8D37C09134E6733011C /* UtilityRow.swift in Sources */,
+				50A5DB6C4E634694F41B936E /* LogbookPresentation.swift in Sources */,
+				9C3070815601C79DC63B94C9 /* CostsPresentation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E895ACBBE6A3B901D1388553 /* Sources */ = {
+		BFA2C9A51ED4171A185EA438 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70BD58327D49B3BA082B3C0E /* AppNavigationState.swift in Sources */,
-				90FCB54CFC5774CCA72DA1CD /* AppReleaseConfiguration.swift in Sources */,
-				BFDC917BB6666F113226C9D7 /* CamperReadyApp.swift in Sources */,
-				62B65551B6D72DB226B98096 /* RootTabView.swift in Sources */,
-				D231604963BB0AB6995624E0 /* ChecklistItemRecord.swift in Sources */,
-				7C0DF7FA1F4EB9BAFEFAAAB6 /* ChecklistRun.swift in Sources */,
-				E349E997802E8B2347657B0E /* CostEntry.swift in Sources */,
-				D2DD48737680B2DCEBD7B482 /* DocumentRecord.swift in Sources */,
-				44A9DD4CBC479D77A9B65805 /* MaintenanceEntry.swift in Sources */,
-				732FD808E1EF77C4E378B92C /* PackingItem.swift in Sources */,
-				1B542B31D98056EDDB01BEB0 /* PassengerLoad.swift in Sources */,
-				13EC7F883F999202E58506B0 /* PlaceNote.swift in Sources */,
-				1DE0086F796E5A8451885B2F /* SupportEnums.swift in Sources */,
-				F6F53830B63F52F9A84B486D /* Trip.swift in Sources */,
-				881208EEC0D9B17A25A97C6E /* TripLoadSettings.swift in Sources */,
-				51826FCDC5FB86194325921F /* VehicleProfile.swift in Sources */,
-				B2273E5F4509D75776953625 /* ReadinessDimensionMetadata.swift in Sources */,
-				7D465795F8AC41F40D5E1332 /* ReadinessEngine.swift in Sources */,
-				8618F9C7C284F41619A39775 /* ChecklistPresentation.swift in Sources */,
-				C75C7BB5165023F6552A0BA7 /* ChecklistsView.swift in Sources */,
-				806A0608BD7077746841A9E3 /* CostsPresentation.swift in Sources */,
-				A8024ED58D4773D0985D0AFB /* CostsView.swift in Sources */,
-				E275D604945C5C63183283FB /* AppInfoView.swift in Sources */,
-				29FCB0489CDE689564525856 /* FirstRunOnboardingView.swift in Sources */,
-				EDB9F545ED65FFF5980972DB /* HomeDashboardPresentation.swift in Sources */,
-				C30FB321E4FF5CDE1C6B181C /* HomeDashboardView.swift in Sources */,
-				105E6D6F3AE75E65698ED517 /* LogbookPresentation.swift in Sources */,
-				01D5EC0C160428C1EC7B6302 /* LogbookView.swift in Sources */,
-				E8B1378DFF4E9A88ED6DC687 /* GaragePresentation.swift in Sources */,
-				3940E77BF41D5807CF1B50BD /* GarageView.swift in Sources */,
-				13857847EFC9811AD828C5F6 /* VehicleProfileView.swift in Sources */,
-				DDDA211173D4B550D17ABEAB /* WeightPresentation.swift in Sources */,
-				BFC8B4D75EBC097E221E9D5A /* WeightView.swift in Sources */,
-				B7D2FB08DF3C6783BF602F62 /* ActiveVehicleStore.swift in Sources */,
-				5BD1B88B068B04B50A5ACFBE /* AppDataLocator.swift in Sources */,
-				F2E9D6B1A36286C48006253B /* AttachmentStore.swift in Sources */,
-				3213759D64C744B92716DD15 /* ChecklistEditorService.swift in Sources */,
-				47DD80D5A4658F8EB2D7AAFA /* ChecklistTemplateLibrary.swift in Sources */,
-				A57704C04817D552E6E92F98 /* ExportService.swift in Sources */,
-				AE23985FD3CE36E6E0A8D6B6 /* NotificationManager.swift in Sources */,
-				32A6BFD7DE541779AEF8552F /* PersistenceController.swift in Sources */,
-				36DC7389140DC3C5ABE1A7DB /* PreviewStore.swift in Sources */,
-				3AB727A3D31EF0DCED87BF06 /* ReminderPlanner.swift in Sources */,
-				506AD021E40A190AD0373A64 /* SampleDataSeeder.swift in Sources */,
-				BD57F666AC251896E63EF9BD /* WeightEditorService.swift in Sources */,
-				318A4E4AEF78D34432EABE57 /* AlpineSurface.swift in Sources */,
-				DE32A233F5EAB9CFD465A89C /* AppTheme.swift in Sources */,
-				0743591789C21EB1E1FC8236 /* AttachmentSection.swift in Sources */,
-				EF5DB1F49AC5768EF2F62BE2 /* FeatureHeader.swift in Sources */,
-				21DFE45751515CB5E671C09F /* MetricCard.swift in Sources */,
-				CF81F57BAB08F866549900B3 /* ReadinessTile.swift in Sources */,
-				A3CB3701B235E9B640BFFA05 /* RoadSheetHeader.swift in Sources */,
-				3DB493A3632D71F2D203914A /* RoadSheetScaffold.swift in Sources */,
-				933138D16653EEA415AFEC2F /* SectionCard.swift in Sources */,
-				8C0CF0F17CC46717C0933667 /* StatusBadge.swift in Sources */,
-				34894AF369FBFF0069F4937B /* UtilityRow.swift in Sources */,
+				D891735CAE7CFC8012FF7927 /* AlpineSurfaceTests.swift in Sources */,
+				4364C95B1A8B4B6CA1C2D3E4 /* ChecklistPresentationTests.swift in Sources */,
+				8F31C7A24B6D9E1001AA22BB /* GaragePresentationTests.swift in Sources */,
+				C883E5227C6316D400D34026 /* HomeDashboardPresentationTests.swift in Sources */,
+				D891735BAE7CFC8012FF7927 /* ReadinessEngineTests.swift in Sources */,
+				824A0BA7C1D94555A8AE1A0D /* WeightPresentationTests.swift in Sources */,
+				C32BF77BAABCE733BDC6C761 /* WorldClassUpgradeTests.swift in Sources */,
+				BAD43E8262D9B76E43F89E8A /* LogbookPresentationTests.swift in Sources */,
+				04098A8A603F57BE24AFDFA7 /* CostsPresentationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		635AFB833B67282B1501A12B /* PBXTargetDependency */ = {
+		FB60CCAA7C903BEB3DE36265 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = CamperReady;
-			target = A420B4271FACC3B66357C5D4 /* CamperReady */;
-			targetProxy = D4AC93806FA14EA7C4E65AA3 /* PBXContainerItemProxy */;
+			target = CDE6126702E6C5B686C3A3AA /* CamperReady */;
+			targetProxy = 4995B1D063DD2F70D94B1B96 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		3E285C28DB33BEB8AD9DD66B /* Release */ = {
+		153896BFC115BCDC558B38DC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C38B4828FFCADD3862AE8BD /* App-Release.xcconfig */;
+			baseConfigurationReference = B8430C3CCA5C79A27BA0A5C0 /* Tests-Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CamperReady.app/CamperReady";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.camperready.appTests;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CamperReady.app/CamperReady";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		35F7297D04FFB1C680CEB3ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 213F688A902A9BB727B57E8D /* App-Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DBHUULDT59;
 				GENERATE_INFOPLIST_FILE = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.camperready.app;
 				SDKROOT = iphoneos;
@@ -673,9 +702,9 @@
 			};
 			name = Release;
 		};
-		4A95DED9981FA2E62507FFBD /* Debug */ = {
+		3942CB175A3931FDB413EEEF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 12A29418A3396510B57C875B /* Shared.xcconfig */;
+			baseConfigurationReference = CC99200772A7B9007435EDB5 /* Shared.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -708,9 +737,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -729,37 +760,16 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		5A8117603E72867BED9F10DE /* Debug */ = {
+		847106CAAC36EA3CFD3B3F29 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0F71F4053C155CD2676536B /* App-Debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.camperready.app;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		7F9B629884A8FCB7858AB4DE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E44225C3BA6801E39147B93 /* Tests-Debug.xcconfig */;
+			baseConfigurationReference = 15EDE0A1E85A85354B2E10EE /* Tests-Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CamperReady.app/CamperReady";
@@ -768,7 +778,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/Frameworks",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.camperready.appTests;
 				SDKROOT = iphoneos;
@@ -780,9 +794,35 @@
 			};
 			name = Debug;
 		};
-		8407EE02EBA313B4CBEF5CCF /* Release */ = {
+		8860E26D6FDC9C6AD467B3C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 12A29418A3396510B57C875B /* Shared.xcconfig */;
+			baseConfigurationReference = 619D4F00AE83955BBF44CC0B /* App-Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DBHUULDT59;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.camperready.app;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FE35DC502520271F09B553B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC99200772A7B9007435EDB5 /* Shared.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -815,9 +855,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -829,67 +871,44 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		E977A21D01DF2B2AC4B230FB /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6832613474C92269BF17F5B3 /* Tests-Release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CamperReady.app/CamperReady";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.camperready.appTests;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CamperReady.app/CamperReady";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		43DD5ABADCE5F1A9CDFA75E4 /* Build configuration list for PBXNativeTarget "CamperReady" */ = {
+		03A210E899134904F27E1CE9 /* Build configuration list for PBXNativeTarget "CamperReadyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3E285C28DB33BEB8AD9DD66B /* Release */,
-				5A8117603E72867BED9F10DE /* Debug */,
+				153896BFC115BCDC558B38DC /* Release */,
+				847106CAAC36EA3CFD3B3F29 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6ECFBC49BDBC2F3A56BECA9D /* Build configuration list for PBXNativeTarget "CamperReadyTests" */ = {
+		0F2678E421CE8C6A0E5234D6 /* Build configuration list for PBXNativeTarget "CamperReady" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E977A21D01DF2B2AC4B230FB /* Release */,
-				7F9B629884A8FCB7858AB4DE /* Debug */,
+				35F7297D04FFB1C680CEB3ED /* Release */,
+				8860E26D6FDC9C6AD467B3C4 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7918746A4B94A4D955046062 /* Build configuration list for PBXProject "CamperReady" */ = {
+		1912B863DB74E9DF4CDAFA50 /* Build configuration list for PBXProject "CamperReady" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4A95DED9981FA2E62507FFBD /* Debug */,
-				8407EE02EBA313B4CBEF5CCF /* Release */,
+				3942CB175A3931FDB413EEEF /* Debug */,
+				FE35DC502520271F09B553B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D5D3B1E87A90DF0320F6ABFE /* Project object */;
+	rootObject = 07F19CDEFD8B9D90AA47B321 /* Project object */;
 }

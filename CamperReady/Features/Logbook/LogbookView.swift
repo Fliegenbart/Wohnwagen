@@ -42,16 +42,16 @@ struct LogbookView: View {
         let vehiclePlaces = AppDataLocator.places(for: vehicle, places: placeNotes)
         let vehicleCosts = AppDataLocator.costs(for: vehicle, costs: costs)
         let currentOdometerKm = AppDataLocator.currentOdometerKm(maintenance: vehicleMaintenance, costs: vehicleCosts)
-        let readinessAverage = vehicle == nil ? 0 : readinessAverage(
-            for: [
-                ReadinessEngine.evaluateLegal(documents: vehicleDocuments).status,
-                ReadinessEngine.evaluateMaintenance(entries: vehicleMaintenance, currentOdometerKm: currentOdometerKm).status
-            ]
-        )
+        let readinessOpenItems = vehicle == nil ? 0 : [
+            ReadinessEngine.evaluateLegal(documents: vehicleDocuments).status,
+            ReadinessEngine.evaluateMaintenance(entries: vehicleMaintenance, currentOdometerKm: currentOdometerKm).status
+        ]
+        .filter { $0 != .green }
+        .count
         let presentation = LogbookPresentation.make(
             totalDistance: currentOdometerKm ?? 0,
             totalSpend: vehicleMaintenance.compactMap(\.costEUR).reduce(0, +),
-            readinessAverage: readinessAverage
+            readinessOpenItems: readinessOpenItems
         )
 
         ScrollView {
@@ -293,25 +293,6 @@ struct LogbookView: View {
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 14)
-    }
-
-    private func readinessAverage(for statuses: [ReadinessStatus]) -> Int {
-        guard !statuses.isEmpty else { return 0 }
-        let total = statuses
-            .map(readinessScore(for:))
-            .reduce(0, +)
-        return Int((Double(total) / Double(statuses.count)).rounded())
-    }
-
-    private func readinessScore(for status: ReadinessStatus) -> Int {
-        switch status {
-        case .green:
-            100
-        case .yellow:
-            72
-        case .red:
-            38
-        }
     }
 
     private func region(for places: [PlaceNote]) -> MKCoordinateRegion {
