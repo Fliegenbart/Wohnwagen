@@ -26,6 +26,7 @@ struct LogbookView: View {
     @Query(sort: \MaintenanceEntry.date, order: .reverse) private var maintenanceEntries: [MaintenanceEntry]
     @Query(sort: \DocumentRecord.validUntil) private var documents: [DocumentRecord]
     @Query(sort: \PlaceNote.dateLastUsed, order: .reverse) private var placeNotes: [PlaceNote]
+    @Query(sort: \CostEntry.date, order: .reverse) private var costs: [CostEntry]
 
     @State private var selectedSection: LogbookSection = .maintenance
     @State private var exportFile: ExportFile?
@@ -39,15 +40,40 @@ struct LogbookView: View {
         let vehicleMaintenance = AppDataLocator.maintenance(for: vehicle, entries: maintenanceEntries)
         let vehicleDocuments = AppDataLocator.documents(for: vehicle, documents: documents)
         let vehiclePlaces = AppDataLocator.places(for: vehicle, places: placeNotes)
+        let vehicleCosts = AppDataLocator.costs(for: vehicle, costs: costs)
+        let currentOdometerKm = AppDataLocator.currentOdometerKm(maintenance: vehicleMaintenance, costs: vehicleCosts)
+        let readinessAverage = vehicle == nil ? 0 : readinessAverage(
+            for: [
+                ReadinessEngine.evaluateLegal(documents: vehicleDocuments).status,
+                ReadinessEngine.evaluateMaintenance(entries: vehicleMaintenance, currentOdometerKm: currentOdometerKm).status
+            ]
+        )
+        let presentation = LogbookPresentation.make(
+            totalDistance: currentOdometerKm ?? 0,
+            totalSpend: vehicleMaintenance.compactMap(\.costEUR).reduce(0, +),
+            readinessAverage: readinessAverage
+        )
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Picker("Bereich", selection: $selectedSection) {
-                    ForEach(LogbookSection.allCases) { section in
-                        Text(section.title).tag(section)
+            VStack(alignment: .leading, spacing: 20) {
+                FeatureHeader(
+                    eyebrow: "Journey history",
+                    title: "Logbuch",
+                    subtitle: "Wartung, Dokumente und Orte in einer ruhigen Chronologie."
+                )
+                .opacity(hasAppeared ? 1 : 0.01)
+                .offset(y: hasAppeared ? 0 : 10)
+
+                summaryStats(presentation.stats, emphasisTitle: "Bereitschaft")
+
+                AlpineSurface(role: .section) {
+                    Picker("Bereich", selection: $selectedSection) {
+                        ForEach(LogbookSection.allCases) { section in
+                            Text(section.title).tag(section)
+                        }
                     }
+                    .pickerStyle(.segmented)
                 }
-                .pickerStyle(.segmented)
 
                 switch selectedSection {
                 case .maintenance:
@@ -160,8 +186,8 @@ struct LogbookView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
-        .navigationTitle("Logbuch")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -242,10 +268,50 @@ struct LogbookView: View {
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.mutedInk)
             }
-            content()
+            AlpineSurface(role: .section) {
+                content()
+            }
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 18)
+    }
+
+    private func summaryStats(_ stats: [SummaryStat], emphasisTitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ForEach(stats) { stat in
+                AlpineSurface(role: stat.title == emphasisTitle ? .section : .raised) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(stat.title.uppercased())
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(AppTheme.mutedInk)
+                        Text(stat.value)
+                            .font(.system(size: 28, weight: .semibold))
+                            .foregroundStyle(AppTheme.ink)
+                    }
+                }
+            }
+        }
+        .opacity(hasAppeared ? 1 : 0.01)
+        .offset(y: hasAppeared ? 0 : 14)
+    }
+
+    private func readinessAverage(for statuses: [ReadinessStatus]) -> Int {
+        guard !statuses.isEmpty else { return 0 }
+        let total = statuses
+            .map(readinessScore(for:))
+            .reduce(0, +)
+        return Int((Double(total) / Double(statuses.count)).rounded())
+    }
+
+    private func readinessScore(for status: ReadinessStatus) -> Int {
+        switch status {
+        case .green:
+            100
+        case .yellow:
+            72
+        case .red:
+            38
+        }
     }
 
     private func region(for places: [PlaceNote]) -> MKCoordinateRegion {

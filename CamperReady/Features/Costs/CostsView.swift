@@ -29,18 +29,26 @@ struct CostsView: View {
         let annualVariable = vehicleCosts
             .filter { Calendar.current.isDate($0.date, equalTo: .now, toGranularity: .year) && !$0.isRecurringFixedCost }
             .reduce(0) { $0 + $1.amountEUR }
+        let annualTotal = annualFixed + annualVariable
+        let presentation = CostsPresentation.make(
+            tripTotal: tripTotal,
+            perNight: tripTotal / Double(tripNights),
+            perHundredKm: distance > 0 ? (tripTotal / distance * 100) : nil,
+            annualTotal: annualTotal
+        )
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 20) {
                 if let vehicle {
-                    hero(
-                        vehicle: vehicle,
-                        tripTitle: trip?.title,
-                        tripTotal: tripTotal,
-                        annualFixed: annualFixed,
-                        annualTotal: annualFixed + annualVariable,
-                        hasTripCosts: !tripCosts.isEmpty
+                    FeatureHeader(
+                        eyebrow: vehicle.name,
+                        title: "Kosten",
+                        subtitle: trip?.title ?? "Kosten ohne aktive Reise"
                     )
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 10)
+
+                    summaryStats(presentation.stats, emphasisTitle: "Diese Reise")
 
                     costSection(title: "Reise", subtitle: trip == nil ? "Lege eine Reise an, damit du Kosten unterwegs getrennt erfassen kannst." : "Die aktive Reise bestimmt, welche Kosten hier oben zusammenlaufen.") {
                         if let trip {
@@ -93,15 +101,6 @@ struct CostsView: View {
                                 }
                                 .buttonStyle(.borderedProminent)
                             }
-                        }
-                    }
-
-                    costSection(title: "Auf einen Blick", subtitle: "Die wichtigsten Werte für diese Reise und dieses Jahr.") {
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                            MetricCard(title: "Diese Reise", value: tripTotal.euroString, systemImage: "car.fill")
-                            MetricCard(title: "Pro Nacht", value: (tripTotal / Double(tripNights)).euroString, systemImage: "bed.double.fill")
-                            MetricCard(title: "Pro 100 km", value: distance > 0 ? (tripTotal / distance * 100).euroString : "Offen", systemImage: "road.lanes")
-                            MetricCard(title: "Dieses Jahr", value: (annualFixed + annualVariable).euroString, systemImage: "calendar")
                         }
                     }
 
@@ -175,8 +174,8 @@ struct CostsView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
-        .navigationTitle("Kosten")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -233,150 +232,6 @@ struct CostsView: View {
         }
     }
 
-    private func hero(
-        vehicle: VehicleProfile,
-        tripTitle: String?,
-        tripTotal: Double,
-        annualFixed: Double,
-        annualTotal: Double,
-        hasTripCosts: Bool
-    ) -> some View {
-        ZStack(alignment: .bottomLeading) {
-            heroBackground
-
-            VStack(alignment: .leading, spacing: 18) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("CamperReady")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(.white)
-                        Text("Kosten")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.78))
-                    }
-
-                    Spacer()
-
-                    Image(systemName: "eurosign.circle.fill")
-                        .font(.system(size: 28))
-                        .foregroundStyle(.white)
-                        .padding(14)
-                        .background(.ultraThinMaterial.opacity(0.58), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                }
-
-                Spacer(minLength: 18)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(costHeadline(tripTitle: tripTitle, tripTotal: tripTotal, hasTripCosts: hasTripCosts))
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(.white)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.72)
-
-                    Text(costSupportLine(tripTitle: tripTitle, tripTotal: tripTotal, annualFixed: annualFixed, annualTotal: annualTotal, hasTripCosts: hasTripCosts))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack(spacing: 12) {
-                        heroPill(title: "Diese Reise", value: tripTotal.euroString)
-                        heroPill(title: "Dieses Jahr", value: annualTotal.euroString)
-                        heroPill(title: "Fixkosten", value: annualFixed.euroString)
-                    }
-
-                    HStack(spacing: 14) {
-                        heroMeta(label: vehicle.name, systemImage: "car.side.fill")
-                        heroMeta(label: tripTitle ?? "Keine Reise aktiv", systemImage: "map")
-                    }
-                }
-            }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 24)
-        }
-        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
-        .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
-        .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 22)
-    }
-
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2.weight(.bold))
-                .textCase(.uppercase)
-                .foregroundStyle(.white.opacity(0.72))
-            Text(value)
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(.white)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-    }
-
-    private func heroMeta(label: String, systemImage: String) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: systemImage)
-                .font(.caption.weight(.bold))
-            Text(label)
-                .lineLimit(1)
-        }
-        .font(.footnote.weight(.semibold))
-        .foregroundStyle(.white.opacity(0.88))
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(Color.white.opacity(0.12), in: Capsule())
-        .overlay(
-            Capsule()
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-    }
-
-    private var heroBackground: some View {
-        AppTheme.surface
-    }
-
-    private func costHeadline(tripTitle: String?, tripTotal: Double, hasTripCosts: Bool) -> String {
-        guard tripTitle != nil else {
-            return "Noch keine Reise aktiv"
-        }
-
-        guard hasTripCosts else {
-            return "Noch keine Reisekosten"
-        }
-
-        return "\(tripTotal.euroString) bisher"
-    }
-
-    private func costSupportLine(
-        tripTitle: String?,
-        tripTotal: Double,
-        annualFixed: Double,
-        annualTotal: Double,
-        hasTripCosts: Bool
-    ) -> String {
-        guard let tripTitle else {
-            if annualTotal > 0 {
-                return "Bisher sind \(annualTotal.euroString) für dieses Jahr erfasst. Sobald du eine Reise anlegst, siehst du die Kosten auch getrennt pro Fahrt."
-            }
-            return "Sobald du Kosten erfasst, siehst du hier, was dich Reisen und Fahrzeug über das Jahr kosten."
-        }
-
-        guard hasTripCosts else {
-            return "\(tripTitle) ist angelegt. Trage Tanken, Maut oder Stellplatz ein, damit du den Überblick behältst."
-        }
-
-        return "\(tripTitle) kostet bisher \(tripTotal.euroString). Fixkosten von \(annualFixed.euroString) pro Jahr laufen separat weiter."
-    }
-
     private func costSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
@@ -387,10 +242,31 @@ struct CostsView: View {
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.mutedInk)
             }
-            content()
+            AlpineSurface(role: .section) {
+                content()
+            }
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 18)
+    }
+
+    private func summaryStats(_ stats: [SummaryStat], emphasisTitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ForEach(stats) { stat in
+                AlpineSurface(role: stat.title == emphasisTitle ? .section : .raised) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(stat.title.uppercased())
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(AppTheme.mutedInk)
+                        Text(stat.value)
+                            .font(.system(size: 28, weight: .semibold))
+                            .foregroundStyle(AppTheme.ink)
+                    }
+                }
+            }
+        }
+        .opacity(hasAppeared ? 1 : 0.01)
+        .offset(y: hasAppeared ? 0 : 14)
     }
 }
 
