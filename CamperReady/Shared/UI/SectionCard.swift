@@ -12,8 +12,8 @@ struct SectionCard<Content: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundStyle(AppTheme.ink)
@@ -25,17 +25,15 @@ struct SectionCard<Content: View>: View {
             }
             content
         }
-        .padding(20)
+        .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(Color.white.opacity(0.56))
-        )
+        .background(AppTheme.surface)
         .overlay(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
         )
-        .shadow(color: AppTheme.ink.opacity(0.06), radius: 16, x: 0, y: 8)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.05), radius: 10, x: 0, y: 6)
         .accessibilityElement(children: .contain)
     }
 }

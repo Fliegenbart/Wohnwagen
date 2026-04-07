@@ -214,76 +214,49 @@ struct ChecklistsView: View {
         requiredCount: Int
     ) -> some View {
         let heroStatus = selectedChecklist.map { status(for: $0) } ?? .yellow
-        let shape = RoundedRectangle(cornerRadius: 34, style: .continuous)
 
-        return ZStack(alignment: .bottomLeading) {
-            checklistHeroBackground(status: heroStatus)
-
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("CamperReady")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(.white)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
-                        Text("Checklisten")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.78))
-                    }
-
-                    Spacer()
-
-                    StatusBadge(status: heroStatus, text: heroStatus.title)
-                        .foregroundStyle(.white)
-                }
-
-                Spacer(minLength: 18)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(selectedChecklist?.mode.title ?? "Checklisten")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(.white)
+        return VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(selectedChecklist?.title ?? "Checklisten")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
                         .lineLimit(2)
-                        .minimumScaleFactor(0.74)
-                    Text(checklistSupportLine(selectedChecklist: selectedChecklist, completedRequired: completedRequired, requiredCount: requiredCount))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
-                        .fixedSize(horizontal: false, vertical: true)
+                        .minimumScaleFactor(0.82)
+                    Text(selectedChecklist?.mode.title ?? "Modus wählen")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
 
-                VStack(alignment: .leading, spacing: 12) {
-                    ProgressView(value: progress)
-                        .progressViewStyle(.linear)
-                        .tint(.white)
+                Spacer()
 
-                    HStack(spacing: 12) {
-                        heroPill(title: "Fortschritt", value: "\(Int((progress * 100).rounded())) %")
-                        heroPill(title: "Pflicht", value: "\(completedRequired)/\(max(requiredCount, 1))")
-                    }
+                StatusBadge(status: heroStatus, text: heroStatus.title)
+            }
 
-                    if let selectedChecklist {
-                        heroMeta(label: selectedChecklist.title, systemImage: selectedChecklist.mode.iconName)
-                    }
-                }
+            Text(checklistSupportLine(selectedChecklist: selectedChecklist, completedRequired: completedRequired, requiredCount: requiredCount))
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.mutedInk)
+                .fixedSize(horizontal: false, vertical: true)
+
+            ProgressView(value: progress)
+                .progressViewStyle(.linear)
+                .tint(AppTheme.statusColor(heroStatus))
+
+            HStack(spacing: 12) {
+                MetricCard(title: "Fortschritt", value: "\(Int((progress * 100).rounded())) %", systemImage: "checkmark.seal")
+                MetricCard(title: "Pflicht", value: "\(completedRequired)/\(max(requiredCount, 1))", systemImage: "list.bullet")
             }
         }
-        .padding(.horizontal, 22)
-        .padding(.vertical, 26)
-        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
-        .compositingGroup()
-        .mask(shape)
-        .overlay {
-            shape
-                .strokeBorder(AppTheme.asphalt.opacity(0.18), lineWidth: 1.6)
-        }
-        .overlay {
-            shape
-                .strokeBorder(Color.white.opacity(0.34), lineWidth: 0.8)
-        }
-        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
+        .padding(18)
+        .background(AppTheme.surface)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
         .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 22)
+        .offset(y: hasAppeared ? 0 : 16)
     }
 
     private func heroPill(title: String, value: String) -> some View {

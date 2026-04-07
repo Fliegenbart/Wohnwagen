@@ -235,152 +235,75 @@ struct WeightView: View {
         assessment: WeightAssessmentOutput,
         settings: TripLoadSettings?
     ) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 34, style: .continuous)
-
-        return ZStack(alignment: .bottomLeading) {
-            weightHeroBackground(status: assessment.status)
-
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("CamperReady")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(.white)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
-                        Text("Vor der Fahrt")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.78))
-                    }
-
-                    Spacer()
-
-                    StatusBadge(status: assessment.status, text: assessment.status.title)
-                        .foregroundStyle(.white)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(vehicle.name)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.82)
+                    Text(trip?.title ?? "Vor der Fahrt")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
 
-                Spacer(minLength: 18)
+                Spacer()
 
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(assessment.summary)
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(.white)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.72)
+                StatusBadge(status: assessment.status, text: assessment.status.title)
+            }
 
-                    Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+            Text(assessment.summary)
+                .font(.system(size: 26, weight: .bold))
+                .foregroundStyle(AppTheme.ink)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
 
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack(spacing: 12) {
-                        heroPill(title: "Reserve", value: assessment.remainingMarginKg?.kgString ?? "Unklar")
-                        heroPill(title: "Achslast", value: axleLabel(for: assessment.axleRisk))
-                    }
+            Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.mutedInk)
+                .fixedSize(horizontal: false, vertical: true)
 
-                    heroMeta(
-                        label: trip?.title ?? "\(Int((settings?.freshWaterLiters ?? 0).rounded())) l Frischwasser",
-                        systemImage: trip == nil ? "drop.fill" : "map"
-                    )
-                }
+            HStack(spacing: 12) {
+                MetricCard(title: "Reserve", value: assessment.remainingMarginKg?.kgString ?? "Unklar", systemImage: "scalemass")
+                MetricCard(title: "Achslast", value: axleLabel(for: assessment.axleRisk), systemImage: "car.side")
+            }
+
+            if let settings {
+                Text(trip?.title ?? "Einstellungen: Frischwasser \(Int((settings.freshWaterLiters).rounded())) l")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(AppTheme.mutedInk)
             }
         }
-        .padding(.horizontal, 22)
-        .padding(.vertical, 26)
-        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
-        .compositingGroup()
-        .mask(shape)
-        .overlay {
-            shape
-                .strokeBorder(AppTheme.asphalt.opacity(0.18), lineWidth: 1.6)
-        }
-        .overlay {
-            shape
-                .strokeBorder(Color.white.opacity(0.34), lineWidth: 0.8)
-        }
-        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
+        .padding(18)
+        .background(AppTheme.surface)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
         .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 22)
+        .offset(y: hasAppeared ? 0 : 16)
     }
 
     private func heroPill(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(.caption2.weight(.bold))
-                .textCase(.uppercase)
-                .foregroundStyle(.white.opacity(0.72))
+                .foregroundStyle(AppTheme.mutedInk)
             Text(value)
                 .font(.subheadline.weight(.bold))
-                .foregroundStyle(.white)
+                .foregroundStyle(AppTheme.ink)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(AppTheme.surface)
         .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
         )
-    }
-
-    private func heroMeta(label: String, systemImage: String) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: systemImage)
-                .font(.caption.weight(.bold))
-            Text(label)
-                .lineLimit(1)
-        }
-        .font(.footnote.weight(.semibold))
-        .foregroundStyle(.white.opacity(0.88))
-        .padding(.horizontal, 13)
-        .padding(.vertical, 10)
-        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-    }
-
-    private func weightHeroBackground(status: ReadinessStatus) -> some View {
-        ZStack {
-            Rectangle()
-                .fill(AppTheme.roadHeroGradient)
-
-            Rectangle()
-                .fill(AppTheme.roadFogGradient)
-
-            Circle()
-                .fill(AppTheme.accent.opacity(0.18))
-                .frame(width: 170, height: 170)
-                .blur(radius: 34)
-                .offset(x: 112, y: -100)
-
-            Circle()
-                .fill(AppTheme.accentWarm.opacity(0.12))
-                .frame(width: 150, height: 150)
-                .blur(radius: 38)
-                .offset(x: -100, y: 90)
-
-            LinearGradient(
-                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.28)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Image(systemName: "car.side.fill")
-                        .font(.system(size: 108, weight: .bold))
-                        .foregroundStyle(.white.opacity(0.16))
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 28)
-                }
-            }
-        }
     }
 
     private func weightSupportLine(vehicle: VehicleProfile, trip: Trip?, assessment: WeightAssessmentOutput) -> String {

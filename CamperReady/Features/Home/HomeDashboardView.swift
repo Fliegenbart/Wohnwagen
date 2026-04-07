@@ -42,7 +42,7 @@ struct HomeDashboardView: View {
         )
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 18) {
                 if vehicle == nil {
                     emptyStateHero
                 } else {
@@ -98,7 +98,7 @@ struct HomeDashboardView: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 14)
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
@@ -179,129 +179,76 @@ struct HomeDashboardView: View {
     }
 
     private func hero(snapshot: DashboardSnapshot, trip: Trip?) -> some View {
-        ZStack(alignment: .bottomLeading) {
-            heroBackground(status: snapshot.overallStatus)
-
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("CamperReady")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(.white)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.75)
-                            .allowsTightening(true)
-                        Text("Bereitschaft")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.76))
-                    }
-
-                    Spacer()
-
-                    StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.compactTitle)
-                        .foregroundStyle(.white)
-                }
-
-                Spacer(minLength: 18)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(snapshot.overallHeadline)
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(.white)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.72)
-                    Text(heroSupportLine(snapshot: snapshot, trip: trip))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
-                        .lineLimit(3)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                VStack(alignment: .leading, spacing: 14) {
-                    Button {
-                        navigation.navigate(for: .departureChecklist)
-                    } label: {
-                        HStack(spacing: 12) {
-                            ctaIcon
-                            Text("Vor Abfahrt prüfen")
-                                .fontWeight(.semibold)
-                            Spacer()
-                            Image(systemName: "arrow.right")
-                                .font(.footnote.weight(.bold))
-                        }
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(snapshot.vehicleName)
+                        .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(AppTheme.ink)
-                        .padding(.horizontal, 18)
-                        .padding(.vertical, 16)
-                        .frame(maxWidth: .infinity)
-                        .background(.white, in: Capsule())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Vor Abfahrt prüfen")
-                    .accessibilityHint("Öffnet die Checklisten für die Abfahrt.")
-
-                    if let trip {
-                        heroMeta(label: trip.title, systemImage: "map")
-                    } else {
-                        heroMeta(label: snapshot.vehicleName, systemImage: "car.side.fill")
-                    }
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.82)
+                    Text("Bereitschaft")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
+
+                Spacer()
+
+                StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.compactTitle)
             }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 26)
+
+            Text(snapshot.overallHeadline)
+                .font(.system(size: 26, weight: .bold))
+                .foregroundStyle(AppTheme.ink)
+                .lineLimit(3)
+                .minimumScaleFactor(0.82)
+
+            Text(heroSupportLine(snapshot: snapshot, trip: trip))
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.mutedInk)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Button {
+                navigation.navigate(for: .departureChecklist)
+            } label: {
+                HStack(spacing: 12) {
+                    ctaIcon
+                    Text("Vor Abfahrt prüfen")
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Image(systemName: "arrow.right")
+                        .font(.footnote.weight(.bold))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 16)
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Vor Abfahrt prüfen")
+            .accessibilityHint("Öffnet die Checklisten für die Abfahrt.")
+
+            if let trip {
+                Text(trip.title)
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(AppTheme.mutedInk)
+            }
         }
-        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
-        .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
+        .padding(18)
+        .background(AppTheme.surface)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
         .opacity(hasAppeared ? 1 : 0.01)
-        .offset(y: hasAppeared ? 0 : 22)
+        .offset(y: hasAppeared ? 0 : 16)
         .accessibilityElement(children: .contain)
     }
 
-    private func heroBackground(status: ReadinessStatus) -> some View {
-        ZStack {
-            Rectangle()
-                .fill(AppTheme.roadHeroGradient)
-
-            Rectangle()
-                .fill(AppTheme.roadFogGradient)
-
-            LinearGradient(
-                colors: [Color.white.opacity(0.24), Color.clear],
-                startPoint: .top,
-                endPoint: .center
-            )
-
-            Circle()
-                .fill(AppTheme.accent.opacity(0.20))
-                .frame(width: 180, height: 180)
-                .blur(radius: 36)
-                .offset(x: 120, y: -110)
-
-            Circle()
-                .fill(AppTheme.accentWarm.opacity(0.12))
-                .frame(width: 160, height: 160)
-                .blur(radius: 40)
-                .offset(x: -110, y: 90)
-
-            LinearGradient(
-                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.28)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Image(systemName: "car.side.fill")
-                        .font(.system(size: 112, weight: .bold))
-                        .foregroundStyle(.white.opacity(0.16))
-                        .padding(.trailing, 22)
-                        .padding(.bottom, 30)
-                }
-            }
-        }
-    }
+    // Hintergrund entfallen – Oberfläche ist nun bewusst flach und ruhig
 
     private func heroMeta(label: String, systemImage: String) -> some View {
         HStack(spacing: 8) {
@@ -418,13 +365,10 @@ struct HomeDashboardView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color.white.opacity(0.42))
-        )
+        .background(AppTheme.surface)
         .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
         )
     }
 
@@ -482,66 +426,57 @@ struct HomeDashboardView: View {
     }
 
     private var emptyStateHero: some View {
-        ZStack(alignment: .bottomLeading) {
-            heroBackground(status: .yellow)
-
-            VStack(alignment: .leading, spacing: 18) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("CamperReady")
-                            .font(.system(size: 30, weight: .black, design: .rounded))
-                            .foregroundStyle(.white)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.75)
-                        Text("Los geht's mit deinem Fahrzeug")
-                            .font(.caption.weight(.bold))
-                            .textCase(.uppercase)
-                            .tracking(1.4)
-                            .foregroundStyle(.white.opacity(0.76))
-                    }
-
-                    Spacer()
-
-                    StatusBadge(status: .yellow, text: "Einrichten")
-                        .foregroundStyle(.white)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("CamperReady")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
+                    Text("Los geht's mit deinem Fahrzeug")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
 
-                Spacer(minLength: 18)
+                Spacer()
 
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Noch nicht startklar")
-                        .font(.system(size: 36, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text("Lege zuerst dein Fahrzeug an. Danach siehst du vor jeder Fahrt Gewicht, Fristen und wichtige Checks an einem Ort.")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.84))
-                }
-
-                Button {
-                    showGarageSheet = true
-                } label: {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                        Text("Garage öffnen")
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .font(.footnote.weight(.bold))
-                    }
-                    .foregroundStyle(AppTheme.ink)
-                    .padding(.horizontal, 18)
-                    .padding(.vertical, 16)
-                    .frame(maxWidth: .infinity)
-                    .background(.white, in: Capsule())
-                }
-                .buttonStyle(.plain)
+                StatusBadge(status: .yellow, text: "Einrichten")
             }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 26)
+
+            Text("Noch nicht startklar")
+                .font(.system(size: 26, weight: .bold))
+                .foregroundStyle(AppTheme.ink)
+
+            Text("Lege zuerst dein Fahrzeug an. Danach siehst du vor jeder Fahrt Gewicht, Fristen und wichtige Checks an einem Ort.")
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.mutedInk)
+
+            Button {
+                showGarageSheet = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Garage öffnen")
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Image(systemName: "arrow.right")
+                        .font(.footnote.weight(.bold))
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 16)
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            }
+            .buttonStyle(.plain)
         }
-        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
-        .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
-        .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
+        .padding(18)
+        .background(AppTheme.surface)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 10, x: 0, y: 6)
     }
 
     private func handlePendingRoute() {

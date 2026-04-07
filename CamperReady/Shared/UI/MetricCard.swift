@@ -6,40 +6,25 @@ struct MetricCard: View {
     let systemImage: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Label(title, systemImage: systemImage)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(AppTheme.mutedInk)
-                Spacer()
-                Image(systemName: systemImage)
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppTheme.accent)
-            }
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(AppTheme.mutedInk)
             Text(value)
-                .font(.system(.title2, design: .rounded, weight: .heavy))
+                .font(.system(.title3, design: .rounded, weight: .bold))
                 .foregroundStyle(AppTheme.ink)
                 .lineLimit(2)
-                .minimumScaleFactor(0.75)
+                .minimumScaleFactor(0.8)
         }
-        .padding(18)
+        .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white.opacity(0.54))
-        )
+        .background(AppTheme.surface)
         .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(AppTheme.subtleBorder, lineWidth: 1)
         )
-        .overlay(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(AppTheme.accent)
-                .frame(width: 34, height: 4)
-                .padding(.top, 12)
-                .padding(.leading, 18)
-        }
-        .shadow(color: AppTheme.ink.opacity(0.05), radius: 12, x: 0, y: 6)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: AppTheme.asphalt.opacity(0.04), radius: 8, x: 0, y: 4)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(title)
         .accessibilityValue(value)
