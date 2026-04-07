@@ -199,6 +199,44 @@ final class WorldClassUpgradeTests: XCTestCase {
         XCTAssertEqual(navigation.pendingRoute, .checklist(mode: .departure))
     }
 
+    func testActiveVehicleResolverKeepsStoredVehicleWhenItExists() {
+        let vehicleA = VehicleProfile(name: "Atlas", vehicleKind: .motorhome, brand: "Hymer", model: "ML-T")
+        let vehicleB = VehicleProfile(name: "Nova", vehicleKind: .campervan, brand: "Pössl", model: "Summit")
+
+        let resolution = ActiveVehicleResolver.resolve(
+            storedVehicleID: vehicleB.id,
+            vehicles: [vehicleA, vehicleB]
+        )
+
+        XCTAssertEqual(resolution.selectedVehicleID, vehicleB.id)
+        XCTAssertFalse(resolution.needsSelection)
+    }
+
+    func testActiveVehicleResolverAutoSelectsSingleVehicle() {
+        let vehicle = VehicleProfile(name: "Atlas", vehicleKind: .motorhome, brand: "Hymer", model: "ML-T")
+
+        let resolution = ActiveVehicleResolver.resolve(
+            storedVehicleID: nil,
+            vehicles: [vehicle]
+        )
+
+        XCTAssertEqual(resolution.selectedVehicleID, vehicle.id)
+        XCTAssertFalse(resolution.needsSelection)
+    }
+
+    func testActiveVehicleResolverRequestsSelectionWhenMultipleVehiclesExistWithoutValidChoice() {
+        let vehicleA = VehicleProfile(name: "Atlas", vehicleKind: .motorhome, brand: "Hymer", model: "ML-T")
+        let vehicleB = VehicleProfile(name: "Nova", vehicleKind: .campervan, brand: "Pössl", model: "Summit")
+
+        let resolution = ActiveVehicleResolver.resolve(
+            storedVehicleID: UUID(),
+            vehicles: [vehicleA, vehicleB]
+        )
+
+        XCTAssertNil(resolution.selectedVehicleID)
+        XCTAssertTrue(resolution.needsSelection)
+    }
+
     func testAttachmentStoreImportsAndDeletesFile() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         let store = AttachmentStore(rootDirectory: root)

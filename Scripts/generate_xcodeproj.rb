@@ -117,4 +117,36 @@ scheme = Xcodeproj::XCScheme.new
 scheme.configure_with_targets(app_target, test_target)
 scheme.save_as(PROJECT_PATH, 'CamperReady', true)
 
+scheme_path = File.join(PROJECT_PATH, 'xcshareddata', 'xcschemes', 'CamperReady.xcscheme')
+scheme_contents = File.read(scheme_path)
+
+launch_payload = <<~XML
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "#{app_target.uuid}"
+            BuildableName = "CamperReady.app"
+            BlueprintName = "CamperReady"
+            ReferencedContainer = "container:CamperReady.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "#{app_target.uuid}"
+            BuildableName = "CamperReady.app"
+            BlueprintName = "CamperReady"
+            ReferencedContainer = "container:CamperReady.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+XML
+
+scheme_contents.sub!(
+  /(<LaunchAction\b[^>]*>\n)(\s*<\/LaunchAction>)/,
+  "\\1#{launch_payload}\\2"
+)
+
+File.write(scheme_path, scheme_contents)
+
 puts "Generated #{PROJECT_PATH}"

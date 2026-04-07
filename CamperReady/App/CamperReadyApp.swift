@@ -5,6 +5,7 @@ import SwiftUI
 struct CamperReadyApp: App {
     private let bootstrap: PersistenceBootstrap
     @StateObject private var persistenceStatus: PersistenceStatus
+    @StateObject private var activeVehicleStore = ActiveVehicleStore()
 
     init() {
         let bootstrap = PersistenceController.makeProductionBootstrap()
@@ -16,6 +17,7 @@ struct CamperReadyApp: App {
         WindowGroup {
             RootTabView()
                 .environmentObject(persistenceStatus)
+                .environmentObject(activeVehicleStore)
         }
         .modelContainer(bootstrap.container)
     }

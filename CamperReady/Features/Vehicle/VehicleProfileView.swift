@@ -48,11 +48,13 @@ struct VehicleProfileView: View {
     @Environment(\.modelContext) private var modelContext
 
     let vehicle: VehicleProfile?
+    let onSave: ((VehicleProfile) -> Void)?
 
     @State private var draft: VehicleDraft
 
-    init(vehicle: VehicleProfile?) {
+    init(vehicle: VehicleProfile?, onSave: ((VehicleProfile) -> Void)? = nil) {
         self.vehicle = vehicle
+        self.onSave = onSave
         _draft = State(initialValue: vehicle.map(VehicleDraft.init) ?? VehicleDraft())
     }
 
@@ -258,6 +260,8 @@ struct VehicleProfileView: View {
     private func saveVehicle() {
         guard draft.canSave else { return }
 
+        let savedVehicle: VehicleProfile
+
         if let vehicle {
             vehicle.name = draft.name
             vehicle.vehicleKind = draft.vehicleKind
@@ -275,6 +279,7 @@ struct VehicleProfileView: View {
             vehicle.serviceIntervalKm = draft.serviceIntervalKm == 0 ? nil : draft.serviceIntervalKm
             vehicle.notes = draft.notes
             vehicle.updatedAt = .now
+            savedVehicle = vehicle
         } else {
             let newVehicle = VehicleProfile(
                 name: draft.name,
@@ -294,9 +299,11 @@ struct VehicleProfileView: View {
                 notes: draft.notes
             )
             modelContext.insert(newVehicle)
+            savedVehicle = newVehicle
         }
 
         try? modelContext.save()
+        onSave?(savedVehicle)
         dismiss()
     }
 

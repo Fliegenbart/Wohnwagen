@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
+    @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @EnvironmentObject private var persistenceStatus: PersistenceStatus
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \VehicleProfile.createdAt) private var vehicles: [VehicleProfile]
@@ -91,17 +92,17 @@ struct RootTabView: View {
             if AppReleaseConfiguration.shouldSeedSampleDataOnFirstLaunch {
                 try? SampleDataSeeder.seedIfNeeded(context: modelContext)
             }
-            updateOnboardingPresentation()
+            updatePresentationState()
         }
         .task(id: reminderRefreshKey) {
             guard didBootstrap else { return }
             await NotificationManager.shared.rescheduleAllIfAuthorized(context: modelContext)
         }
-        .onChange(of: vehicles.count) { _, _ in
-            updateOnboardingPresentation()
+        .onChange(of: vehicleIDsToken) { _, _ in
+            updatePresentationState()
         }
         .onChange(of: hasDismissedOnboarding) { _, _ in
-            updateOnboardingPresentation()
+            updatePresentationState()
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             FirstRunOnboardingView(
@@ -109,10 +110,23 @@ struct RootTabView: View {
                 hasDismissedOnboarding: $hasDismissedOnboarding
             )
         }
+        .fullScreenCover(
+            isPresented: Binding(
+                get: { !showOnboarding && activeVehicleStore.needsSelection },
+                set: { _ in }
+            )
+        ) {
+            VehicleSelectionView()
+        }
     }
 
-    private func updateOnboardingPresentation() {
+    private func updatePresentationState() {
         showOnboarding = !AppReleaseConfiguration.shouldSeedSampleDataOnFirstLaunch && vehicles.isEmpty && !hasDismissedOnboarding
+        activeVehicleStore.reconcile(with: vehicles)
+    }
+
+    private var vehicleIDsToken: String {
+        vehicles.map(\.id.uuidString).sorted().joined(separator: ",")
     }
 
     private var reminderRefreshKey: String {
@@ -129,5 +143,6 @@ struct RootTabView: View {
 #Preview {
     RootTabView()
         .environmentObject(PersistenceStatus())
+        .environmentObject(ActiveVehicleStore())
         .modelContainer(PreviewStore.container)
 }

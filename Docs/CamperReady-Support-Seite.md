@@ -1,6 +1,6 @@
 # CamperReady Support-Seite
 
-Stand: 6. April 2026
+Stand: 7. April 2026
 
 Dieser Text ist so geschrieben, dass du ihn fast direkt auf deiner Website als Support-Seite veröffentlichen kannst.
 
@@ -10,7 +10,7 @@ Dieser Text ist so geschrieben, dass du ihn fast direkt auf deiner Website als S
 
 CamperReady ist eine iPhone-App für private Besitzer:innen von Campervan und Wohnmobil.
 
-Die App hilft dabei, vor jeder Reise Gewicht, Fristen, Checklisten, Wartung und Kosten an einem Ort im Blick zu behalten.
+Die App hilft dir dabei, vor jeder Reise Gewicht, Fristen, Checklisten, Wartung und Kosten an einem Ort im Blick zu behalten.
 
 ## Kontakt
 
@@ -31,8 +31,13 @@ Du kannst uns zum Beispiel schreiben, wenn:
 - die App nicht wie erwartet startet
 - Erinnerungen nicht erscheinen
 - ein Export nicht funktioniert
-- du Fragen zu Funktionen oder Bedienung hast
+- du Fragen zur Bedienung hast
 - du einen Fehler melden möchtest
+- du einen Verbesserungsvorschlag hast
+
+## Antwortzeit
+
+Wir bemühen uns, Support-Anfragen so schnell wie möglich zu beantworten. Bitte beschreibe dein Anliegen möglichst konkret und nenne, wenn sinnvoll, dein iPhone-Modell und deine iOS-Version.
 
 ## Wichtiger Hinweis
 

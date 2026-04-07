@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct HomeDashboardView: View {
+    @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @EnvironmentObject private var navigation: AppNavigationState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(sort: \VehicleProfile.createdAt) private var vehicles: [VehicleProfile]
@@ -16,13 +17,13 @@ struct HomeDashboardView: View {
     @Query(sort: \PlaceNote.dateLastUsed, order: .reverse) private var places: [PlaceNote]
     @Query(sort: \CostEntry.date, order: .reverse) private var costs: [CostEntry]
 
-    @State private var showVehicleSheet = false
+    @State private var showGarageSheet = false
     @State private var showInfoSheet = false
     @State private var exportFile: ExportFile?
     @State private var hasAppeared = false
 
     var body: some View {
-        let vehicle = AppDataLocator.primaryVehicle(in: vehicles)
+        let vehicle = activeVehicleStore.activeVehicle(in: vehicles)
         let trip = AppDataLocator.activeTrip(for: vehicle, trips: trips)
         let settings = AppDataLocator.loadSettings(for: vehicle, trip: trip, settings: loadSettings)
         let weight = AppDataLocator.weightAssessment(vehicle: vehicle, trip: trip, items: packingItems, passengers: passengers, settings: settings)
@@ -88,9 +89,9 @@ struct HomeDashboardView: View {
                             quickAction("Wartung ansehen", systemImage: "wrench.and.screwdriver", action: .maintenance)
                             quickAction("Kosten ansehen", systemImage: "eurosign.circle", action: .costs)
                             Button {
-                                showVehicleSheet = true
+                                showGarageSheet = true
                             } label: {
-                                actionRow(title: "Fahrzeugprofil bearbeiten", subtitle: "Stammdaten und Kapazitäten pflegen", systemImage: "car.circle", tint: AppTheme.accent)
+                                actionRow(title: "Garage öffnen", subtitle: "Fahrzeug wählen und Stammdaten pflegen", systemImage: "car.circle", tint: AppTheme.accent)
                             }
                             .buttonStyle(.plain)
                         }
@@ -153,11 +154,17 @@ struct HomeDashboardView: View {
                 }
             }
         }
-        .sheet(isPresented: $showVehicleSheet) {
-            VehicleProfileView(vehicle: vehicle)
+        .sheet(isPresented: $showGarageSheet) {
+            GarageView()
         }
         .sheet(isPresented: $showInfoSheet) {
             AppInfoView()
+        }
+        .onAppear {
+            handlePendingRoute()
+        }
+        .onChange(of: navigation.pendingRoute) { _, _ in
+            handlePendingRoute()
         }
         .task {
             guard !hasAppeared else { return }
@@ -179,15 +186,13 @@ struct HomeDashboardView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 30, weight: .black, design: .rounded))
+                            .font(.system(size: 24, weight: .bold))
                             .foregroundStyle(.white)
                             .lineLimit(1)
                             .minimumScaleFactor(0.75)
                             .allowsTightening(true)
-                        Text("Vor der Fahrt")
-                            .font(.caption.weight(.bold))
-                            .textCase(.uppercase)
-                            .tracking(1.4)
+                        Text("Bereitschaft")
+                            .font(.caption.weight(.semibold))
                             .foregroundStyle(.white.opacity(0.76))
                     }
 
@@ -201,7 +206,7 @@ struct HomeDashboardView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text(snapshot.overallHeadline)
-                        .font(.system(size: 36, weight: .heavy, design: .rounded))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundStyle(.white)
                         .lineLimit(2)
                         .minimumScaleFactor(0.72)
@@ -244,7 +249,7 @@ struct HomeDashboardView: View {
             .padding(.horizontal, 22)
             .padding(.vertical, 26)
         }
-        .frame(maxWidth: .infinity, minHeight: 452, maxHeight: 520, alignment: .bottomLeading)
+        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
         .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
         .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
         .opacity(hasAppeared ? 1 : 0.01)
@@ -260,31 +265,26 @@ struct HomeDashboardView: View {
             Rectangle()
                 .fill(AppTheme.roadFogGradient)
 
-            VStack(spacing: 0) {
-                Spacer()
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [AppTheme.asphalt.opacity(0.92), Color.black.opacity(0.98)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .frame(height: 180)
-                    .overlay(alignment: .top) {
-                        HStack(spacing: 30) {
-                            ForEach(0..<5, id: \.self) { _ in
-                                Capsule()
-                                    .fill(Color.white.opacity(0.55))
-                                    .frame(width: 36, height: 4)
-                            }
-                        }
-                        .offset(y: 20)
-                    }
-            }
+            LinearGradient(
+                colors: [Color.white.opacity(0.24), Color.clear],
+                startPoint: .top,
+                endPoint: .center
+            )
+
+            Circle()
+                .fill(AppTheme.accent.opacity(0.20))
+                .frame(width: 180, height: 180)
+                .blur(radius: 36)
+                .offset(x: 120, y: -110)
+
+            Circle()
+                .fill(AppTheme.accentWarm.opacity(0.12))
+                .frame(width: 160, height: 160)
+                .blur(radius: 40)
+                .offset(x: -110, y: 90)
 
             LinearGradient(
-                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.26)],
+                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.28)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -294,23 +294,11 @@ struct HomeDashboardView: View {
                 HStack {
                     Spacer()
                     Image(systemName: "car.side.fill")
-                        .font(.system(size: 170, weight: .black))
-                        .foregroundStyle(.white.opacity(0.18))
-                        .padding(.trailing, 10)
-                        .padding(.bottom, 118)
+                        .font(.system(size: 112, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.16))
+                        .padding(.trailing, 22)
+                        .padding(.bottom, 30)
                 }
-            }
-
-            VStack {
-                HStack {
-                    Spacer()
-                    Circle()
-                        .fill(Color.white.opacity(0.18))
-                        .frame(width: 150, height: 150)
-                        .blur(radius: 28)
-                        .offset(x: 55, y: -30)
-                }
-                Spacer()
             }
         }
     }
@@ -326,7 +314,11 @@ struct HomeDashboardView: View {
         .foregroundStyle(.white.opacity(0.88))
         .padding(.horizontal, 13)
         .padding(.vertical, 10)
-        .background(.ultraThinMaterial.opacity(0.58), in: Capsule())
+        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
     }
 
     private func heroSupportLine(snapshot: DashboardSnapshot, trip: Trip?) -> String {
@@ -407,14 +399,10 @@ struct HomeDashboardView: View {
 
     private func actionRow(title: String, subtitle: String, systemImage: String, tint: Color) -> some View {
         HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(tint.opacity(0.12))
-                    .frame(width: 36, height: 36)
-                Image(systemName: systemImage)
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(tint)
-            }
+            Image(systemName: systemImage)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(tint)
+                .frame(width: 24)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
@@ -426,9 +414,18 @@ struct HomeDashboardView: View {
             Spacer()
             Image(systemName: "arrow.right")
                 .font(.footnote.weight(.bold))
-                .foregroundStyle(AppTheme.mutedInk)
+                .foregroundStyle(tint)
         }
-        .padding(.vertical, 9)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(Color.white.opacity(0.42))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
+        )
     }
 
     private func actionKind(for result: ReadinessDimensionResult) -> ReadinessActionKind? {
@@ -521,11 +518,11 @@ struct HomeDashboardView: View {
                 }
 
                 Button {
-                    showVehicleSheet = true
+                    showGarageSheet = true
                 } label: {
                     HStack {
                         Image(systemName: "plus.circle.fill")
-                        Text("Fahrzeug anlegen")
+                        Text("Garage öffnen")
                             .fontWeight(.semibold)
                         Spacer()
                         Image(systemName: "arrow.right")
@@ -542,9 +539,15 @@ struct HomeDashboardView: View {
             .padding(.horizontal, 22)
             .padding(.vertical, 26)
         }
-        .frame(maxWidth: .infinity, minHeight: 452, maxHeight: 520, alignment: .bottomLeading)
+        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
         .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
         .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
+    }
+
+    private func handlePendingRoute() {
+        guard navigation.pendingRoute == .vehicleProfile else { return }
+        showGarageSheet = true
+        navigation.clearPendingRoute()
     }
 }
 
@@ -552,6 +555,7 @@ struct HomeDashboardView: View {
     NavigationStack {
         HomeDashboardView()
             .environmentObject(AppNavigationState())
+            .environmentObject(ActiveVehicleStore())
     }
     .modelContainer(PreviewStore.container)
 }
@@ -562,10 +566,10 @@ private struct ReadinessStripRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 14) {
-            Circle()
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(AppTheme.statusColor(result.status))
-                .frame(width: 10, height: 10)
-                .padding(.top, 6)
+                .frame(width: 8, height: 30)
+                .padding(.top, 2)
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline) {
@@ -579,6 +583,9 @@ private struct ReadinessStripRow: View {
                         .font(.caption2.weight(.bold))
                         .textCase(.uppercase)
                         .foregroundStyle(AppTheme.statusColor(result.status))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(AppTheme.statusColor(result.status).opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
 
                 Text(result.summary)
@@ -603,11 +610,12 @@ private struct ReadinessStripRow: View {
             if isActionable {
                 Image(systemName: "arrow.right")
                     .font(.footnote.weight(.bold))
-                    .foregroundStyle(AppTheme.mutedInk)
+                    .foregroundStyle(AppTheme.statusColor(result.status))
                     .padding(.top, 4)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(result.title)
         .accessibilityValue([result.summary, result.reasons.first, result.nextAction]

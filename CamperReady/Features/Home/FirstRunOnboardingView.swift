@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct FirstRunOnboardingView: View {
+    @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var isPresented: Bool
     @Binding var hasDismissedOnboarding: Bool
@@ -94,7 +95,11 @@ struct FirstRunOnboardingView: View {
             }
         }
         .sheet(isPresented: $showVehicleSheet) {
-            VehicleProfileView(vehicle: nil)
+            VehicleProfileView(vehicle: nil) { savedVehicle in
+                activeVehicleStore.select(savedVehicle)
+                hasDismissedOnboarding = true
+                isPresented = false
+            }
         }
     }
 
@@ -248,5 +253,6 @@ struct FirstRunOnboardingView: View {
         isPresented: .constant(true),
         hasDismissedOnboarding: .constant(false)
     )
+    .environmentObject(ActiveVehicleStore())
     .modelContainer(PreviewStore.container)
 }

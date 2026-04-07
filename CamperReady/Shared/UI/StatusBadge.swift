@@ -5,37 +5,28 @@ struct StatusBadge: View {
     let text: String
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 7) {
             Circle()
                 .fill(color)
-                .frame(width: 9, height: 9)
-                .overlay {
-                    Circle()
-                        .stroke(.white.opacity(0.35), lineWidth: 1)
-                }
+                .frame(width: 8, height: 8)
             Text(text)
                 .font(.system(.caption, design: .rounded, weight: .bold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
                 .textCase(.uppercase)
-                .tracking(0.7)
+                .tracking(0.9)
         }
-        .padding(.horizontal, 13)
+        .padding(.horizontal, 14)
         .padding(.vertical, 9)
         .foregroundStyle(color)
         .background(
-            Capsule(style: .continuous)
-                .fill(color.opacity(0.18))
-                .overlay {
-                    Capsule(style: .continuous)
-                        .fill(.thinMaterial.opacity(0.26))
-                }
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color.white.opacity(0.16))
         )
         .overlay(
-            Capsule()
-                .stroke(color.opacity(0.34), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(color.opacity(0.22), lineWidth: 1)
         )
-        .shadow(color: color.opacity(0.16), radius: 18, y: 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Status")
         .accessibilityValue(text)

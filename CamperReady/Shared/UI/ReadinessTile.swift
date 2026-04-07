@@ -4,17 +4,15 @@ struct ReadinessTile: View {
     let result: ReadinessDimensionResult
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) {
                 Image(systemName: iconName)
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                    .frame(width: 32, height: 32)
-                    .background(accentGradient, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(accentColor)
                 Spacer()
-                Circle()
-                    .fill(accentGradient)
-                    .frame(width: 10, height: 10)
+                RoundedRectangle(cornerRadius: 999, style: .continuous)
+                    .fill(accentColor)
+                    .frame(width: 28, height: 6)
             }
 
             Text(result.title)
@@ -43,7 +41,15 @@ struct ReadinessTile: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(strokeColor: accentColor.opacity(0.25))
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(Color.white.opacity(0.54))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(accentColor.opacity(0.16), lineWidth: 1)
+        )
+        .shadow(color: AppTheme.ink.opacity(0.05), radius: 12, x: 0, y: 6)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(result.title)
         .accessibilityValue([result.summary, result.reasons.first, result.nextAction]
@@ -53,10 +59,6 @@ struct ReadinessTile: View {
 
     private var accentColor: Color {
         AppTheme.statusColor(result.status)
-    }
-
-    private var accentGradient: LinearGradient {
-        AppTheme.statusGradient(result.status)
     }
 
     private var iconName: String {

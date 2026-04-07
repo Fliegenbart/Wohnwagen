@@ -13,16 +13,7 @@ struct SectionCard<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [AppTheme.accentWarm, AppTheme.accent],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(width: 44, height: 4)
+            VStack(alignment: .leading, spacing: 6) {
                 Text(title)
                     .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundStyle(AppTheme.ink)
@@ -36,7 +27,15 @@ struct SectionCard<Content: View>: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: 26, strokeColor: AppTheme.panelHairline)
+        .background(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(Color.white.opacity(0.56))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
+        )
+        .shadow(color: AppTheme.ink.opacity(0.06), radius: 16, x: 0, y: 8)
         .accessibilityElement(children: .contain)
     }
 }
@@ -49,16 +48,18 @@ struct RoadSheetHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top) {
+            Capsule()
+                .fill(AppTheme.accent.opacity(0.88))
+                .frame(width: 68, height: 6)
+
+            HStack(alignment: .top, spacing: 14) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(eyebrow)
                         .font(.caption.weight(.bold))
-                        .textCase(.uppercase)
-                        .tracking(1.1)
-                        .foregroundStyle(.white.opacity(0.76))
+                        .foregroundStyle(AppTheme.accent)
                     Text(title)
-                        .font(.system(size: 28, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
                         .lineLimit(2)
                 }
 
@@ -66,14 +67,14 @@ struct RoadSheetHeader: View {
 
                 Image(systemName: systemImage)
                     .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(AppTheme.accent)
                     .padding(14)
-                    .background(.white.opacity(0.14), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .background(AppTheme.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
 
             Text(subtitle)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(.white.opacity(0.84))
+                .foregroundStyle(AppTheme.mutedInk)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal, 20)
@@ -81,18 +82,14 @@ struct RoadSheetHeader: View {
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            LinearGradient(
-                colors: [AppTheme.asphalt.opacity(0.95), AppTheme.accent.opacity(0.78), AppTheme.metal.opacity(0.84)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
+            Color.white.opacity(0.74),
             in: RoundedRectangle(cornerRadius: 30, style: .continuous)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .stroke(Color.white.opacity(0.10), lineWidth: 1)
+                .stroke(AppTheme.asphalt.opacity(0.08), lineWidth: 1)
         )
-        .shadow(color: AppTheme.ink.opacity(0.12), radius: 24, x: 0, y: 12)
+        .shadow(color: AppTheme.ink.opacity(0.06), radius: 16, x: 0, y: 8)
     }
 }
 

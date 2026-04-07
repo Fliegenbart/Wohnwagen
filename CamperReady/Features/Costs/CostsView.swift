@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct CostsView: View {
+    @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(sort: \VehicleProfile.createdAt) private var vehicles: [VehicleProfile]
     @Query(sort: \Trip.startDate) private var trips: [Trip]
@@ -13,7 +14,7 @@ struct CostsView: View {
     @State private var hasAppeared = false
 
     var body: some View {
-        let vehicle = AppDataLocator.primaryVehicle(in: vehicles)
+        let vehicle = activeVehicleStore.activeVehicle(in: vehicles)
         let trip = AppDataLocator.activeTrip(for: vehicle, trips: trips)
         let vehicleTrips = trips
             .filter { $0.vehicleID == vehicle?.id }
@@ -247,12 +248,10 @@ struct CostsView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .rounded))
+                            .font(.system(size: 24, weight: .bold))
                             .foregroundStyle(.white)
                         Text("Kosten")
-                            .font(.caption.weight(.bold))
-                            .textCase(.uppercase)
-                            .tracking(1.4)
+                            .font(.caption.weight(.semibold))
                             .foregroundStyle(.white.opacity(0.78))
                     }
 
@@ -269,7 +268,7 @@ struct CostsView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text(costHeadline(tripTitle: tripTitle, tripTotal: tripTotal, hasTripCosts: hasTripCosts))
-                        .font(.system(size: 38, weight: .heavy, design: .rounded))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundStyle(.white)
                         .lineLimit(2)
                         .minimumScaleFactor(0.72)
@@ -296,7 +295,7 @@ struct CostsView: View {
             .padding(.horizontal, 22)
             .padding(.vertical, 24)
         }
-        .frame(maxWidth: .infinity, minHeight: 450, maxHeight: 520, alignment: .bottomLeading)
+        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
         .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
         .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
         .opacity(hasAppeared ? 1 : 0.01)
@@ -316,7 +315,11 @@ struct CostsView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial.opacity(0.58), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
     }
 
     private func heroMeta(label: String, systemImage: String) -> some View {
@@ -330,7 +333,11 @@ struct CostsView: View {
         .foregroundStyle(.white.opacity(0.88))
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .background(.ultraThinMaterial.opacity(0.58), in: Capsule())
+        .background(Color.white.opacity(0.12), in: Capsule())
+        .overlay(
+            Capsule()
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
     }
 
     private var heroBackground: some View {
@@ -341,31 +348,20 @@ struct CostsView: View {
             Rectangle()
                 .fill(AppTheme.roadFogGradient)
 
-            VStack {
-                Spacer()
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [AppTheme.asphalt.opacity(0.92), Color.black.opacity(0.98)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .frame(height: 178)
-                    .overlay(alignment: .top) {
-                        HStack(spacing: 30) {
-                            ForEach(0..<5, id: \.self) { _ in
-                                Capsule()
-                                    .fill(Color.white.opacity(0.50))
-                                    .frame(width: 34, height: 4)
-                            }
-                        }
-                        .offset(y: 20)
-                    }
-            }
+            Circle()
+                .fill(AppTheme.accent.opacity(0.18))
+                .frame(width: 170, height: 170)
+                .blur(radius: 34)
+                .offset(x: 116, y: -100)
+
+            Circle()
+                .fill(AppTheme.accentWarm.opacity(0.12))
+                .frame(width: 150, height: 150)
+                .blur(radius: 38)
+                .offset(x: -100, y: 92)
 
             LinearGradient(
-                colors: [Color.clear, AppTheme.green.opacity(0.22)],
+                colors: [Color.clear, AppTheme.green.opacity(0.16)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -375,10 +371,10 @@ struct CostsView: View {
                 HStack {
                     Spacer()
                     Image(systemName: "eurosign.circle.fill")
-                        .font(.system(size: 154, weight: .black))
+                        .font(.system(size: 106, weight: .bold))
                         .foregroundStyle(.white.opacity(0.16))
-                        .padding(.trailing, 8)
-                        .padding(.bottom, 118)
+                        .padding(.trailing, 18)
+                        .padding(.bottom, 30)
                 }
             }
         }
@@ -920,6 +916,7 @@ private struct CostEntryFormView: View {
 #Preview {
     NavigationStack {
         CostsView()
+            .environmentObject(ActiveVehicleStore())
     }
     .modelContainer(PreviewStore.container)
 }

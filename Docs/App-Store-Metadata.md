@@ -1,6 +1,8 @@
 # CamperReady App-Store-Metadaten
 
-Stand: 6. April 2026
+Stand: 7. April 2026
+
+Dieses Dokument ist die saubere Copy-Paste-Grundlage für App Store Connect.
 
 ## Veröffentlichung
 
@@ -13,6 +15,8 @@ Stand: 6. April 2026
 - Kategorie 1: `Dienstprogramme`
 - Kategorie 2: `Reisen`
 - Preisziel: `0,99 €`
+- In-App-Käufe: `nein`
+- Abos: `nein`
 
 Hinweis:
 
@@ -25,50 +29,75 @@ Hinweis:
 - Website: `https://www.wegener-gmbh.com`
 - Support-E-Mail: `mail@wegener-gmbh.com`
 
-## App Name
+## App-Name
 
 `CamperReady`
 
+Apple-Limit:
+
+- maximal `30` Zeichen
+
 ## Untertitel
 
-`Abfahrt, Gewicht und Fristen im Blick`
+`Abfahrt, Gewicht, Fristen`
+
+Apple-Limit:
+
+- maximal `30` Zeichen
 
 ## Promotional Text
 
-`CamperReady hilft privaten Wohnmobil- und Campervan-Besitzer:innen, vor jeder Reise Gewicht, Fristen, Checklisten, Wartung und Kosten an einem Ort im Blick zu behalten.`
+`Prüfe vor jeder Reise Gewicht, Fristen, Checklisten, Wartung und Kosten an einem Ort. Ohne Konto, ohne Cloud, direkt auf deinem iPhone.`
+
+Hinweis:
+
+- Der Promotional Text lässt sich später ändern, ohne eine neue Version einzureichen.
 
 ## Beschreibung
 
-`CamperReady` ist dein persönliches Cockpit für die Abfahrtsbereitschaft deines Campers.
+`CamperReady` ist das persönliche Cockpit für private Wohnmobil- und Campervan-Besitzer:innen.
 
-Die App richtet sich an private Besitzer:innen von Campervan oder Wohnmobil in Deutschland, Österreich und der Schweiz. Statt Campingplätze, Buchungen oder Community-Funktionen in den Mittelpunkt zu stellen, hilft dir CamperReady bei einer einfachen Frage:
-
-`Kann ich jetzt losfahren?`
+Die App hilft dir vor jeder Reise in weniger als einer Minute zu sehen, ob dein Fahrzeug bereit zur Abfahrt ist.
 
 Mit CamperReady kannst du:
 
 - die Abfahrtsbereitschaft auf einen Blick prüfen
-- Gewicht und Restreserve ohne Scheingenauigkeit im Blick behalten
+- Gewicht, Reserve und Risikofaktoren ehrlich einschätzen
 - Abfahrts-, Winter- und Betriebs-Checklisten nutzen
 - Wartung, Dokumente und Fristen verwalten
 - persönliche Ortsnotizen speichern
 - Reise- und Jahreskosten nachvollziehen
 
-CamperReady arbeitet lokal auf deinem iPhone. Es gibt kein Benutzerkonto und keinen Zwang zu einer Online-Verbindung.
+CamperReady ist bewusst kein Stellplatzfinder, keine Community und keine Buchungsplattform. Stattdessen bleibt der Fokus auf deinem Fahrzeug, deinem Trip und dem, was vor der Abfahrt wirklich wichtig ist.
+
+Besonders praktisch:
+
+- übersichtliches Bereitschafts-Cockpit
+- lokale Speicherung direkt auf dem iPhone
+- kein Benutzerkonto
+- keine Cloud-Pflicht
+- Erinnerungen für Fristen und wichtige Aufgaben
+- PDF- und CSV-Export für deine Unterlagen
 
 Wichtige Hinweise:
 
 - CamperReady ist eine persönliche Organisations- und Erinnerungshilfe.
 - Die App ersetzt keine technische Prüfung, keine Wiegung und keine Rechtsberatung.
-- Prüffristen, Vorschriften und regionale Anforderungen können sich ändern.
+- Vorschriften, Prüffristen und regionale Anforderungen können sich ändern.
 
 ## Keywords
 
-`camper,wohnmobil,campervan,checkliste,abfahrt,gewicht,wartung,dokumente,gaskontrolle,kosten`
+`wohnmobil,campervan,camper,abfahrt,checkliste,gewicht,wartung,dokumente,kosten,gas`
+
+Hinweis:
+
+- Keywords sollten in App Store Connect ohne Leerzeichen nach den Kommas eingetragen werden.
 
 ## Review Notes
 
-`CamperReady` ist eine lokale Organisations- und Erinnerungshilfe für private Camper-Besitzer:innen. Die App bietet keine Buchung, keine öffentliche Stellplatzsuche und keine Community-Funktionen. Hinweise zu Dokumenten, Fristen, Gasprüfung und Winterbetrieb dienen nur der persönlichen Erinnerung und stellen keine Rechtsberatung oder technische Freigabe dar.
+Empfohlene Fassung für App Review:
+
+`CamperReady is a local, offline-first utility app for private campervan and motorhome owners. The app has no account system, no booking flow, no public campsite directory, and no community features. It helps users manage departure readiness, weight, checklists, maintenance, documents, reminders, private place notes, and trip costs on their own device. References to gas checks, documents, winter mode, and maintenance are provided only as a personal reminder and organization aid, not as legal or technical advice. No login is required. On first launch, the reviewer can create a vehicle locally and then access all core modules.`
 
 ## Preis und Vertrieb
 
@@ -104,4 +133,4 @@ Arbeitsannahme für App Store Connect:
 
 - `No, we do not collect data from this app`
 
-Das muss vor der echten Einreichung noch einmal gegen den finalen Build geprüft werden.
+Vor dem echten Upload bitte noch einmal gegen den finalen Build prüfen.

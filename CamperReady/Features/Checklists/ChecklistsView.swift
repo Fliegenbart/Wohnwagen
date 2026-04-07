@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct ChecklistsView: View {
+    @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @EnvironmentObject private var navigation: AppNavigationState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.modelContext) private var modelContext
@@ -16,7 +17,7 @@ struct ChecklistsView: View {
     @State private var hasAppeared = false
 
     var body: some View {
-        let vehicle = AppDataLocator.primaryVehicle(in: vehicles)
+        let vehicle = activeVehicleStore.activeVehicle(in: vehicles)
         let trip = AppDataLocator.activeTrip(for: vehicle, trips: trips)
         let vehicleChecklists = AppDataLocator.checklists(for: vehicle, checklists: checklists)
         let selectedChecklist = vehicleChecklists.first(where: { $0.id == selectedChecklistID }) ?? vehicleChecklists.first
@@ -213,20 +214,21 @@ struct ChecklistsView: View {
         requiredCount: Int
     ) -> some View {
         let heroStatus = selectedChecklist.map { status(for: $0) } ?? .yellow
+        let shape = RoundedRectangle(cornerRadius: 34, style: .continuous)
 
         return ZStack(alignment: .bottomLeading) {
             checklistHeroBackground(status: heroStatus)
 
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CamperReady")
-                            .font(.system(size: 34, weight: .black, design: .rounded))
+                            .font(.system(size: 24, weight: .bold))
                             .foregroundStyle(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                         Text("Checklisten")
-                            .font(.caption.weight(.bold))
-                            .textCase(.uppercase)
-                            .tracking(1.4)
+                            .font(.caption.weight(.semibold))
                             .foregroundStyle(.white.opacity(0.78))
                     }
 
@@ -240,7 +242,7 @@ struct ChecklistsView: View {
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text(selectedChecklist?.mode.title ?? "Checklisten")
-                        .font(.system(size: 38, weight: .heavy, design: .rounded))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundStyle(.white)
                         .lineLimit(2)
                         .minimumScaleFactor(0.74)
@@ -258,15 +260,27 @@ struct ChecklistsView: View {
                     HStack(spacing: 12) {
                         heroPill(title: "Fortschritt", value: "\(Int((progress * 100).rounded())) %")
                         heroPill(title: "Pflicht", value: "\(completedRequired)/\(max(requiredCount, 1))")
-                        heroPill(title: "Status", value: stateLabel(for: selectedChecklist?.state ?? .notStarted))
+                    }
+
+                    if let selectedChecklist {
+                        heroMeta(label: selectedChecklist.title, systemImage: selectedChecklist.mode.iconName)
                     }
                 }
             }
         }
         .padding(.horizontal, 22)
-        .padding(.vertical, 24)
-        .frame(maxWidth: .infinity, minHeight: 450, maxHeight: 520, alignment: .bottomLeading)
-        .clipShape(RoundedRectangle(cornerRadius: 34, style: .continuous))
+        .padding(.vertical, 26)
+        .frame(maxWidth: .infinity, minHeight: 320, maxHeight: 360, alignment: .bottomLeading)
+        .compositingGroup()
+        .mask(shape)
+        .overlay {
+            shape
+                .strokeBorder(AppTheme.asphalt.opacity(0.18), lineWidth: 1.6)
+        }
+        .overlay {
+            shape
+                .strokeBorder(Color.white.opacity(0.34), lineWidth: 0.8)
+        }
         .shadow(color: AppTheme.asphalt.opacity(0.24), radius: 34, x: 0, y: 20)
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 22)
@@ -285,7 +299,29 @@ struct ChecklistsView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial.opacity(0.58), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
+    }
+
+    private func heroMeta(label: String, systemImage: String) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: systemImage)
+                .font(.caption.weight(.bold))
+            Text(label)
+                .lineLimit(1)
+        }
+        .font(.footnote.weight(.semibold))
+        .foregroundStyle(.white.opacity(0.88))
+        .padding(.horizontal, 13)
+        .padding(.vertical, 10)
+        .background(Color.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
     }
 
     private func checklistHeroBackground(status: ReadinessStatus) -> some View {
@@ -296,31 +332,20 @@ struct ChecklistsView: View {
             Rectangle()
                 .fill(AppTheme.roadFogGradient)
 
-            VStack {
-                Spacer()
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [AppTheme.asphalt.opacity(0.92), Color.black.opacity(0.98)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .frame(height: 178)
-                    .overlay(alignment: .top) {
-                        HStack(spacing: 30) {
-                            ForEach(0..<5, id: \.self) { _ in
-                                Capsule()
-                                    .fill(Color.white.opacity(0.50))
-                                    .frame(width: 34, height: 4)
-                            }
-                        }
-                        .offset(y: 20)
-                    }
-            }
+            Circle()
+                .fill(AppTheme.accent.opacity(0.18))
+                .frame(width: 172, height: 172)
+                .blur(radius: 34)
+                .offset(x: 118, y: -102)
+
+            Circle()
+                .fill(AppTheme.accentWarm.opacity(0.12))
+                .frame(width: 150, height: 150)
+                .blur(radius: 38)
+                .offset(x: -104, y: 92)
 
             LinearGradient(
-                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.24)],
+                colors: [Color.clear, AppTheme.statusColor(status).opacity(0.28)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -330,10 +355,10 @@ struct ChecklistsView: View {
                 HStack {
                     Spacer()
                     Image(systemName: "checklist.checked")
-                        .font(.system(size: 150, weight: .black))
-                        .foregroundStyle(.white.opacity(0.17))
-                        .padding(.trailing, 8)
-                        .padding(.bottom, 118)
+                        .font(.system(size: 102, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.16))
+                        .padding(.trailing, 18)
+                        .padding(.bottom, 30)
                 }
             }
         }
@@ -494,26 +519,32 @@ private struct ChecklistModeCard: View {
                 Image(systemName: checklist.mode.iconName)
                     .font(.headline)
                     .foregroundStyle(isSelected ? .white : tint)
-                    .frame(width: 34, height: 34)
-                    .background((isSelected ? Color.white.opacity(0.18) : tint.opacity(0.12)), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 Spacer()
-                StatusBadge(status: status, text: status.title)
+                RoundedRectangle(cornerRadius: 999, style: .continuous)
+                    .fill(isSelected ? AnyShapeStyle(.white.opacity(0.92)) : AnyShapeStyle(tint))
+                    .frame(width: 24, height: 6)
             }
 
             Text(checklist.mode.title)
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(isSelected ? .white : AppTheme.ink)
 
-            Text(checklist.updatedAt.shortDateString())
-                .font(.caption.weight(.medium))
-                .foregroundStyle(isSelected ? .white.opacity(0.82) : AppTheme.mutedInk)
+            HStack(spacing: 8) {
+                Text(stateText)
+                    .font(.caption.weight(.bold))
+                    .textCase(.uppercase)
+                    .foregroundStyle(isSelected ? .white.opacity(0.92) : tint)
+                Text(checklist.updatedAt.shortDateString())
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(isSelected ? .white.opacity(0.82) : AppTheme.mutedInk)
+            }
         }
         .padding(16)
         .frame(width: 176, alignment: .leading)
         .background(background, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(isSelected ? Color.white.opacity(0.18) : tint.opacity(0.16), lineWidth: 1)
+                .stroke(isSelected ? Color.white.opacity(0.18) : AppTheme.asphalt.opacity(0.08), lineWidth: 1)
         )
     }
 
@@ -530,10 +561,18 @@ private struct ChecklistModeCard: View {
             return AppTheme.statusGradient(status)
         }
         return LinearGradient(
-            colors: [Color.white.opacity(0.42), Color.white.opacity(0.16)],
+            colors: [Color.white.opacity(0.54), Color.white.opacity(0.46)],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
+    }
+
+    private var stateText: String {
+        switch checklist.state {
+        case .complete: "Erledigt"
+        case .inProgress: "Läuft"
+        case .notStarted: "Offen"
+        }
     }
 }
 
@@ -692,6 +731,7 @@ private extension ChecklistMode {
     NavigationStack {
         ChecklistsView()
             .environmentObject(AppNavigationState())
+            .environmentObject(ActiveVehicleStore())
     }
     .modelContainer(PreviewStore.container)
 }
