@@ -18,10 +18,44 @@ final class WeightPresentationTests: XCTestCase {
         let presentation = WeightPresentation.make(assessment: output, tripTitle: "Bodensee")
 
         XCTAssertEqual(presentation.headline, "+450 kg Reserve")
+        XCTAssertEqual(presentation.support, "Bodensee")
         XCTAssertEqual(presentation.primaryMetrics.map(\.title), ["Gesamtgewicht", "Achslast"])
+        XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["3050 kg", "Niedrig"])
     }
 
-    func testWeightPresentationEqualityUsesVisibleMetricContent() {
+    func testWeightPresentationFallsBackToCurrentTripSupport() {
+        let output = WeightAssessmentOutput(
+            status: .green,
+            estimatedGrossWeightKg: nil,
+            remainingMarginKg: nil,
+            summary: "Unklare Reserve",
+            warnings: [],
+            nextAction: nil,
+            contributors: [],
+            axleRisk: .low,
+            waterComparisonDeltaKg: 0
+        )
+
+        let presentation = WeightPresentation.make(assessment: output, tripTitle: nil)
+
+        XCTAssertEqual(presentation.support, "Aktuelle Fahrt")
+        XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["Unklar", "Niedrig"])
+    }
+
+    func testWeightPresentationMapsAxleRiskStatesWithoutLosingInformation() {
+        XCTAssertEqual(makePresentation(axleRisk: .low).primaryMetrics.last?.value, "Niedrig")
+        XCTAssertEqual(makePresentation(axleRisk: .elevated).primaryMetrics.last?.value, "Erhöht")
+        XCTAssertEqual(makePresentation(axleRisk: .measured).primaryMetrics.last?.value, "Gemessen")
+    }
+
+    func testWeightMetricUsesStableIdentityFromContent() {
+        let firstMetric = WeightMetric(title: "Gesamtgewicht", value: "3050 kg")
+        let secondMetric = WeightMetric(title: "Gesamtgewicht", value: "9999 kg")
+
+        XCTAssertEqual(firstMetric.id, secondMetric.id)
+    }
+
+    private func makePresentation(axleRisk: LoadRiskLevel) -> WeightPresentation {
         let output = WeightAssessmentOutput(
             status: .green,
             estimatedGrossWeightKg: 3050,
@@ -30,13 +64,10 @@ final class WeightPresentationTests: XCTestCase {
             warnings: [],
             nextAction: "Aktuelle Beladung speichern",
             contributors: [],
-            axleRisk: .low,
+            axleRisk: axleRisk,
             waterComparisonDeltaKg: 80
         )
 
-        XCTAssertEqual(
-            WeightPresentation.make(assessment: output, tripTitle: "Bodensee"),
-            WeightPresentation.make(assessment: output, tripTitle: "Bodensee")
-        )
+        return WeightPresentation.make(assessment: output, tripTitle: "Bodensee")
     }
 }

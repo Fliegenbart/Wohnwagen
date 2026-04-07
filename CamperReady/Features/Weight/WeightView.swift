@@ -247,7 +247,7 @@ struct WeightView: View {
 
                     Spacer(minLength: 12)
 
-                    StatusBadge(status: assessment.status, text: assessment.status.title)
+                    StatusBadge(status: assessment.status, text: assessment.status.title, surface: .dark)
                 }
 
                 Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))

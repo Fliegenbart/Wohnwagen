@@ -1,12 +1,14 @@
 import Foundation
 
 struct WeightMetric: Identifiable, Equatable {
-    let id = UUID()
+    let id: String
     let title: String
     let value: String
 
-    static func == (lhs: WeightMetric, rhs: WeightMetric) -> Bool {
-        lhs.title == rhs.title && lhs.value == rhs.value
+    init(title: String, value: String) {
+        self.id = title
+        self.title = title
+        self.value = value
     }
 }
 
@@ -26,9 +28,20 @@ struct WeightPresentation: Equatable {
                 ),
                 WeightMetric(
                     title: "Achslast",
-                    value: assessment.axleRisk == .measured ? "Gemessen" : "Prüfen"
+                    value: axleLabel(for: assessment.axleRisk)
                 )
             ]
         )
+    }
+
+    private static func axleLabel(for risk: LoadRiskLevel) -> String {
+        switch risk {
+        case .low:
+            "Niedrig"
+        case .elevated:
+            "Erhöht"
+        case .measured:
+            "Gemessen"
+        }
     }
 }

@@ -1,8 +1,20 @@
 import SwiftUI
 
+enum StatusBadgeSurface {
+    case light
+    case dark
+}
+
 struct StatusBadge: View {
     let status: ReadinessStatus
     let text: String
+    let surface: StatusBadgeSurface
+
+    init(status: ReadinessStatus, text: String, surface: StatusBadgeSurface = .light) {
+        self.status = status
+        self.text = text
+        self.surface = surface
+    }
 
     var body: some View {
         HStack(spacing: 7) {
@@ -18,11 +30,17 @@ struct StatusBadge: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 9)
-        .foregroundStyle(AppTheme.ink)
+        .foregroundStyle(foregroundColor)
         .background(
             Capsule(style: .continuous)
                 .fill(backgroundColor)
         )
+        .overlay {
+            if let borderColor {
+                Capsule(style: .continuous)
+                    .stroke(borderColor, lineWidth: 1)
+            }
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Status")
         .accessibilityValue(text)
@@ -34,13 +52,37 @@ struct StatusBadge: View {
     }
 
     private var backgroundColor: Color {
-        switch status {
-        case .green:
-            AppTheme.green.opacity(0.12)
-        case .yellow:
-            AppTheme.sand
-        case .red:
-            AppTheme.red.opacity(0.12)
+        switch surface {
+        case .light:
+            switch status {
+            case .green:
+                AppTheme.green.opacity(0.12)
+            case .yellow:
+                AppTheme.sand
+            case .red:
+                AppTheme.red.opacity(0.12)
+            }
+        case .dark:
+            Color.white.opacity(0.10)
         }
     }
+
+    private var foregroundColor: Color {
+        switch surface {
+        case .light:
+            AppTheme.ink
+        case .dark:
+            .white
+        }
+    }
+
+    private var borderColor: Color? {
+        switch surface {
+        case .light:
+            nil
+        case .dark:
+            Color.white.opacity(0.18)
+        }
+    }
+
 }
