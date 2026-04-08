@@ -43,7 +43,7 @@ struct CostsView: View {
                     FeatureHeader(
                         eyebrow: vehicle.name,
                         title: "Kosten",
-                        subtitle: trip?.title ?? "Reise- und laufende Kosten pro Fahrzeug"
+                        subtitle: trip?.title ?? "Was dein Camper-Leben kostet — pro Reise und aufs Jahr."
                     )
                     .opacity(hasAppeared ? 1 : 0.01)
                     .offset(y: hasAppeared ? 0 : 10)
@@ -51,8 +51,8 @@ struct CostsView: View {
                     CamperSceneCard(
                         mood: .costs,
                         eyebrow: "Budget",
-                        title: "Kosten klar und freundlich sortiert.",
-                        subtitle: "Die App trennt Reise, Jahreskosten und Fixkosten, ohne dass du viel suchen musst.",
+                        title: "Kosten — klar sortiert, ohne Bürokratie.",
+                        subtitle: "Reisekosten, Fixkosten, Jahresüberblick — alles getrennt, alles findbar.",
                         badge: "Übersicht"
                     )
                     .opacity(hasAppeared ? 1 : 0.01)
@@ -60,7 +60,7 @@ struct CostsView: View {
 
                     summaryStats(presentation.stats, emphasisTitle: "Diese Reise")
 
-                    costSection(title: "Reise", subtitle: trip == nil ? "Lege eine Reise an, um Kosten getrennt zuzuordnen." : "Die aktive Reise bestimmt die Zuordnung der laufenden Kosten.") {
+                    costSection(title: "Reise", subtitle: trip == nil ? "Leg eine Reise an, damit die Kosten sauber zugeordnet werden." : "Laufende Kosten werden automatisch der aktiven Reise zugeordnet.") {
                         if let trip {
                             VStack(alignment: .leading, spacing: 12) {
                                 Button {
@@ -82,7 +82,7 @@ struct CostsView: View {
                                                     .font(.subheadline)
                                                     .foregroundStyle(AppTheme.mutedInk)
                                             }
-                                            Text("Start: \(trip.startDate.shortDateString())")
+                                            Text("Seit dem \(trip.startDate.shortDateString())")
                                                 .font(.footnote)
                                                 .foregroundStyle(AppTheme.mutedInk)
                                         }
@@ -97,16 +97,16 @@ struct CostsView: View {
                                 }
                                 .buttonStyle(.plain)
 
-                                Button("Neue Reise anlegen") {
+                                Button("Neue Reise starten") {
                                     tripFormContext = TripFormContext(trip: nil)
                                 }
                                 .buttonStyle(.bordered)
                             }
                         } else {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Aktuell ist keine Reise aktiv.")
+                                Text("Gerade keine Reise aktiv.")
                                     .foregroundStyle(AppTheme.mutedInk)
-                                Button("Reise anlegen") {
+                                Button("Neue Reise") {
                                     tripFormContext = TripFormContext(trip: nil)
                                 }
                                 .buttonStyle(.borderedProminent)
@@ -121,13 +121,13 @@ struct CostsView: View {
                             : "Alle Einträge der aktiven Reise."
                     ) {
                         VStack(alignment: .leading, spacing: 12) {
-                            Button(trip == nil ? "Kosten erfassen" : "Kosten für diese Reise erfassen") {
+                            Button(trip == nil ? "Kosten eintragen" : "Kosten für diese Reise eintragen") {
                                 costFormContext = CostFormContext(cost: nil)
                             }
                             .buttonStyle(.borderedProminent)
 
                             if tripCosts.isEmpty {
-                                Text(trip == nil ? "Sobald du Kosten einträgst, erscheinen sie hier." : "Für diese Reise hast du noch keine Kosten erfasst.")
+                                Text(trip == nil ? "Sobald du etwas einträgst, taucht es hier auf." : "Noch keine Kosten für diese Reise.")
                                     .foregroundStyle(AppTheme.mutedInk)
                             } else {
                                 ForEach(tripCosts) { cost in
@@ -146,15 +146,15 @@ struct CostsView: View {
                         }
                     }
 
-                    costSection(title: "Regelmäßige Kosten", subtitle: "Wiederkehrende Kosten unabhängig von einer Reise.") {
+                    costSection(title: "Laufende Kosten", subtitle: "Versicherung, Stellplatzmiete und Co. — unabhängig von Reisen.") {
                         VStack(alignment: .leading, spacing: 12) {
-                            Button("Regelmäßige Kosten hinzufügen") {
+                            Button("Laufende Kosten hinzufügen") {
                                 costFormContext = CostFormContext(cost: nil, startsAsFixedCost: true)
                             }
                             .buttonStyle(.bordered)
 
                             if fixedCosts.isEmpty {
-                                Text("Du hast noch keine regelmäßigen Kosten hinterlegt.")
+                                Text("Noch keine laufenden Kosten hinterlegt.")
                                     .foregroundStyle(AppTheme.mutedInk)
                             } else {
                                 ForEach(fixedCosts) { cost in
@@ -174,9 +174,9 @@ struct CostsView: View {
                     }
                 } else {
                     ContentUnavailableView(
-                        "Kein Fahrzeug",
+                        "Noch kein Camper",
                         systemImage: "eurosign.circle",
-                        description: Text("Lege zuerst dein Fahrzeug an. Danach behältst du Reise- und Jahreskosten im Blick.")
+                        description: Text("Leg zuerst deinen Camper an — dann behältst du alle Kosten im Blick.")
                     )
                 }
             }
@@ -190,15 +190,15 @@ struct CostsView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     if vehicle != nil {
-                        Button(trip == nil ? "Reise anlegen" : "Reise bearbeiten") {
+                        Button(trip == nil ? "Neue Reise" : "Reise bearbeiten") {
                             tripFormContext = TripFormContext(trip: trip)
                         }
 
-                        Button("Kosten erfassen") {
+                        Button("Kosten eintragen") {
                             costFormContext = CostFormContext(cost: nil)
                         }
 
-                        Button("Regelmäßige Kosten hinzufügen") {
+                        Button("Laufende Kosten hinzufügen") {
                             costFormContext = CostFormContext(cost: nil, startsAsFixedCost: true)
                         }
 
@@ -466,7 +466,7 @@ private struct TripFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Kosten",
-                title: existingTrip == nil ? "Reise anlegen" : "Reise anpassen",
+                title: existingTrip == nil ? "Neue Reise" : "Reise anpassen",
                 subtitle: SheetCopy.tripSubtitle,
                 systemImage: "road.lanes"
             ) {
@@ -478,7 +478,7 @@ private struct TripFormView: View {
                     } header: {
                         Text("Reise")
                     } footer: {
-                        Text("Nutze einen klaren Namen, damit du Kosten und Notizen später schnell wiederfindest.")
+                        Text("Gib der Reise einen Namen, den du später sofort wiedererkennst.")
                     }
 
                     Section {
@@ -497,7 +497,7 @@ private struct TripFormView: View {
                     } header: {
                         Text("Planung")
                     } footer: {
-                        Text("Es sollte immer nur eine Reise aktiv sein. Wenn du diese Reise aktiv setzt, wird eine andere aktive Reise beendet.")
+                        Text("Es kann immer nur eine Reise gleichzeitig aktiv sein. Wenn du diese aktivierst, wird die andere beendet.")
                     }
 
                     Section("Notizen") {
@@ -513,27 +513,27 @@ private struct TripFormView: View {
                                 Label("Reise löschen", systemImage: "trash")
                             }
                         } footer: {
-                            Text("Bereits erfasste Kosten bleiben erhalten, werden danach aber keiner Reise mehr zugeordnet.")
+                            Text("Bisherige Kosten bleiben erhalten — sie werden nur keiner Reise mehr zugeordnet.")
                         }
                     }
                 }
             }
-            .navigationTitle(existingTrip == nil ? "Reise anlegen" : "Reise bearbeiten")
+            .navigationTitle(existingTrip == nil ? "Neue Reise starten" : "Reise anpassen")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Reise wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Reise wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deleteTrip()
                 }
                 Button("Abbrechen", role: .cancel) {}
             } message: {
-                Text("Die Reise wird entfernt. Zugehörige Kosten bleiben im Kostenverlauf erhalten.")
+                Text("Die Reise wird entfernt. Deine Kosten bleiben aber erhalten.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingTrip == nil ? "Sichern" : "Fertig") {
+                    Button(existingTrip == nil ? "Speichern" : "Fertig") {
                         saveTrip()
                     }
                     .disabled(!draft.canSave)
@@ -618,7 +618,7 @@ private struct CostEntryFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Kosten",
-                title: existingCost == nil ? "Kosten erfassen" : "Kosten anpassen",
+                title: existingCost == nil ? "Kosten eintragen" : "Kosten anpassen",
                 subtitle: SheetCopy.costEntrySubtitle,
                 systemImage: "eurosign.circle.fill"
             ) {
@@ -630,13 +630,13 @@ private struct CostEntryFormView: View {
                                 Text(category.title).tag(category)
                             }
                         }
-                        TextField("Betrag in EUR", value: $draft.amountEUR, format: .number)
+                        TextField("Betrag in €", value: $draft.amountEUR, format: .number)
                             .keyboardType(.decimalPad)
                         TextField("Notiz", text: $draft.notes)
                     } header: {
-                        Text("Kosten")
+                        Text("Wofür?")
                     } footer: {
-                        Text("Zum Beispiel Tanken, Maut, Stellplatz oder Werkstatt.")
+                        Text("Tanken, Maut, Stellplatz, Werkstatt …")
                     }
 
                     Section {
@@ -649,9 +649,9 @@ private struct CostEntryFormView: View {
                                 Text("Jährlich").tag(FixedCostInterval.yearly)
                             }
                         } else if let activeTrip {
-                            LabeledContent("Wird zugeordnet zu", value: activeTrip.title)
+                            LabeledContent("Gehört zu", value: activeTrip.title)
                         } else {
-                            Text("Der Eintrag wird ohne Reise gespeichert. Sobald eine Reise aktiv ist, kannst du neue Kosten direkt zuordnen.")
+                            Text("Wird ohne Reise gespeichert. Sobald eine Reise aktiv ist, ordnest du neue Kosten direkt zu.")
                                 .font(.footnote)
                                 .foregroundStyle(AppTheme.mutedInk)
                         }
@@ -659,7 +659,7 @@ private struct CostEntryFormView: View {
                         Text("Zuordnung")
                     }
 
-                    Section("Zusätzliche Angaben") {
+                    Section("Noch ein paar Details") {
                         Toggle("Kilometerstand speichern", isOn: $draft.hasOdometer.animation())
                         if draft.hasOdometer {
                             TextField("Kilometerstand", value: $draft.odometerKm, format: .number)
@@ -686,27 +686,27 @@ private struct CostEntryFormView: View {
                                 Label("Kosten löschen", systemImage: "trash")
                             }
                         } footer: {
-                            Text("Der Eintrag wird aus deiner Reise- oder Jahresübersicht entfernt.")
+                            Text("Der Eintrag verschwindet aus deiner Übersicht.")
                         }
                     }
                 }
             }
-            .navigationTitle(existingCost == nil ? "Kosten erfassen" : "Kosten bearbeiten")
+            .navigationTitle(existingCost == nil ? "Kosten eintragen" : "Kosten bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Kosten wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Kosten wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deleteCost()
                 }
                 Button("Abbrechen", role: .cancel) {}
             } message: {
-                Text("Dieser Kosteneintrag wird dauerhaft entfernt.")
+                Text("Dieser Eintrag wird dauerhaft entfernt.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingCost == nil ? "Sichern" : "Fertig") {
+                    Button(existingCost == nil ? "Speichern" : "Fertig") {
                         saveCost()
                     }
                     .disabled(!draft.canSave)

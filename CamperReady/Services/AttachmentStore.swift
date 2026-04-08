@@ -9,11 +9,11 @@ enum AttachmentStoreError: LocalizedError, Equatable {
     var errorDescription: String? {
         switch self {
         case .invalidPath:
-            "Der gespeicherte Dateipfad ist ungültig."
+            "Der Dateipfad ist leider ungültig."
         case .couldNotReadImportedFile:
-            "Die ausgewählte Datei konnte nicht gelesen werden."
+            "Die Datei konnte leider nicht gelesen werden."
         case .unsupportedType:
-            "Bitte wähle nur Bilder oder PDF-Dateien aus."
+            "Bitte wähl ein Bild oder ein PDF aus."
         }
     }
 }

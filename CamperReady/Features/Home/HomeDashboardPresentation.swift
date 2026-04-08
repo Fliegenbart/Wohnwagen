@@ -53,7 +53,7 @@ struct HomeDashboardPresentation: Equatable {
                 HomeActionRow(
                     dimensionTitle: result.title,
                     title: result.summary,
-                    subtitle: result.nextAction ?? result.reasons.first ?? "Jetzt prüfen",
+                    subtitle: result.nextAction ?? result.reasons.first ?? "Kurz prüfen",
                     systemImage: result.metadata.systemImage,
                     status: result.status,
                     action: result.metadata.action
@@ -73,8 +73,8 @@ struct HomeDashboardPresentation: Equatable {
 
     private static func greenDetail(snapshot: DashboardSnapshot, tripTitle: String?) -> String {
         if let tripTitle {
-            return "\(snapshot.vehicleName) ist für \(tripTitle) einsatzbereit."
+            return "\(snapshot.vehicleName) ist bereit für \(tripTitle)."
         }
-        return "\(snapshot.vehicleName) ist fahrbereit. Alle Kernbereiche sind im grünen Bereich."
+        return "\(snapshot.vehicleName) ist startklar — alles sieht gut aus."
     }
 }

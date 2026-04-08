@@ -11,7 +11,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
             openItemsCount: 2,
             dimensions: [
                 ReadinessDimensionResult(title: "Gewicht", status: .green, summary: "+220 kg Reserve", reasons: [], nextAction: nil),
-                ReadinessDimensionResult(title: "Gas & Dokumente", status: .red, summary: "Gasprüfung abgelaufen", reasons: ["Gasprüfung abgelaufen"], nextAction: "Nachweis erneuern"),
+                ReadinessDimensionResult(title: "Dokumente & Fristen", status: .red, summary: "Gasprüfung abgelaufen", reasons: ["Gasprüfung abgelaufen"], nextAction: "Nachweis erneuern"),
                 ReadinessDimensionResult(title: "Wartung", status: .yellow, summary: "Service bald fällig", reasons: ["In 250 km fällig"], nextAction: "Termin planen")
             ],
             blockingItems: ["Gasprüfung abgelaufen"]
@@ -23,7 +23,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
         XCTAssertEqual(presentation.focusDetail, "Nachweis erneuern")
         XCTAssertEqual(presentation.focusContext, "Bodensee")
-        XCTAssertEqual(presentation.overviewRows.map(\.title), ["Gewicht", "Gas & Dokumente", "Wartung"])
+        XCTAssertEqual(presentation.overviewRows.map(\.title), ["Gewicht", "Dokumente & Fristen", "Wartung"])
         XCTAssertEqual(presentation.actionRows.count, 2)
         XCTAssertEqual(presentation.actionRows.first?.title, "Gasprüfung abgelaufen")
         XCTAssertEqual(presentation.actionRows.first?.systemImage, "doc.text")
@@ -38,7 +38,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
             openItemsCount: 0,
             dimensions: [
                 ReadinessDimensionResult(title: "Gewicht", status: .green, summary: "+220 kg Reserve", reasons: [], nextAction: nil),
-                ReadinessDimensionResult(title: "Gas & Dokumente", status: .green, summary: "Alles gültig", reasons: [], nextAction: nil)
+                ReadinessDimensionResult(title: "Dokumente & Fristen", status: .green, summary: "Alles gültig", reasons: [], nextAction: nil)
             ],
             blockingItems: []
         )
@@ -47,7 +47,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.focusTitle, "Abfahrbereit")
         XCTAssertEqual(presentation.focusSubtitle, "Bodensee")
-        XCTAssertEqual(presentation.focusDetail, "Atlas ist für Bodensee einsatzbereit.")
+        XCTAssertEqual(presentation.focusDetail, "Atlas ist bereit für Bodensee.")
         XCTAssertEqual(presentation.overviewRows.count, 2)
         XCTAssertTrue(presentation.actionRows.isEmpty)
     }
@@ -69,7 +69,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.focusContext, "Keine Reise geplant")
         XCTAssertEqual(presentation.focusSubtitle, "Keine Reise geplant")
-        XCTAssertEqual(presentation.focusDetail, "Atlas ist fahrbereit. Alle Kernbereiche sind im grünen Bereich.")
+        XCTAssertEqual(presentation.focusDetail, "Atlas ist startklar — alles sieht gut aus.")
     }
 
     func testPresentationUsesDimensionMetadataForTieBreakingAndActionRows() {
@@ -81,7 +81,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
             openItemsCount: 3,
             dimensions: [
                 ReadinessDimensionResult(title: "Wartung", status: .red, summary: "Service überfällig", reasons: ["Seit 400 km überzogen"], nextAction: "Termin buchen"),
-                ReadinessDimensionResult(title: "Gas & Dokumente", status: .red, summary: "Gasprüfung abgelaufen", reasons: ["Prüfung fehlt"], nextAction: "Nachweis erneuern"),
+                ReadinessDimensionResult(title: "Dokumente & Fristen", status: .red, summary: "Gasprüfung abgelaufen", reasons: ["Prüfung fehlt"], nextAction: "Nachweis erneuern"),
                 ReadinessDimensionResult(title: "Gewicht", status: .yellow, summary: "Nur noch 50 kg Reserve", reasons: ["Wenig Reserve"], nextAction: "Beladung prüfen")
             ],
             blockingItems: ["Prüfung fehlt", "Seit 400 km überzogen"]
@@ -91,6 +91,6 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
         XCTAssertEqual(presentation.actionRows.map(\.systemImage), ["doc.text", "wrench.and.screwdriver", "scalemass"])
-        XCTAssertEqual(presentation.actionRows.map(\.dimensionTitle), ["Gas & Dokumente", "Wartung", "Gewicht"])
+        XCTAssertEqual(presentation.actionRows.map(\.dimensionTitle), ["Dokumente & Fristen", "Wartung", "Gewicht"])
     }
 }

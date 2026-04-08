@@ -19,13 +19,13 @@ struct AppInfoView: View {
                         FeatureHeader(
                             eyebrow: "Info",
                             title: "App & Hinweise",
-                            subtitle: "Version, Erinnerungen, Rechtliches und Kontakt an einer Stelle."
+                            subtitle: "Version, Erinnerungen, Rechtliches und Kontakt — alles hier."
                         )
 
-                        SectionCard(title: "App", subtitle: "Version, Sprache und Anbieter.") {
+                        SectionCard(title: "App", subtitle: "Version, Sprache und wer dahintersteckt.") {
                             VStack(alignment: .leading, spacing: 10) {
                                 infoRow(title: "Version", value: AppReleaseConfiguration.appVersionDescription)
-                                infoRow(title: "Speicherort", value: "Lokal auf diesem iPhone")
+                                infoRow(title: "Speicherort", value: "Lokal auf deinem iPhone")
                                 infoRow(title: "Sprache", value: "Deutsch")
                                 infoRow(title: "Anbieter", value: AppReleaseConfiguration.providerName)
                             }
@@ -43,20 +43,20 @@ struct AppInfoView: View {
                                     }
                                     .buttonStyle(.bordered)
                                 } else {
-                                    Button(isUpdatingNotifications ? "Aktualisiere…" : reminderActionTitle) {
+                                    Button(isUpdatingNotifications ? "Wird geprüft …" : reminderActionTitle) {
                                         Task { await updateNotifications() }
                                     }
                                     .buttonStyle(.bordered)
                                     .disabled(isUpdatingNotifications)
                                 }
 
-                                Text("Erinnerungen sind optional. Die App funktioniert auch ohne Mitteilungen weiter.")
+                                Text("Erinnerungen sind optional — die App funktioniert auch ohne.")
                                     .font(.footnote)
                                     .foregroundStyle(AppTheme.mutedInk)
                             }
                         }
 
-                        SectionCard(title: "Rechtliches", subtitle: "Anbieter und rechtliche Hinweise.") {
+                        SectionCard(title: "Rechtliches", subtitle: "Anbieter und Rechtliches.") {
                             VStack(alignment: .leading, spacing: 10) {
                                 infoRow(title: "Anbieter", value: AppReleaseConfiguration.providerName)
                                 infoRow(title: "Adresse", value: AppReleaseConfiguration.providerAddress)
@@ -67,7 +67,7 @@ struct AppInfoView: View {
                             }
                         }
 
-                        SectionCard(title: "Links", subtitle: "Support, Datenschutz und Website.") {
+                        SectionCard(title: "Links", subtitle: "Support, Datenschutz und mehr.") {
                             VStack(alignment: .leading, spacing: 12) {
                                 configuredLinkRow(title: "Support", url: AppReleaseConfiguration.supportURL)
                                 configuredLinkRow(title: "Datenschutz", url: AppReleaseConfiguration.privacyPolicyURL)
@@ -132,7 +132,7 @@ struct AppInfoView: View {
         case .authorized: "Aktiv"
         case .provisional: "Vorläufig aktiv"
         case .ephemeral: "Temporär aktiv"
-        @unknown default: "Unbekannt"
+        @unknown default: "Noch nicht erfasst"
         }
     }
 

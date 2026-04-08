@@ -34,17 +34,17 @@ struct WeightView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 FeatureHeader(
-                    eyebrow: "Sicherheitswerte",
+                    eyebrow: "Sicherheit & Reserve",
                     title: "Beladung",
-                    subtitle: "Prüfe Reserve, Wasser und Zusatzlasten vor der Abfahrt."
+                    subtitle: "Wirf vor der Fahrt einen Blick auf Reserve, Frischwasser und Zusatzlasten."
                 )
 
                 if let vehicle {
                     CamperSceneCard(
                         mood: .weight,
                         eyebrow: "Beladung",
-                        title: "Gewicht freundlich im Blick.",
-                        subtitle: "Alles Wichtige für die Abfahrt liegt auf einen Blick vor dir.",
+                        title: "Dein Gewicht — übersichtlich und ehrlich.",
+                        subtitle: "Alles Wichtige für die Fahrt auf einen Blick.",
                         badge: assessment.status.title
                     )
 
@@ -56,16 +56,16 @@ struct WeightView: View {
                         settings: activeSettings
                     )
 
-                    weightSection(title: "Beladung", subtitle: "Pflege Wasser, Gas und Zusatzlasten für diese Fahrt.") {
+                    weightSection(title: "Beladung", subtitle: "Wasser, Gas und Zusatzlasten für diese Fahrt anpassen.") {
                         if let activeSettings {
                             LoadSettingsSummaryCard(vehicle: vehicle, loadSettings: activeSettings) {
                                 loadSettingsFormContext = LoadSettingsFormContext(settings: activeSettings, trip: trip)
                             }
                         } else {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Für diese Fahrt ist noch keine Beladung hinterlegt.")
+                                Text("Für diese Fahrt ist noch keine Beladung eingetragen. Kein Stress — das geht schnell.")
                                     .foregroundStyle(AppTheme.mutedInk)
-                                Button("Beladung anlegen") {
+                                Button("Beladung eintragen") {
                                     loadSettingsFormContext = LoadSettingsFormContext(settings: nil, trip: trip)
                                 }
                                 .buttonStyle(.borderedProminent)
@@ -73,10 +73,10 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Das wiegt am meisten", subtitle: "Die größten Lasten stehen hier zuerst.") {
+                    weightSection(title: "Die größten Brocken", subtitle: "Was am meisten wiegt, siehst du hier zuerst.") {
                         let topContributors = Array(assessment.contributors.prefix(6))
                         if topContributors.isEmpty {
-                            Text("Bisher sind noch keine größeren Gewichte erfasst.")
+                            Text("Noch keine größeren Gewichte erfasst.")
                                 .foregroundStyle(AppTheme.mutedInk)
                         } else {
                             ForEach(topContributors) { contributor in
@@ -91,14 +91,14 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Packliste", subtitle: "Pflege Packstücke und Gewichte für diese Fahrt.") {
-                        Button("Packstück hinzufügen") {
+                    weightSection(title: "Packliste", subtitle: "Deine Packstücke und ihr Gewicht für diese Fahrt.") {
+                        Button("Neues Packstück") {
                             packingItemFormContext = PackingItemFormContext(item: nil, trip: trip)
                         }
                         .buttonStyle(.borderedProminent)
 
                         if vehicleItems.isEmpty {
-                            Text("Du hast noch keine Packstücke hinterlegt.")
+                            Text("Noch keine Packstücke eingetragen.")
                                 .foregroundStyle(AppTheme.mutedInk)
                         } else {
                             ForEach(vehicleItems) { item in
@@ -116,14 +116,14 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Mitfahrende", subtitle: "Pflege Personen und Gewichte für diese Fahrt.") {
-                        Button("Mitfahrende hinzufügen") {
+                    weightSection(title: "Mitfahrende", subtitle: "Wer fährt mit? Personen und Gewicht für diese Fahrt.") {
+                        Button("Person hinzufügen") {
                             passengerFormContext = PassengerFormContext(passenger: nil, trip: trip)
                         }
                         .buttonStyle(.borderedProminent)
 
                         if vehiclePassengers.isEmpty {
-                            Text("Du hast noch keine Mitfahrenden erfasst.")
+                            Text("Noch niemand eingetragen.")
                                 .foregroundStyle(AppTheme.mutedInk)
                         } else {
                             ForEach(vehiclePassengers) { person in
@@ -137,9 +137,9 @@ struct WeightView: View {
                         }
                     }
 
-                    weightSection(title: "Hinweise", subtitle: "Hinweise aus den hinterlegten Daten.") {
+                    weightSection(title: "Hinweise", subtitle: "Was uns bei deinen Daten auffällt.") {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Die Berechnung ist absichtlich vorsichtig. Achslasten bewerten wir nur mit echten Messwerten oder bei klaren Risikomustern.")
+                            Text("Wir rechnen absichtlich vorsichtig. Achslasten bewerten wir nur mit echten Messwerten oder bei klaren Auffälligkeiten.")
                                 .font(.footnote)
                                 .foregroundStyle(AppTheme.mutedInk)
 
@@ -147,7 +147,7 @@ struct WeightView: View {
                                 HStack(spacing: 10) {
                                     Image(systemName: "checkmark.seal.fill")
                                         .foregroundStyle(AppTheme.green)
-                                    Text("Aktuell sind keine zusätzlichen Gewichtsrisiken erkennbar.")
+                                    Text("Aktuell sieht alles unproblematisch aus.")
                                         .font(.subheadline.weight(.semibold))
                                         .foregroundStyle(AppTheme.ink)
                                 }
@@ -169,9 +169,9 @@ struct WeightView: View {
                     }
                 } else {
                     ContentUnavailableView(
-                        "Kein Fahrzeug",
+                        "Noch kein Camper",
                         systemImage: "scalemass",
-                        description: Text("Lege ein Fahrzeug an, damit du Reserve und Beladung prüfen kannst.")
+                        description: Text("Leg deinen Camper an — dann kannst du Reserve und Beladung prüfen.")
                     )
                 }
             }
@@ -239,13 +239,13 @@ struct WeightView: View {
                 VStack(spacing: 12) {
                     axleMetricCard(
                         title: "Hinterachse",
-                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
                         progress: axleProgress(for: vehicle.rearAxleMeasuredKg, baseline: vehicle.gvwrKg)
                     )
 
                     axleMetricCard(
                         title: "Vorderachse",
-                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
                         progress: axleProgress(for: vehicle.frontAxleMeasuredKg, baseline: vehicle.gvwrKg)
                     )
                 }
@@ -253,13 +253,13 @@ struct WeightView: View {
                 HStack(spacing: 12) {
                     axleMetricCard(
                         title: "Hinterachse",
-                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
                         progress: axleProgress(for: vehicle.rearAxleMeasuredKg, baseline: vehicle.gvwrKg)
                     )
 
                     axleMetricCard(
                         title: "Vorderachse",
-                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
                         progress: axleProgress(for: vehicle.frontAxleMeasuredKg, baseline: vehicle.gvwrKg)
                     )
                 }
@@ -304,7 +304,7 @@ struct WeightView: View {
 
                     VStack(spacing: 10) {
                         metricRow(title: "Reserve", value: assessment.remainingMarginKg.map { $0.kgString } ?? "—")
-                        metricRow(title: "Achsrisko", value: axleLabel(for: assessment.axleRisk))
+                        metricRow(title: "Achslast-Risiko", value: axleLabel(for: assessment.axleRisk))
                     }
 
                     GeometryReader { proxy in
@@ -402,12 +402,12 @@ struct WeightView: View {
 
     private func weightSupportLine(vehicle: VehicleProfile, trip: Trip?, assessment: WeightAssessmentOutput) -> String {
         if assessment.status == .green {
-            return trip.map { "\(vehicle.name) hat für \($0.title) noch ausreichend Reserve und keine auffälligen Lastmuster." }
+            return trip.map { "\(vehicle.name) hat für \($0.title) noch genügend Reserve — keine Auffälligkeiten." }
                 ?? "\(vehicle.name) bleibt aktuell in einem plausiblen Gewichtsfenster."
         }
 
         if assessment.status == .red {
-            return "Die aktuelle Beladung ist für die Abfahrt nicht plausibel. Reduziere Last oder senke Wasserstand, bevor du losfährst."
+            return "Die Beladung passt so nicht ganz. Nimm etwas raus oder reduziere den Wasserstand, bevor du losfährst."
         }
 
         return "Die Beladung ist noch nicht eindeutig unkritisch. Prüfe Reserve, Wasserstand und mögliche Achslast-Risiken vor der Abfahrt."
@@ -469,11 +469,11 @@ private struct LoadSettingsSummaryCard: View {
                 summaryRow("Dachlast", "\(Int(loadSettings.roofLoadKg.rounded())) kg")
                 summaryRow("Zusatzlast", "\(Int(loadSettings.extraLoadKg.rounded())) kg")
                 if loadSettings.bikesOnRearCarrier {
-                    Text("Fahrräder am Heckträger sind berücksichtigt.")
+                    Text("Fahrräder am Heckträger sind mit eingerechnet.")
                         .font(.footnote)
                         .foregroundStyle(AppTheme.mutedInk)
                 }
-                Button("Beladung bearbeiten", action: onEdit)
+                Button("Beladung anpassen", action: onEdit)
                     .buttonStyle(.borderedProminent)
             }
         }
@@ -537,7 +537,7 @@ private struct PackingItemRow: View {
             Spacer()
 
             if item.isPersistent {
-                Text("Dauerhaft")
+                Text("Dauerhaft dabei")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(AppTheme.accent)
             }
@@ -595,7 +595,7 @@ private struct PackingItemFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Gewicht",
-                title: existingItem == nil ? "Packstück hinzufügen" : "Packstück anpassen",
+                title: existingItem == nil ? "Neues Packstück" : "Packstück anpassen",
                 subtitle: SheetCopy.packingItemSubtitle,
                 systemImage: "shippingbox.fill"
             ) {
@@ -609,11 +609,11 @@ private struct PackingItemFormView: View {
                         }
                         TextField("Menge", value: $draft.quantity, format: .number)
                             .keyboardType(.numberPad)
-                        TextField("Gewicht pro Stück (kg)", value: $draft.unitWeightKg, format: .number)
+                        TextField("Gewicht pro Stück in kg", value: $draft.unitWeightKg, format: .number)
                             .keyboardType(.decimalPad)
                     }
 
-                    Section("Gültigkeit") {
+                    Section("Mitfahrt-Typ") {
                         Toggle("Für alle Reisen merken", isOn: $draft.isPersistent)
                         Toggle("Bei dieser Beladung berücksichtigen", isOn: $draft.includeInCurrentLoad)
                     }
@@ -623,33 +623,33 @@ private struct PackingItemFormView: View {
                             Button(role: .destructive) {
                                 showDeleteConfirmation = true
                             } label: {
-                                Label("Packstück löschen", systemImage: "trash")
+                                Label("Packstück entfernen", systemImage: "trash")
                             }
                         }
                     }
                 }
             }
-            .navigationTitle(existingItem == nil ? "Packstück hinzufügen" : "Packstück bearbeiten")
+            .navigationTitle(existingItem == nil ? "Neues Packstück" : "Packstück bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Packstück wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Packstück wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deleteItem()
                 }
                 Button("Abbrechen", role: .cancel) {}
             } message: {
-                Text("Dieses Packstück wird aus deiner Liste entfernt.")
+                Text("Das Packstück verschwindet aus deiner Liste.")
             }
-            .alert("Packstück konnte nicht gespeichert werden", isPresented: errorBinding) {
+            .alert("Das hat leider nicht geklappt", isPresented: errorBinding) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "Bitte prüfe deine Eingaben.")
+                Text(errorMessage ?? "Bitte schau nochmal über deine Eingaben.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingItem == nil ? "Sichern" : "Fertig") {
+                    Button(existingItem == nil ? "Speichern" : "Fertig") {
                         saveItem()
                     }
                     .disabled(!draft.canSave)
@@ -676,7 +676,7 @@ private struct PackingItemFormView: View {
             )
             dismiss()
         } catch {
-            errorMessage = "Das Packstück konnte nicht gespeichert werden."
+            errorMessage = "Das hat leider nicht geklappt."
         }
     }
 
@@ -714,12 +714,12 @@ private struct PassengerFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Gewicht",
-                title: existingPassenger == nil ? "Mitfahrende hinzufügen" : "Mitfahrende anpassen",
+                title: existingPassenger == nil ? "Person hinzufügen" : "Person anpassen",
                 subtitle: SheetCopy.passengerSubtitle,
                 systemImage: "person.2.fill"
             ) {
                 Form {
-                    Section("Mitfahrende Person") {
+                    Section("Wer fährt mit?") {
                         TextField("Name", text: $draft.name)
                         TextField("Gewicht in kg", value: $draft.weightKg, format: .number)
                             .keyboardType(.decimalPad)
@@ -732,31 +732,31 @@ private struct PassengerFormView: View {
                             Button(role: .destructive) {
                                 showDeleteConfirmation = true
                             } label: {
-                                Label("Mitfahrende Person löschen", systemImage: "trash")
+                                Label("Person entfernen", systemImage: "trash")
                             }
                         }
                     }
                 }
             }
-            .navigationTitle(existingPassenger == nil ? "Mitfahrende hinzufügen" : "Mitfahrende bearbeiten")
+            .navigationTitle(existingPassenger == nil ? "Person hinzufügen" : "Person anpassen")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Eintrag wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deletePassenger()
                 }
                 Button("Abbrechen", role: .cancel) {}
             }
-            .alert("Eintrag konnte nicht gespeichert werden", isPresented: errorBinding) {
+            .alert("Das hat leider nicht geklappt", isPresented: errorBinding) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "Bitte prüfe Name und Gewicht.")
+                Text(errorMessage ?? "Bitte prüf Name und Gewicht nochmal.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingPassenger == nil ? "Sichern" : "Fertig") {
+                    Button(existingPassenger == nil ? "Speichern" : "Fertig") {
                         savePassenger()
                     }
                     .disabled(!draft.canSave)
@@ -820,21 +820,21 @@ private struct LoadSettingsFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Gewicht",
-                title: "Beladung festlegen",
+                title: "Beladung für die Fahrt",
                 subtitle: SheetCopy.loadSettingsSubtitle,
                 systemImage: "gauge.with.needle.fill"
             ) {
                 Form {
-                    Section("Wasser & Gas") {
-                        Stepper("Frischwasser: \(Int(draft.freshWaterLiters.rounded())) l", value: $draft.freshWaterLiters, in: 0...(vehicle.freshWaterCapacityL ?? 120), step: 5)
-                        Stepper("Grauwasser: \(Int(draft.greyWaterLiters.rounded())) l", value: $draft.greyWaterLiters, in: 0...(vehicle.greyWaterCapacityL ?? 120), step: 5)
-                        Stepper("Gasflaschenfüllstand: \(Int(draft.gasBottleFillPercent.rounded())) %", value: $draft.gasBottleFillPercent, in: 0...100, step: 10)
+                    Section("Frischwasser & Gas") {
+                        Stepper("Frischwasser: \(Int(draft.freshWaterLiters.rounded())) Liter", value: $draft.freshWaterLiters, in: 0...(vehicle.freshWaterCapacityL ?? 120), step: 5)
+                        Stepper("Grauwasser: \(Int(draft.greyWaterLiters.rounded())) Liter", value: $draft.greyWaterLiters, in: 0...(vehicle.greyWaterCapacityL ?? 120), step: 5)
+                        Stepper("Gas: ca. \(Int(draft.gasBottleFillPercent.rounded())) % gefüllt", value: $draft.gasBottleFillPercent, in: 0...100, step: 10)
                     }
 
                     Section("Zusatzlasten") {
                         Stepper("Heckträger: \(Int(draft.rearCarrierLoadKg.rounded())) kg", value: $draft.rearCarrierLoadKg, in: 0...150, step: 2)
                         Stepper("Dachlast: \(Int(draft.roofLoadKg.rounded())) kg", value: $draft.roofLoadKg, in: 0...150, step: 2)
-                        Stepper("Zusatzlast: \(Int(draft.extraLoadKg.rounded())) kg", value: $draft.extraLoadKg, in: 0...200, step: 2)
+                        Stepper("Sonstiges obendrauf: \(Int(draft.extraLoadKg.rounded())) kg", value: $draft.extraLoadKg, in: 0...200, step: 2)
                         Toggle("Fahrräder am Heckträger", isOn: $draft.bikesOnRearCarrier)
                     }
 
@@ -844,19 +844,19 @@ private struct LoadSettingsFormView: View {
                     }
                 }
             }
-            .navigationTitle("Beladung bearbeiten")
+            .navigationTitle("Beladung anpassen")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Beladung konnte nicht gespeichert werden", isPresented: errorBinding) {
+            .alert("Das hat leider nicht geklappt", isPresented: errorBinding) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "Bitte versuche es noch einmal.")
+                Text(errorMessage ?? "Versuch es nochmal — manchmal klemmt’s kurz.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Sichern") {
+                    Button("Speichern") {
                         saveSettings()
                     }
                 }
@@ -882,7 +882,7 @@ private struct LoadSettingsFormView: View {
             )
             dismiss()
         } catch {
-            errorMessage = "Die Beladung konnte nicht gespeichert werden."
+            errorMessage = "Das hat leider nicht geklappt."
         }
     }
 }

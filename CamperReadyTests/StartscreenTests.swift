@@ -62,7 +62,7 @@ final class StartscreenTests: XCTestCase {
 
     func testLaunchCopyAndTimingConstantsMatchSpecification() {
         XCTAssertEqual(AppLaunchCopy.title, "CamperReady")
-        XCTAssertEqual(AppLaunchCopy.subtitle, "Bereit fuer die Abfahrt.")
+        XCTAssertEqual(AppLaunchCopy.subtitle, "Alles dabei. Alles bereit.")
         XCTAssertEqual(AppLaunchTiming.holdDurationSeconds, 0.85)
         XCTAssertEqual(AppLaunchTiming.fadeDurationSeconds, 0.35)
     }

@@ -61,15 +61,15 @@ struct VehicleProfileView: View {
     var body: some View {
         NavigationStack {
             RoadSheetScaffold(
-                eyebrow: "Fahrzeug",
-                title: vehicle == nil ? "Fahrzeug anlegen" : "Fahrzeugprofil",
+                eyebrow: "Dein Camper",
+                title: vehicle == nil ? "Camper anlegen" : "Camper-Profil",
                 subtitle: SheetCopy.vehicleProfileSubtitle,
                 systemImage: "car.side.fill"
             ) {
                 Form {
                     Section {
-                        TextField("Fahrzeugname", text: nameBinding)
-                        Picker("Typ", selection: vehicleKindBinding) {
+                        TextField("Name", text: nameBinding)
+                        Picker("Fahrzeugtyp", selection: vehicleKindBinding) {
                             ForEach(VehicleKind.allCases) { kind in
                                 Text(kind.title).tag(kind)
                             }
@@ -77,7 +77,7 @@ struct VehicleProfileView: View {
                         TextField("Marke", text: brandBinding)
                         TextField("Modell", text: modelBinding)
                         TextField("Kennzeichen", text: licensePlateBinding)
-                        Picker("Land", selection: countryBinding) {
+                        Picker("Zulassungsland", selection: countryBinding) {
                             ForEach(CountryPreset.allCases) { country in
                                 Text(country.title).tag(country)
                             }
@@ -85,34 +85,34 @@ struct VehicleProfileView: View {
                     } header: {
                         Text("Basisdaten")
                     } footer: {
-                        Text("Ein Name reicht für den Start. Fehlende Angaben kannst du später ergänzen.")
+                        Text("Ein Name reicht für den Anfang. Den Rest kannst du jederzeit nachtragen.")
                     }
 
                     Section {
-                        TextField("zGG (kg)", value: gvwrBinding, format: .number)
+                        TextField("Zul. Gesamtgewicht in kg", value: gvwrBinding, format: .number)
                             .keyboardType(.decimalPad)
                         TextField("Leergewicht, gemessen (kg)", value: measuredWeightBinding, format: .number)
                             .keyboardType(.decimalPad)
-                        TextField("Frischwasser (l)", value: freshWaterBinding, format: .number)
+                        TextField("Frischwasser in Liter", value: freshWaterBinding, format: .number)
                             .keyboardType(.decimalPad)
-                        TextField("Grauwasser (l)", value: greyWaterBinding, format: .number)
+                        TextField("Grauwasser in Liter", value: greyWaterBinding, format: .number)
                             .keyboardType(.decimalPad)
                         Stepper("Gasflaschen: \(gasBottleCountBinding.wrappedValue)", value: gasBottleCountBinding, in: 0...4)
-                        TextField("Flaschengröße (kg)", value: gasBottleSizeBinding, format: .number)
+                        TextField("Flaschengröße in kg", value: gasBottleSizeBinding, format: .number)
                             .keyboardType(.decimalPad)
                     } header: {
-                        Text("Gewichte & Kapazitäten")
+                        Text("Gewichte & Tanks")
                     } footer: {
-                        Text("Trag hier nur Werte ein, die du sicher kennst.")
+                        Text("Trag nur ein, was du sicher weißt — den Rest lieber offenlassen.")
                     }
 
                     Section {
                         Stepper("Service alle \(serviceMonthsBinding.wrappedValue) Monate", value: serviceMonthsBinding, in: 0...36)
                         Stepper("Service alle \(serviceKmBinding.wrappedValue) km", value: serviceKmBinding, in: 0...60000, step: 1000)
                     } header: {
-                        Text("Service")
+                        Text("Service-Intervalle")
                     } footer: {
-                        Text("Nutze 0, wenn du noch kein festes Intervall pflegen willst.")
+                        Text("Kein festes Intervall? Dann einfach bei 0 lassen.")
                     }
 
                     Section {
@@ -123,7 +123,7 @@ struct VehicleProfileView: View {
                     }
                 }
             }
-            .navigationTitle(vehicle == nil ? "Fahrzeug anlegen" : "Fahrzeugprofil")
+            .navigationTitle(vehicle == nil ? "Camper anlegen" : "Camper-Profil")
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.interactively)
             .toolbar {

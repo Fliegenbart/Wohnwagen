@@ -10,11 +10,11 @@ struct ReadinessDimensionMetadata: Equatable {
         switch title {
         case "Gewicht":
             .init(title: title, systemImage: "scalemass", action: .weight, sortOrder: 0)
-        case "Gas & Dokumente":
+        case "Dokumente & Fristen":
             .init(title: title, systemImage: "doc.text", action: .documents, sortOrder: 1)
         case "Wartung":
             .init(title: title, systemImage: "wrench.and.screwdriver", action: .maintenance, sortOrder: 2)
-        case "Wasser / Winter":
+        case "Wasser & Saison":
             .init(title: title, systemImage: "drop", action: .departureChecklist, sortOrder: 3)
         case "Kosten":
             .init(title: title, systemImage: "eurosign.circle", action: .costs, sortOrder: 4)

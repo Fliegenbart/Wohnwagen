@@ -76,7 +76,7 @@ struct AttachmentSection: View {
         .alert("Anhang konnte nicht gespeichert werden", isPresented: errorBinding) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text(errorMessage ?? "Bitte versuche es noch einmal.")
+            Text(errorMessage ?? "Versuch es nochmal — manchmal klemmt’s kurz.")
         }
     }
 

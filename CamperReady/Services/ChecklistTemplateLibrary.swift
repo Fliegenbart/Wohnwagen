@@ -41,54 +41,54 @@ enum ChecklistTemplateLibrary {
         switch mode {
         case .departure:
             [
-                .init(title: "Fenster und Dachluken geschlossen", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Stützen und Hubstützen eingefahren", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Landstrom getrennt", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Grauwasser in Ordnung", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Toilettenkassette ok", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Kühlschrank-Modus geprüft", details: "", isRequired: false, contributesToReadiness: true),
-                .init(title: "Gas geschlossen / gesichert", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Ladung gesichert", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Reifendruck vor kurzem geprüft", details: "", isRequired: false, contributesToReadiness: true),
-                .init(title: "Dokumente an Bord", details: "", isRequired: true, contributesToReadiness: true)
+                .init(title: "Fenster und Dachluken zu?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Stützen eingefahren?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Landstrom getrennt?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Grauwasser gecheckt?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Toilettenkassette in Ordnung?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Kühlschrank auf den richtigen Modus gestellt?", details: "", isRequired: false, contributesToReadiness: true),
+                .init(title: "Gas geschlossen und gesichert?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Ladung gesichert?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Reifendruck noch aktuell?", details: "", isRequired: false, contributesToReadiness: true),
+                .init(title: "Dokumente dabei?", details: "", isRequired: true, contributesToReadiness: true)
             ]
         case .arrival:
             [
-                .init(title: "Stellplatz eingeebnet", details: "Keile falls nötig", isRequired: true, contributesToReadiness: false),
-                .init(title: "Strom angeschlossen", details: "", isRequired: false, contributesToReadiness: false),
-                .init(title: "Wasseranschluss geprüft", details: "", isRequired: false, contributesToReadiness: false),
-                .init(title: "Markise / Fenster sicher", details: "", isRequired: false, contributesToReadiness: false)
+                .init(title: "Stellplatz einigermaßen eben?", details: "Keile eingepackt, falls nötig?", isRequired: true, contributesToReadiness: false),
+                .init(title: "Strom angeschlossen?", details: "", isRequired: false, contributesToReadiness: false),
+                .init(title: "Wasseranschluss passt?", details: "", isRequired: false, contributesToReadiness: false),
+                .init(title: "Markise und Fenster gesichert?", details: "", isRequired: false, contributesToReadiness: false)
             ]
         case .shortStop:
             [
-                .init(title: "Schneller Sicherheitscheck", details: "Fenster, Gas, Ladung", isRequired: true, contributesToReadiness: true),
-                .init(title: "Parken für Weiterfahrt vorbereitet", details: "", isRequired: true, contributesToReadiness: false)
+                .init(title: "Kurzer Sicherheitscheck", details: "Fenster, Gas, Ladung", isRequired: true, contributesToReadiness: true),
+                .init(title: "Bereit zum Weiterfahren?", details: "", isRequired: true, contributesToReadiness: false)
             ]
         case .storage:
             [
-                .init(title: "Batterie-Ladezustand geprüft", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Perishables entfernt", details: "", isRequired: true, contributesToReadiness: false),
-                .init(title: "Belüftung / Feuchtigkeit geprüft", details: "", isRequired: true, contributesToReadiness: true)
+                .init(title: "Batterie geladen?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Verderbliches raus?", details: "", isRequired: true, contributesToReadiness: false),
+                .init(title: "Lüftung und Feuchtigkeit gecheckt?", details: "", isRequired: true, contributesToReadiness: true)
             ]
         case .winterize:
             [
-                .init(title: "Frischwasser abgelassen", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Boiler entleert", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Leitungen geöffnet", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Pumpe ausgeschaltet", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Grauwasser leer", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Toilette gereinigt", details: "", isRequired: false, contributesToReadiness: false),
-                .init(title: "Batterie im Lagermodus", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Gasflaschen geschlossen", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Verderbliches entfernt", details: "", isRequired: true, contributesToReadiness: false),
-                .init(title: "Belüftung / Feuchtigkeit geprüft", details: "", isRequired: true, contributesToReadiness: true)
+                .init(title: "Frischwasser abgelassen?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Boiler leer?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Leitungen offen?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Pumpe aus?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Grauwasser abgelassen?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Toilette sauber?", details: "", isRequired: false, contributesToReadiness: false),
+                .init(title: "Batterie im Lagermodus?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Gasflaschen zu?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Verderbliches raus?", details: "", isRequired: true, contributesToReadiness: false),
+                .init(title: "Lüftung und Feuchtigkeit gecheckt?", details: "", isRequired: true, contributesToReadiness: true)
             ]
         case .deWinterize:
             [
-                .init(title: "Wasseranlage auf Dichtheit geprüft", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Boiler geschlossen", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Pumpe aktiviert", details: "", isRequired: true, contributesToReadiness: true),
-                .init(title: "Gasversorgung getestet", details: "", isRequired: true, contributesToReadiness: true)
+                .init(title: "Wasseranlage dicht?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Boiler geschlossen?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Pumpe läuft?", details: "", isRequired: true, contributesToReadiness: true),
+                .init(title: "Gas getestet?", details: "", isRequired: true, contributesToReadiness: true)
             ]
         }
     }

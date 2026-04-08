@@ -127,7 +127,7 @@ enum ReadinessEngine {
         }
 
         return DashboardSnapshot(
-            vehicleName: vehicle?.name ?? "Kein Fahrzeug",
+            vehicleName: vehicle?.name ?? "Noch kein Camper",
             nextTripTitle: nextTrip?.title ?? "Keine Reise geplant",
             overallStatus: overallStatus,
             overallHeadline: overallHeadline,
@@ -143,9 +143,9 @@ enum ReadinessEngine {
                 status: .yellow,
                 estimatedGrossWeightKg: nil,
                 remainingMarginKg: nil,
-                summary: "Gewicht unvollständig",
+                summary: "Gewicht noch nicht komplett",
                 warnings: ["zGG oder Leergewicht fehlt. Darum ist die Einschätzung noch ungenau."],
-                nextAction: "zGG und gemessenes Leergewicht nachtragen",
+                nextAction: "Trag bei Gelegenheit zGG und Leergewicht nach — dann rechnet die App genauer.",
                 contributors: (input.packingItems + input.passengers).sorted(by: { $0.weightKg > $1.weightKg }),
                 axleRisk: .elevated,
                 waterComparisonDeltaKg: max((input.freshWaterCapacityL ?? 0) - input.freshWaterLiters, 0)
@@ -228,11 +228,11 @@ enum ReadinessEngine {
         let relevantDocs = documents.filter(\.isStatusRelevant)
         guard !relevantDocs.isEmpty else {
             return ReadinessDimensionResult(
-                title: "Gas & Dokumente",
+                title: "Dokumente & Fristen",
                 status: .yellow,
-                summary: "Noch keine Fristen hinterlegt",
-                reasons: ["Du kannst Fristen und Nachweise selbst anpassen."],
-                nextAction: "Mindestens HU, Versicherung und Gasprüfung anlegen"
+                summary: "Noch keine Fristen angelegt",
+                reasons: ["Du kannst Fristen und Nachweise jederzeit selbst pflegen."],
+                nextAction: "Am besten startest du mit HU, Versicherung und Gasprüfung."
             )
         }
 
@@ -248,40 +248,40 @@ enum ReadinessEngine {
 
         if let expired = expiredBlocking.first {
             return ReadinessDimensionResult(
-                title: "Gas & Dokumente",
+                title: "Dokumente & Fristen",
                 status: .red,
-                summary: "\(expired.title) abgelaufen",
+                summary: "\(expired.title) ist abgelaufen",
                 reasons: ["\(expired.title) ist seit \(expired.validUntil?.shortDateString() ?? "") abgelaufen."],
-                nextAction: "Nachweis erneuern oder Termin planen"
+                nextAction: "Nachweis erneuern oder Termin einplanen"
             )
         }
 
         if let nextDue = upcoming.first, nextDue.1 <= 30 {
             return ReadinessDimensionResult(
-                title: "Gas & Dokumente",
+                title: "Dokumente & Fristen",
                 status: .yellow,
                 summary: "\(nextDue.0.title) fällig bis \(nextDue.0.validUntil?.monthYearString() ?? "")",
-                reasons: ["Frist endet in \(max(nextDue.1, 0)) Tagen."],
-                nextAction: "Dokument prüfen und Erinnerung bestätigen"
+                reasons: ["Noch \(max(nextDue.1, 0)) Tage — dann wird’s fällig."],
+                nextAction: "Am besten jetzt kurz prüfen."
             )
         }
 
         if let farthest = upcoming.first {
             return ReadinessDimensionResult(
-                title: "Gas & Dokumente",
+                title: "Dokumente & Fristen",
                 status: .green,
                 summary: "\(farthest.0.title) gültig bis \(farthest.0.validUntil?.monthYearString() ?? "")",
-                reasons: ["Prüfe wichtige Fristen trotzdem regelmäßig selbst."],
-                nextAction: "Nachweise aktuell halten"
+                reasons: ["Trotzdem ab und zu selbst reinschauen — sicher ist sicher."],
+                nextAction: "Nachweise im Blick behalten"
             )
         }
 
         return ReadinessDimensionResult(
-            title: "Gas & Dokumente",
+            title: "Dokumente & Fristen",
             status: .yellow,
-            summary: "Laufzeit unklar",
+            summary: "Laufzeit noch unklar",
             reasons: ["Mindestens ein Nachweis hat kein Gültig-bis-Datum."],
-            nextAction: "Laufzeiten ergänzen"
+            nextAction: "Ablaufdaten nachtragen — dann erinnert dich die App rechtzeitig."
         )
     }
 
@@ -294,9 +294,9 @@ enum ReadinessEngine {
             return ReadinessDimensionResult(
                 title: "Wartung",
                 status: .yellow,
-                summary: "Kein Wartungsverlauf vorhanden",
-                reasons: ["Ohne Einträge können Fälligkeiten nicht bewertet werden."],
-                nextAction: "Letzte Services eintragen"
+                summary: "Dein Camper hat noch keine Werkstatt-Geschichte.",
+                reasons: ["Ohne Einträge kann die App keine Fälligkeiten einschätzen."],
+                nextAction: "Trag den letzten Service ein — dann behältst du den Überblick."
             )
         }
 
@@ -310,9 +310,9 @@ enum ReadinessEngine {
             return ReadinessDimensionResult(
                 title: "Wartung",
                 status: .red,
-                summary: "\(overdue.title) überfällig",
-                reasons: ["Nächster Service wurde überschritten."],
-                nextAction: "Werkstatttermin oder Eigeneintrag planen"
+                summary: "\(overdue.title) — überfällig",
+                reasons: ["Der nächste Termin ist schon vorbei."],
+                nextAction: "Am besten bald einen Termin einplanen."
             )
         }
 
@@ -326,9 +326,9 @@ enum ReadinessEngine {
             return ReadinessDimensionResult(
                 title: "Wartung",
                 status: .yellow,
-                summary: "\(soon.0.title) in \(max(soon.1, 0)) Tagen fällig",
-                reasons: ["Dieser Termin rückt näher."],
-                nextAction: "Termin vormerken"
+                summary: "\(soon.0.title) steht in \(max(soon.1, 0)) Tagen an",
+                reasons: ["Rückt langsam näher."],
+                nextAction: "Vielleicht schon mal vormerken."
             )
         }
 
@@ -336,9 +336,9 @@ enum ReadinessEngine {
         return ReadinessDimensionResult(
             title: "Wartung",
             status: .green,
-            summary: recent.map { "Letzter Eintrag: \($0.title)" } ?? "Wartung im Plan",
-            reasons: ["Keine überfälligen Services erkannt."],
-            nextAction: "Nächste Fristen im Blick behalten"
+            summary: recent.map { "Zuletzt: \($0.title)" } ?? "Wartung läuft nach Plan",
+            reasons: ["Keine überfälligen Services — sehr gut."],
+            nextAction: "Einfach weiter im Blick behalten."
         )
     }
 
@@ -354,11 +354,11 @@ enum ReadinessEngine {
 
         guard let latest = relevantChecklists.first else {
             return ReadinessDimensionResult(
-                title: "Wasser / Winter",
+                title: "Wasser & Saison",
                 status: .yellow,
-                summary: "Kein Modus aktiv",
-                reasons: ["Du hast noch keine passende Checkliste gestartet."],
-                nextAction: "Passenden Modus starten"
+                summary: "Noch kein Modus gestartet",
+                reasons: ["Starte eine passende Checkliste — zum Beispiel für die Abfahrt oder den Winterschlaf."],
+                nextAction: "Modus auswählen"
             )
         }
 
@@ -369,30 +369,30 @@ enum ReadinessEngine {
 
         if latest.mode == .departure && !openRequired.isEmpty {
             return ReadinessDimensionResult(
-                title: "Wasser / Winter",
+                title: "Wasser & Saison",
                 status: .yellow,
-                summary: "Abfahrtscheck unvollständig",
-                reasons: openRequired.prefix(2).map { "\($0.title) noch offen." },
-                nextAction: "Vor Abfahrt prüfen"
+                summary: "Abfahrts-Check noch offen",
+                reasons: openRequired.prefix(2).map { "\($0.title) ist noch offen." },
+                nextAction: "Vor der Fahrt kurz checken"
             )
         }
 
         if latest.mode == .winterize && isColdSeason && !openRequired.isEmpty {
             return ReadinessDimensionResult(
-                title: "Wasser / Winter",
+                title: "Wasser & Saison",
                 status: .yellow,
-                summary: "Wintermodus unvollständig",
-                reasons: openRequired.prefix(2).map { "\($0.title) noch offen." },
-                nextAction: "Wasser- und Gasanlage sichern"
+                summary: "Winterschlaf noch nicht komplett",
+                reasons: openRequired.prefix(2).map { "\($0.title) ist noch offen." },
+                nextAction: "Wasser und Gas noch absichern."
             )
         }
 
         return ReadinessDimensionResult(
-            title: "Wasser / Winter",
+            title: "Wasser & Saison",
             status: .green,
-            summary: "\(latest.mode.title) komplett",
-                reasons: ["Die letzte passende Checkliste ist erledigt."],
-            nextAction: "Status bei Wetterumschwung neu prüfen"
+            summary: "\(latest.mode.title) — erledigt",
+                reasons: ["Alles abgehakt — gut gemacht."],
+            nextAction: "Bei Wetterumschwung am besten nochmal prüfen."
         )
     }
 
@@ -408,9 +408,9 @@ enum ReadinessEngine {
             return ReadinessDimensionResult(
                 title: "Kosten",
                 status: .yellow,
-                summary: "Keine aktive Reise",
-                reasons: ["Fixkosten \(annualFixedTotal.euroString) pro Jahr erfasst."],
-                nextAction: "Reise anlegen, um Kosten für unterwegs festzuhalten"
+                summary: "Gerade keine Reise aktiv",
+                reasons: ["Fixkosten: \(annualFixedTotal.euroString) pro Jahr."],
+                nextAction: "Leg eine Reise an, um unterwegs Kosten zuzuordnen."
             )
         }
 
@@ -418,18 +418,18 @@ enum ReadinessEngine {
             return ReadinessDimensionResult(
                 title: "Kosten",
                 status: .yellow,
-                summary: "Noch keine Reisekosten",
-                reasons: ["Fixkosten \(annualFixedTotal.euroString) pro Jahr hinterlegt."],
-                nextAction: "Tankung, Maut oder Stellplatz erfassen"
+                summary: "Noch keine Reisekosten erfasst",
+                reasons: ["Fixkosten: \(annualFixedTotal.euroString) pro Jahr."],
+                nextAction: "Tanken, Maut oder Stellplatz — einfach laufend eintragen."
             )
         }
 
         return ReadinessDimensionResult(
             title: "Kosten",
             status: .green,
-            summary: "Diese Reise: \(tripTotal.euroString)",
-            reasons: ["Fixkosten hochgerechnet: \(annualFixedTotal.euroString) pro Jahr."],
-            nextAction: "Kosten pro 100 km beobachten"
+            summary: "Diese Reise bisher: \(tripTotal.euroString)",
+            reasons: ["Fixkosten aufs Jahr gerechnet: \(annualFixedTotal.euroString)."],
+            nextAction: "Kosten pro 100 km im Auge behalten."
         )
     }
 

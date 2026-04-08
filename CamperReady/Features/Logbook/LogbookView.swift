@@ -59,9 +59,9 @@ struct LogbookView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 FeatureHeader(
-                    eyebrow: "Reiseverlauf",
-                    title: "Das Logbuch.",
-                    subtitle: "Wartung, Kosten und Orte pro Fahrzeug."
+                    eyebrow: "Dein Reiseverlauf",
+                    title: "Dein Logbuch.",
+                    subtitle: "Wartung, Orte und Kosten — alles an einem Ort."
                 )
                 .opacity(hasAppeared ? 1 : 0.01)
                 .offset(y: hasAppeared ? 0 : 10)
@@ -69,14 +69,14 @@ struct LogbookView: View {
                 CamperSceneCard(
                     mood: .logbook,
                     eyebrow: "Unterwegs",
-                    title: "Wartung, Orte und Notizen an einem Ort.",
-                    subtitle: "Jeder Eintrag bleibt sauber beim richtigen Fahrzeug und fühlt sich wie ein echtes Reisetagebuch an.",
+                    title: "Werkstatt, Lieblingsplätze und Notizen gesammelt.",
+                    subtitle: "Jeder Eintrag bleibt beim richtigen Camper — wie ein echtes Bordbuch.",
                     badge: "Archiv"
                 )
                 .opacity(hasAppeared ? 1 : 0.01)
                 .offset(y: hasAppeared ? 0 : 12)
 
-                summaryStats(presentation.stats, emphasisTitle: "Bereitschaft")
+                summaryStats(presentation.stats, emphasisTitle: "Status")
 
                 AlpineSurface(role: .section) {
                     Picker("Bereich", selection: $selectedSection) {
@@ -89,7 +89,7 @@ struct LogbookView: View {
 
                 switch selectedSection {
                 case .maintenance:
-                    logbookSection(title: "Wartung", subtitle: "Einträge, Kosten und nächste Fälligkeiten.") {
+                    logbookSection(title: "Wartung", subtitle: "Einträge, Kosten und was als Nächstes ansteht.") {
                         VStack(alignment: .leading, spacing: 12) {
                             if vehicle != nil {
                                 Button("Wartung eintragen") {
@@ -99,7 +99,7 @@ struct LogbookView: View {
                             }
 
                             if vehicleMaintenance.isEmpty {
-                                Text("Du hast noch keine Wartung eingetragen.")
+                                Text("Noch keine Wartung eingetragen — sobald du den ersten Service festhaltst, baut sich die Historie von selbst auf.")
                                     .foregroundStyle(AppTheme.mutedInk)
                             } else {
                                 ForEach(vehicleMaintenance) { entry in
@@ -119,21 +119,21 @@ struct LogbookView: View {
                     }
 
                 case .documents:
-                    logbookSection(title: "Dokumente & Fristen", subtitle: "Nachweise, Fristen und Erinnerungen für dieses Fahrzeug.") {
+                    logbookSection(title: "Dokumente & Fristen", subtitle: "Nachweise und Fristen für deinen Camper — mit Erinnerung, wenn’s soweit ist.") {
                         VStack(alignment: .leading, spacing: 12) {
                             if vehicle != nil {
-                                Button("Dokument hinzufügen") {
+                                Button("Neues Dokument") {
                                     documentFormContext = DocumentFormContext(document: nil)
                                 }
                                 .buttonStyle(.borderedProminent)
                             }
 
-                            Text("Hinweis: Die Fristen sind persönliche Erinnerungen. Bitte prüfe bei Bedarf selbst die aktuellen Regeln.")
+                            Text("Die Fristen sind deine persönlichen Erinnerungen. Im Zweifel gelten natürlich immer die offiziellen Vorgaben.")
                                 .font(.footnote)
                                 .foregroundStyle(AppTheme.mutedInk)
 
                             if vehicleDocuments.isEmpty {
-                                Text("Du hast noch keine Dokumente oder Fristen erfasst.")
+                                Text("Noch keine Dokumente oder Fristen hinterlegt.")
                                     .foregroundStyle(AppTheme.mutedInk)
                             } else {
                                 ForEach(vehicleDocuments) { document in
@@ -153,10 +153,10 @@ struct LogbookView: View {
                     }
 
                 case .places:
-                    logbookSection(title: "Eigene Platznotizen", subtitle: "Orte, Koordinaten und eigene Hinweise.") {
+                    logbookSection(title: "Deine Lieblingsplätze", subtitle: "Stellplätze, Wasserstellen und andere Entdeckungen.") {
                         VStack(alignment: .leading, spacing: 12) {
                             if vehicle != nil {
-                                Button("Ort hinzufügen") {
+                                Button("Ort merken") {
                                     placeFormContext = PlaceFormContext(place: nil)
                                 }
                                 .buttonStyle(.borderedProminent)
@@ -166,7 +166,7 @@ struct LogbookView: View {
                                 ContentUnavailableView(
                                     "Noch keine Orte gespeichert",
                                     systemImage: "map",
-                                    description: Text("Speichere hier deine eigenen Platznotizen und Erfahrungen.")
+                                    description: Text("Halt hier fest, was du entdeckt hast — für das nächste Mal.")
                                 )
                             } else {
                                 Map(initialPosition: .region(region(for: vehiclePlaces))) {
@@ -331,7 +331,7 @@ private struct MaintenanceRow: View {
             }
 
             if let dueDate = entry.nextDueDate {
-                Label("Nächste Fälligkeit: \(dueDate.shortDateString())", systemImage: "calendar.badge.clock")
+                Label("Wann steht’s wieder an?: \(dueDate.shortDateString())", systemImage: "calendar.badge.clock")
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(AppTheme.mutedInk)
             }
@@ -415,7 +415,7 @@ private struct PlaceRow: View {
                 }
                 Spacer()
                 if let rating = place.personalRating {
-                    Text("\(rating)/5")
+                    Text("\(rating) von 5")
                         .font(.caption.weight(.bold))
                         .foregroundStyle(AppTheme.ink)
                         .padding(.horizontal, 10)
@@ -431,7 +431,7 @@ private struct PlaceRow: View {
             }
 
             if let lastUsed = place.dateLastUsed {
-                Text("Zuletzt genutzt: \(lastUsed.shortDateString())")
+                Text("Zuletzt dort: \(lastUsed.shortDateString())")
                     .font(.caption)
                     .foregroundStyle(AppTheme.mutedInk)
             }
@@ -606,7 +606,7 @@ private struct MaintenanceEntryFormView: View {
                         Text("Eintrag")
                     }
 
-                    Section("Zusätzliche Angaben") {
+                    Section("Noch ein paar Details") {
                         Toggle("Kilometerstand speichern", isOn: $draft.hasOdometer.animation())
                         if draft.hasOdometer {
                             TextField("Kilometerstand", value: $draft.odometerKm, format: .number)
@@ -615,12 +615,12 @@ private struct MaintenanceEntryFormView: View {
 
                         Toggle("Kosten speichern", isOn: $draft.hasCost.animation())
                         if draft.hasCost {
-                            TextField("Kosten in EUR", value: $draft.costEUR, format: .number)
+                            TextField("Kosten in €", value: $draft.costEUR, format: .number)
                                 .keyboardType(.decimalPad)
                         }
                     }
 
-                    Section("Nächste Fälligkeit") {
+                    Section("Wann steht’s wieder an?") {
                         Toggle("Nächstes Datum speichern", isOn: $draft.hasNextDueDate.animation())
                         if draft.hasNextDueDate {
                             DatePicker("Nächstes Datum", selection: $draft.nextDueDate, displayedComponents: .date)
@@ -651,27 +651,27 @@ private struct MaintenanceEntryFormView: View {
                                 Label("Wartung löschen", systemImage: "trash")
                             }
                         } footer: {
-                            Text("Nutze das nur, wenn der Eintrag wirklich weg soll.")
+                            Text("Nur löschen, wenn der Eintrag wirklich weg soll.")
                         }
                     }
                 }
             }
             .navigationTitle(existingEntry == nil ? "Wartung eintragen" : "Wartung bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Wartung wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Wartung wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deleteEntry()
                 }
                 Button("Abbrechen", role: .cancel) {}
             } message: {
-                Text("Der Eintrag wird aus deinem Logbuch entfernt.")
+                Text("Der Eintrag verschwindet aus deinem Logbuch.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingEntry == nil ? "Sichern" : "Fertig") {
+                    Button(existingEntry == nil ? "Speichern" : "Fertig") {
                         saveEntry()
                     }
                     .disabled(!draft.canSave)
@@ -747,7 +747,7 @@ private struct DocumentRecordFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Logbuch",
-                title: existingDocument == nil ? "Dokument hinzufügen" : "Dokument anpassen",
+                title: existingDocument == nil ? "Neues Dokument" : "Dokument anpassen",
                 subtitle: SheetCopy.documentSubtitle,
                 systemImage: "doc.text.fill"
             ) {
@@ -759,7 +759,7 @@ private struct DocumentRecordFormView: View {
                                 Text(category.title).tag(category)
                             }
                         }
-                        Picker("Land", selection: $draft.country) {
+                        Picker("Zulassungsland", selection: $draft.country) {
                             ForEach(CountryPreset.allCases) { country in
                                 Text(country.title).tag(country)
                             }
@@ -768,7 +768,7 @@ private struct DocumentRecordFormView: View {
                         Text("Dokument")
                     }
 
-                    Section("Frist") {
+                    Section("Gültig bis") {
                         Toggle("Gültig-bis-Datum speichern", isOn: $draft.hasValidUntil.animation())
                         if draft.hasValidUntil {
                             DatePicker("Gültig bis", selection: $draft.validUntil, displayedComponents: .date)
@@ -803,27 +803,27 @@ private struct DocumentRecordFormView: View {
                                 Label("Dokument löschen", systemImage: "trash")
                             }
                         } footer: {
-                            Text("Die gespeicherte Frist und der Nachweis werden entfernt.")
+                            Text("Frist und Nachweis werden entfernt.")
                         }
                     }
                 }
             }
-            .navigationTitle(existingDocument == nil ? "Dokument hinzufügen" : "Dokument bearbeiten")
+            .navigationTitle(existingDocument == nil ? "Neues Dokument" : "Dokument bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Dokument wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Dokument wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deleteDocument()
                 }
                 Button("Abbrechen", role: .cancel) {}
             } message: {
-                Text("Dieses Dokument verschwindet aus deinem Status und aus den Erinnerungen.")
+                Text("Das Dokument verschwindet aus deinem Status und den Erinnerungen.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingDocument == nil ? "Sichern" : "Fertig") {
+                    Button(existingDocument == nil ? "Speichern" : "Fertig") {
                         saveDocument()
                     }
                     .disabled(!draft.canSave)
@@ -923,7 +923,7 @@ private struct PlaceNoteFormView: View {
             ) {
                 Form {
                     Section {
-                        TextField("Name des Ortes", text: $draft.title)
+                        TextField("Wie heißt der Ort?", text: $draft.title)
                         Picker("Art", selection: $draft.type) {
                             ForEach(PlaceType.allCases) { type in
                                 Text(type.title).tag(type)
@@ -932,7 +932,7 @@ private struct PlaceNoteFormView: View {
                     } header: {
                         Text("Ort")
                     } footer: {
-                        Text("Zum Beispiel ein Stellplatz, eine Entsorgung oder eine gute Wasserstelle.")
+                        Text("Stellplatz, Entsorgung, Wasserstelle — oder einfach ein schöner Fleck.")
                     }
 
                     Section("Koordinaten") {
@@ -940,12 +940,12 @@ private struct PlaceNoteFormView: View {
                             .keyboardType(.decimalPad)
                         TextField("Längengrad", value: $draft.longitude, format: .number.precision(.fractionLength(4)))
                             .keyboardType(.decimalPad)
-                        Text("Wenn du die Werte aus Karten oder Apple Maps einfügst, reicht das schon.")
+                        Text("Einfach aus Apple Maps oder Google Maps kopieren — das reicht.")
                             .font(.footnote)
                             .foregroundStyle(AppTheme.mutedInk)
                     }
 
-                    Section("Eigene Notizen") {
+                    Section("Deine Notizen") {
                         TextEditor(text: $draft.notes)
                             .frame(minHeight: 120)
                     }
@@ -955,15 +955,15 @@ private struct PlaceNoteFormView: View {
                         helperText: "Hier kannst du Fotos oder einen Beleg für diesen Ort hinterlegen."
                     )
 
-                    Section("Zusätzliche Angaben") {
+                    Section("Noch ein paar Details") {
                         Toggle("Bewertung speichern", isOn: hasRatingBinding)
                         if draft.personalRating != nil {
-                            Stepper("Bewertung: \(draft.normalizedRating ?? 4)/5", value: ratingBinding, in: 1...5)
+                            Stepper("Deine Bewertung: \(draft.normalizedRating ?? 4) von 5", value: ratingBinding, in: 1...5)
                         }
 
                         Toggle("Kosten speichern", isOn: hasCostBinding)
                         if draft.costEUR != nil {
-                            TextField("Kosten in EUR", value: costBinding, format: .number)
+                            TextField("Kosten in €", value: costBinding, format: .number)
                                 .keyboardType(.decimalPad)
                         }
 
@@ -981,15 +981,15 @@ private struct PlaceNoteFormView: View {
                                 Label("Ort löschen", systemImage: "trash")
                             }
                         } footer: {
-                            Text("Die Notiz und die Kartenmarkierung werden entfernt.")
+                            Text("Notiz und Kartenpin werden entfernt.")
                         }
                     }
                 }
             }
-            .navigationTitle(existingPlace == nil ? "Ort hinzufügen" : "Ort bearbeiten")
+            .navigationTitle(existingPlace == nil ? "Ort merken" : "Ort bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Ort wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                Button("Löschen", role: .destructive) {
+            .alert("Ort wirklich entfernen?", isPresented: $showDeleteConfirmation) {
+                Button("Entfernen", role: .destructive) {
                     deletePlace()
                 }
                 Button("Abbrechen", role: .cancel) {}
@@ -1001,7 +1001,7 @@ private struct PlaceNoteFormView: View {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingPlace == nil ? "Sichern" : "Fertig") {
+                    Button(existingPlace == nil ? "Speichern" : "Fertig") {
                         savePlace()
                     }
                     .disabled(!draft.canSave)

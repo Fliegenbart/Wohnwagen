@@ -37,8 +37,8 @@ enum ReminderPlanner {
                 guard let fireDate = Calendar.current.date(byAdding: .day, value: -days, to: validUntil), fireDate > now else { return nil }
                 return ReminderPlan(
                     identifier: "document.\(document.id.uuidString).\(days)",
-                    title: "Frist im Blick behalten",
-                    body: "\(document.title) läuft bald ab. Prüfe den Nachweis rechtzeitig.",
+                    title: "Frist rückt näher",
+                    body: "\(document.title) läuft bald ab — am besten jetzt kurz prüfen.",
                     fireDate: fireDate
                 )
             }
@@ -55,8 +55,8 @@ enum ReminderPlanner {
                     plans.append(
                         ReminderPlan(
                             identifier: "maintenance.date.\(entry.id.uuidString)",
-                            title: "Wartung rückt näher",
-                            body: "\(entry.title) ist bald fällig. Plane den nächsten Schritt rechtzeitig.",
+                            title: "Wartung steht bald an",
+                            body: "\(entry.title) steht bald an. Vielleicht schon mal einen Termin einplanen?",
                             fireDate: nextDueDate.addingTimeInterval(-7 * 24 * 60 * 60)
                         )
                     )
@@ -67,8 +67,8 @@ enum ReminderPlanner {
                 plans.append(
                     ReminderPlan(
                         identifier: "maintenance.km.\(entry.id.uuidString)",
-                        title: "Kilometerstand prüfen",
-                        body: "\(entry.title) ist bald fällig. Vergleiche den aktuellen Kilometerstand mit deinem Zielwert.",
+                        title: "Kilometerstand checken",
+                        body: "\(entry.title) rückt näher — wirf mal einen Blick auf deinen Kilometerstand.",
                         fireDate: now.addingTimeInterval(60)
                     )
                 )
@@ -99,7 +99,7 @@ enum ReminderPlanner {
             return ReminderPlan(
                 identifier: "departure.\(trip.id.uuidString)",
                 title: "Vor der Abfahrt noch offen",
-                body: "Deine Abfahrtscheckliste ist noch nicht komplett. Prüfe die offenen Punkte vor dem Losfahren.",
+                body: "Deine Abfahrts-Checkliste ist noch nicht ganz durch. Kurz reinschauen, bevor’s losgeht?",
                 fireDate: reminderDate
             )
         }
@@ -109,11 +109,11 @@ enum ReminderPlanner {
         let month = Calendar.current.component(.month, from: now)
 
         if [10, 11, 12].contains(month) {
-            return seasonalPlan(for: .winterize, title: "Einwintern prüfen", body: "Prüfe Wasser, Gas und Lagerzustand, bevor es richtig kalt wird.", checklists: checklists, items: items, now: now)
+            return seasonalPlan(for: .winterize, title: "Zeit für den Winterschlaf?", body: "Prüf Wasser, Gas und Lagerzustand, bevor es richtig kalt wird.", checklists: checklists, items: items, now: now)
         }
 
         if [3, 4].contains(month) {
-            return seasonalPlan(for: .deWinterize, title: "Auswintern prüfen", body: "Prüfe Wasseranlage und Gasversorgung, bevor die Saison startet.", checklists: checklists, items: items, now: now)
+            return seasonalPlan(for: .deWinterize, title: "Frühjahrsstart steht an", body: "Wasseranlage und Gas checken — die Saison ruft!", checklists: checklists, items: items, now: now)
         }
 
         return []

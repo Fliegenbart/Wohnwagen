@@ -32,9 +32,9 @@ struct GarageView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         FeatureHeader(
-                            eyebrow: "Fahrzeugwahl",
+                            eyebrow: "Dein Camper, dein Startpunkt",
                             title: "Garage",
-                            subtitle: "Wähle dein aktives Fahrzeug und pflege die wichtigsten Basisdaten ohne Umwege."
+                            subtitle: "Wähl deinen Camper und halt die Basisdaten aktuell."
                         )
                         .padding(.top, 8)
 
@@ -72,32 +72,32 @@ struct GarageView: View {
                             if let activeVehicle {
                                 GarageDetailSection(
                                     title: "Basisdaten",
-                                    subtitle: "Diese Angaben nutzt die App für Auswahl, Dokumente und Einordnung."
+                                    subtitle: "Damit kennt die App deinen Camper."
                                 ) {
-                                    GarageInfoRow(label: "Fahrzeug", value: activeVehicle.name)
+                                    GarageInfoRow(label: "Name", value: activeVehicle.name)
                                     GarageInfoRow(label: "Marke", value: joinedValue(activeVehicle.brand, activeVehicle.model))
                                     GarageInfoRow(label: "Kennzeichen", value: activeVehicle.licensePlate.fallback("Noch offen"))
-                                    GarageInfoRow(label: "Land", value: activeVehicle.country.title)
-                                    GarageInfoRow(label: "Typ", value: activeVehicle.vehicleKind.title)
+                                    GarageInfoRow(label: "Zulassungsland", value: activeVehicle.country.title)
+                                    GarageInfoRow(label: "Fahrzeugtyp", value: activeVehicle.vehicleKind.title)
                                 }
 
                                 GarageDetailSection(
-                                    title: "Kapazitäten & Gewicht",
-                                    subtitle: "So rechnet die App bei Gewicht, Wasser und Gas mit den Werten deines Campers."
+                                    title: "Gewicht & Tanks",
+                                    subtitle: "Mit diesen Werten rechnet die App bei Gewicht, Wasser und Gas."
                                 ) {
-                                    GarageInfoRow(label: "zGG", value: numberValue(activeVehicle.gvwrKg, suffix: "kg"))
-                                    GarageInfoRow(label: "Leergewicht", value: numberValue(activeVehicle.preferredBaseWeightKg, suffix: "kg"))
+                                    GarageInfoRow(label: "Zulässiges Gesamtgewicht", value: numberValue(activeVehicle.gvwrKg, suffix: "kg"))
+                                    GarageInfoRow(label: "Leergewicht (gemessen)", value: numberValue(activeVehicle.preferredBaseWeightKg, suffix: "kg"))
                                     GarageInfoRow(label: "Frischwasser", value: numberValue(activeVehicle.freshWaterCapacityL, suffix: "l"))
                                     GarageInfoRow(label: "Grauwasser", value: numberValue(activeVehicle.greyWaterCapacityL, suffix: "l"))
                                     GarageInfoRow(label: "Gas", value: gasSummary(for: activeVehicle))
                                 }
 
                                 GarageDetailSection(
-                                    title: "Service",
-                                    subtitle: "Damit Wartung, Fristen und Notizen beim richtigen Fahrzeug bleiben."
+                                    title: "Service-Intervalle",
+                                    subtitle: "Damit Wartung und Fristen immer zum richtigen Camper gehören."
                                 ) {
-                                    GarageInfoRow(label: "Intervall Zeit", value: activeVehicle.serviceIntervalMonths.map { "\($0) Monate" } ?? "Nicht hinterlegt")
-                                    GarageInfoRow(label: "Intervall Kilometer", value: activeVehicle.serviceIntervalKm.map { "\($0.formatted()) km" } ?? "Nicht hinterlegt")
+                                    GarageInfoRow(label: "Service alle … Monate", value: activeVehicle.serviceIntervalMonths.map { "\($0) Monate" } ?? "Noch offen")
+                                    GarageInfoRow(label: "Service alle … km", value: activeVehicle.serviceIntervalKm.map { "\($0.formatted()) km" } ?? "Noch offen")
 
                                     if !activeVehicle.notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                         VStack(alignment: .leading, spacing: 6) {
@@ -138,7 +138,7 @@ struct GarageView: View {
     }
 
     private func numberValue(_ value: Double?, suffix: String) -> String {
-        guard let value else { return "Nicht hinterlegt" }
+        guard let value else { return "Noch offen" }
         return "\(Int(value.rounded())) \(suffix)"
     }
 
@@ -149,7 +149,7 @@ struct GarageView: View {
 
     private func gasSummary(for vehicle: VehicleProfile) -> String {
         guard let count = vehicle.gasBottleCount, count > 0 else {
-            return "Nicht hinterlegt"
+            return "Noch offen"
         }
 
         let size = vehicle.gasBottleSizeKg.map { " à \(Int($0.rounded())) kg" } ?? ""
@@ -178,17 +178,17 @@ struct VehicleSelectionView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         FeatureHeader(
-                            eyebrow: "Fahrzeugwahl",
+                            eyebrow: "Dein Camper, dein Startpunkt",
                             title: "Deine Camper.",
-                            subtitle: "Wähle das Fahrzeug, das du gerade fährst. Die Daten bleiben getrennt."
+                            subtitle: "Wähl den Camper, mit dem du gerade unterwegs bist."
                         )
                         .padding(.top, 20)
 
                         CamperSceneCard(
                             mood: .garage,
                             eyebrow: "Garage",
-                            title: "Ein Camper, viele Erinnerungen.",
-                            subtitle: "Die App merkt sich den zuletzt aktiven Camper und hält die Daten sauber getrennt.",
+                            title: "Ein Camper, viele Geschichten.",
+                            subtitle: "CamperReady merkt sich, wer zuletzt gefahren ist — und hält alles getrennt.",
                             badge: "Wechseln"
                         )
 
@@ -211,7 +211,7 @@ struct VehicleSelectionView: View {
                                 }
                             }
 
-                            Button("Neues Fahrzeug anlegen") {
+                            Button("Neuen Camper anlegen") {
                                 editorContext = VehicleEditorContext(vehicle: nil)
                             }
                             .buttonStyle(.bordered)
@@ -241,17 +241,17 @@ private struct GarageEmptyState: View {
     var body: some View {
         AlpineSurface(role: .section) {
             VStack(alignment: .leading, spacing: 14) {
-                Text("Noch kein Fahrzeug angelegt")
+                Text("Noch kein Camper angelegt")
                     .font(.system(size: 22, weight: .semibold, design: .default))
                     .tracking(-0.3)
                     .foregroundStyle(AppTheme.ink)
 
-                Text("Lege zuerst deinen Camper an. Danach merkt sich die App automatisch, welches Fahrzeug zuletzt aktiv war.")
+                Text("Leg deinen ersten Camper an — danach läuft alles automatisch.")
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.mutedInk)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Button("Fahrzeug anlegen", action: onCreateVehicle)
+                Button("Camper anlegen", action: onCreateVehicle)
                     .buttonStyle(.borderedProminent)
             }
         }
@@ -268,7 +268,7 @@ private struct GarageCurrentVehicleCard: View {
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Aktives Fahrzeug")
+                        Text("Aktiver Camper")
                             .font(.caption.weight(.bold))
                             .textCase(.uppercase)
                             .tracking(1.1)
@@ -291,7 +291,7 @@ private struct GarageCurrentVehicleCard: View {
                 HStack(spacing: 10) {
                     GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
                     GarageTag(title: vehicle.country.title, isHighlighted: false)
-                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
                 }
 
                 HStack(spacing: 12) {
@@ -300,7 +300,7 @@ private struct GarageCurrentVehicleCard: View {
                         .tint(AppTheme.sand)
                         .foregroundStyle(AppTheme.ink)
 
-                    Button("Neues Fahrzeug", action: onAddVehicle)
+                    Button("Neuer Camper", action: onAddVehicle)
                         .buttonStyle(.bordered)
                         .tint(.white.opacity(0.82))
                 }
@@ -320,11 +320,11 @@ private struct GarageFleetSection: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Deine Fahrzeuge")
+                    Text("Deine Camper")
                         .font(.system(size: 22, weight: .semibold, design: .default))
                         .tracking(-0.3)
                         .foregroundStyle(AppTheme.ink)
-                    Text("Das aktive Fahrzeug steht immer zuerst, damit du schnell weiterkommst.")
+                    Text("Der aktive Camper steht immer oben.")
                         .font(.subheadline)
                         .foregroundStyle(AppTheme.mutedInk)
                 }
@@ -378,7 +378,7 @@ private struct GarageFleetCard: View {
                 HStack(spacing: 10) {
                     GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
                     GarageTag(title: vehicle.country.title, isHighlighted: false)
-                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
                 }
 
                 HStack(spacing: 12) {
@@ -464,18 +464,18 @@ private struct GarageSelectionCard: View {
                             GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
                             GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
                         }
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
                     }
                 } else {
                     HStack(spacing: 10) {
                         GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
                         GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
                     }
                 }
 
                 HStack {
-                    Text(isActive ? "Ausgewählt" : "Fahrzeug wählen")
+                    Text(isActive ? "Ausgewählt" : "Camper wählen")
                         .font(.footnote.weight(.bold))
                     Spacer()
                     Image(systemName: isActive ? "checkmark" : "arrow.right")
@@ -586,7 +586,7 @@ private func vehicleHeadline(_ vehicle: VehicleProfile) -> String {
     [vehicle.brand, vehicle.model]
         .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
         .joined(separator: " ")
-        .fallback("Fahrzeugdaten ergänzen")
+        .fallback("Camperdaten ergänzen")
 }
 
 private extension String {

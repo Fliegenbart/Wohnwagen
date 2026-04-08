@@ -39,7 +39,7 @@ final class WeightPresentationTests: XCTestCase {
         let presentation = WeightPresentation.make(assessment: output, tripTitle: nil)
 
         XCTAssertEqual(presentation.support, "Aktuelle Fahrt")
-        XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["Unklar", "Niedrig"])
+        XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["Noch nicht erfasst", "Niedrig"])
     }
 
     func testWeightPresentationMapsAxleRiskStatesWithoutLosingInformation() {

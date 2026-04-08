@@ -44,7 +44,7 @@ enum PersistenceController {
         if let fallback = try? makeContainer(isStoredInMemoryOnly: true) {
             return PersistenceBootstrap(
                 container: fallback,
-                warningMessage: "Deine Datenbank konnte gerade nicht normal geöffnet werden. CamperReady läuft deshalb vorübergehend ohne dauerhafte Speicherung. Starte die App neu und exportiere wichtige Daten, bevor du weiterarbeitest."
+                warningMessage: "CamperReady konnte deine Daten gerade nicht wie gewohnt öffnen und läuft vorübergehend ohne Speicherung. Starte die App am besten neu und sichere wichtige Daten."
             )
         }
 

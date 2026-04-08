@@ -38,21 +38,21 @@ struct ChecklistsView: View {
             VStack(alignment: .leading, spacing: 24) {
                 CamperSceneCard(
                     mood: .checklists,
-                    eyebrow: "Modi",
-                    title: "Vor der Fahrt startet alles ruhiger.",
-                    subtitle: "Abfahrt, Winter und Ankunft bleiben sauber getrennt und leicht zu verstehen.",
+                    eyebrow: "Deine Modi",
+                    title: "Vor der Fahrt wird’s ruhiger — und übersichtlicher.",
+                    subtitle: "Abfahrt, Ankunft, Winterschlaf — jeder Modus hat seine eigene Liste.",
                     badge: "Neu"
                 )
                 .opacity(hasAppeared ? 1 : 0.01)
                 .offset(y: hasAppeared ? 0 : 10)
 
                 if vehicleChecklists.isEmpty {
-                    SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Starte einen Modus, um offene Punkte zu sammeln.") {
+                    SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Wähl einen Modus — die App sammelt die passenden Punkte für dich.") {
                         VStack(alignment: .leading, spacing: 16) {
                             ContentUnavailableView(
                                 "Noch keine Checkliste gestartet",
                                 systemImage: "checklist",
-                                description: Text("Starte eine Checkliste wie Abfahrt oder Einwintern, damit du offene Punkte direkt siehst.")
+                                description: Text("Starte zum Beispiel eine Abfahrts- oder Winterschlaf-Checkliste — dann siehst du sofort, was noch offen ist.")
                             )
 
                             if let vehicle {
@@ -86,13 +86,13 @@ struct ChecklistsView: View {
 
                             if compactActions {
                                 VStack(alignment: .leading, spacing: 10) {
-                                    Button("Punkt hinzufügen") {
+                                    Button("Neuer Punkt") {
                                         guard let selectedChecklist else { return }
                                         checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
                                     }
                                     .buttonStyle(.borderedProminent)
 
-                                    Button(selectedChecklist?.isPinned == true ? "Lösen" : "Anheften") {
+                                    Button(selectedChecklist?.isPinned == true ? "Nicht mehr oben halten" : "Oben halten") {
                                         guard let selectedChecklist else { return }
                                         togglePinned(selectedChecklist)
                                     }
@@ -100,13 +100,13 @@ struct ChecklistsView: View {
                                 }
                             } else {
                                 HStack(spacing: 12) {
-                                    Button("Punkt hinzufügen") {
+                                    Button("Neuer Punkt") {
                                         guard let selectedChecklist else { return }
                                         checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
                                     }
                                     .buttonStyle(.borderedProminent)
 
-                                    Button(selectedChecklist?.isPinned == true ? "Lösen" : "Anheften") {
+                                    Button(selectedChecklist?.isPinned == true ? "Nicht mehr oben halten" : "Oben halten") {
                                         guard let selectedChecklist else { return }
                                         togglePinned(selectedChecklist)
                                     }
@@ -119,7 +119,7 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Aktive Modi")
+                        Text("Aktive Checklisten")
                             .font(.caption.weight(.semibold))
                             .textCase(.uppercase)
                             .foregroundStyle(AppTheme.mutedInk)
@@ -167,10 +167,10 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
 
                     if let selectedChecklist {
-                        SectionCard(title: "Aktive Punkte", subtitle: "Diese Punkte gehören zur aktuellen Liste.") {
+                        SectionCard(title: "Offene Punkte", subtitle: "Das steht für diesen Modus noch an.") {
                             VStack(alignment: .leading, spacing: 14) {
                                 if selectedItems.isEmpty {
-                                    Text("Diese Checkliste hat noch keine Punkte.")
+                                    Text("Diese Liste ist noch leer — füg einfach Punkte hinzu.")
                                         .foregroundStyle(AppTheme.mutedInk)
                                 } else {
                                     ForEach(Array(selectedItems.enumerated()), id: \.element.id) { index, item in
@@ -223,11 +223,11 @@ struct ChecklistsView: View {
                     if let selectedChecklist {
                         Divider()
 
-                        Button(selectedChecklist.isPinned ? "Anheftung lösen" : "Anheften") {
+                        Button(selectedChecklist.isPinned ? "Nicht mehr oben halten" : "Anheften") {
                             togglePinned(selectedChecklist)
                         }
 
-                        Button("Pflichtpunkte als erledigt markieren") {
+                        Button("Alle Pflichtpunkte abhaken") {
                             markChecklistComplete(selectedChecklist)
                         }
 
@@ -238,7 +238,7 @@ struct ChecklistsView: View {
                         Button(role: .destructive) {
                             checklistToDelete = selectedChecklist
                         } label: {
-                            Text("Checkliste löschen")
+                            Text("Checkliste entfernen")
                         }
                     }
                 } label: {
@@ -250,20 +250,20 @@ struct ChecklistsView: View {
         .sheet(item: $checklistItemFormContext) { context in
             ChecklistItemFormView(checklist: context.checklist, existingItem: context.item)
         }
-        .alert("Checkliste wirklich löschen?", isPresented: deleteChecklistBinding) {
-            Button("Löschen", role: .destructive) {
+        .alert("Diese Checkliste wirklich entfernen?", isPresented: deleteChecklistBinding) {
+            Button("Entfernen", role: .destructive) {
                 if let checklistToDelete {
                     deleteChecklist(checklistToDelete, vehicle: vehicle)
                 }
             }
             Button("Abbrechen", role: .cancel) {}
         } message: {
-            Text("Diese Checkliste und alle Punkte darin werden entfernt.")
+            Text("Die Checkliste und alle Punkte darin gehen verloren.")
         }
-        .alert("Checkliste konnte nicht gespeichert werden", isPresented: errorBinding) {
+        .alert("Das hat leider nicht geklappt", isPresented: errorBinding) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text(errorMessage ?? "Bitte versuche es noch einmal.")
+            Text(errorMessage ?? "Versuch es nochmal — manchmal klemmt’s kurz.")
         }
         .onAppear {
             selectedChecklistID = selectedChecklistID ?? vehicleChecklists.first?.id
@@ -483,33 +483,33 @@ private struct ChecklistItemFormView: View {
         NavigationStack {
             RoadSheetScaffold(
                 eyebrow: "Checkliste",
-                title: existingItem == nil ? "Punkt ergänzen" : "Punkt anpassen",
+                title: existingItem == nil ? "Neuer Punkt" : "Punkt anpassen",
                 subtitle: SheetCopy.checklistItemSubtitle,
                 systemImage: "checklist.checked"
             ) {
                 Form {
-                    Section("Punkt") {
+                    Section("Was soll geprüft werden?") {
                         TextField("Titel", text: $draft.title)
                         TextField("Details", text: $draft.details, axis: .vertical)
                             .lineLimit(3, reservesSpace: true)
                         Toggle("Pflichtpunkt", isOn: $draft.isRequired)
-                        Toggle("Für Bereitschaft relevant", isOn: $draft.contributesToReadiness)
+                        Toggle("Für Status relevant", isOn: $draft.contributesToReadiness)
                     }
                 }
             }
             .navigationTitle(existingItem == nil ? "Punkt hinzufügen" : "Punkt bearbeiten")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Punkt konnte nicht gespeichert werden", isPresented: errorBinding) {
+            .alert("Das hat leider nicht geklappt", isPresented: errorBinding) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "Bitte gib mindestens einen Titel an.")
+                Text(errorMessage ?? "Gib dem Punkt mindestens einen kurzen Namen.")
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(existingItem == nil ? "Sichern" : "Fertig") {
+                    Button(existingItem == nil ? "Speichern" : "Fertig") {
                         saveItem()
                     }
                     .disabled(!draft.canSave)
@@ -535,7 +535,7 @@ private struct ChecklistItemFormView: View {
             )
             dismiss()
         } catch {
-            errorMessage = "Der Punkt konnte nicht gespeichert werden."
+            errorMessage = "Das hat leider nicht geklappt."
         }
     }
 }

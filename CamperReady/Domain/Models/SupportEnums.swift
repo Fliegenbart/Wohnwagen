@@ -11,7 +11,7 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .home: "Home"
+        case .home: "Cockpit"
         case .weight: "Gewicht"
         case .checklists: "Checklisten"
         case .logbook: "Logbuch"
@@ -95,12 +95,12 @@ enum WeightCategory: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .kitchen: "Küche"
         case .clothing: "Kleidung"
-        case .outdoor: "Outdoor"
-        case .tech: "Technik"
+        case .outdoor: "Outdoor & Freizeit"
+        case .tech: "Technik & Kabel"
         case .tools: "Werkzeug"
-        case .kidsPets: "Kinder / Haustiere"
+        case .kidsPets: "Kinder & Vierbeiner"
         case .bikes: "Fahrräder"
-        case .campingFurniture: "Campingmöbel"
+        case .campingFurniture: "Tisch, Stuhl & Co."
         case .other: "Sonstiges"
         }
     }
@@ -118,12 +118,12 @@ enum ChecklistMode: String, CaseIterable, Codable, Identifiable {
 
     var title: String {
         switch self {
-        case .departure: "Abfahrt"
+        case .departure: "Vor der Abfahrt"
         case .arrival: "Ankunft"
-        case .shortStop: "Kurzstopp"
-        case .storage: "Einlagerung"
-        case .winterize: "Einwintern"
-        case .deWinterize: "Auswintern"
+        case .shortStop: "Kurzer Halt"
+        case .storage: "Einlagern"
+        case .winterize: "Winterschlaf"
+        case .deWinterize: "Frühjahrsstart"
         }
     }
 }
@@ -157,7 +157,7 @@ enum MaintenanceCategory: String, CaseIterable, Codable, Identifiable {
         case .leakTest: "Dichtigkeitsprüfung"
         case .battery: "Batterie"
         case .gasInspection: "Gasprüfung"
-        case .custom: "Eigene Aufgabe"
+        case .custom: "Eigener Eintrag"
         }
     }
 }
@@ -176,9 +176,9 @@ enum DocumentCategory: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .registration: "Fahrzeugschein"
         case .insurance: "Versicherung"
-        case .roadworthiness: "Hauptuntersuchung"
+        case .roadworthiness: "HU / TÜV"
         case .gasInspection: "Gasprüfung"
-        case .toll: "Vignette / Maut"
+        case .toll: "Vignette & Maut"
         case .custom: "Eigenes Dokument"
         }
     }
@@ -197,9 +197,9 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .stopover: "Stellplatz"
         case .campsite: "Campingplatz"
-        case .serviceStation: "Service-Station"
+        case .serviceStation: "Ver- & Entsorgung"
         case .dump: "Entsorgung"
-        case .water: "Wasser"
+        case .water: "Frischwasser"
         }
     }
 }
@@ -219,14 +219,14 @@ enum CostCategory: String, CaseIterable, Codable, Identifiable {
 
     var title: String {
         switch self {
-        case .fuel: "Diesel / Benzin"
-        case .toll: "Maut / Vignette"
+        case .fuel: "Tanken"
+        case .toll: "Maut & Vignette"
         case .ferry: "Fähre"
-        case .campsite: "Camping / Stellplatz"
+        case .campsite: "Stell- & Campingplatz"
         case .gas: "Gas"
         case .electricity: "Strom"
-        case .waterDisposal: "Wasser / Entsorgung"
-        case .workshop: "Werkstatt / Ersatzteile"
+        case .waterDisposal: "Wasser & Entsorgung"
+        case .workshop: "Werkstatt & Teile"
         case .other: "Sonstiges"
         }
     }

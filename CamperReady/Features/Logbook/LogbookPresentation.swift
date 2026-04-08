@@ -13,14 +13,14 @@ struct LogbookPresentation: Equatable {
     static func make(totalDistance: Double, totalSpend: Double, readinessOpenItems: Int?) -> Self {
         LogbookPresentation(stats: [
             SummaryStat(title: "Distanz", value: "\(Int(totalDistance)) km"),
-            SummaryStat(title: "Investition", value: totalSpend.euroString),
-            SummaryStat(title: "Bereitschaft", value: readinessValue(for: readinessOpenItems))
+            SummaryStat(title: "Investiert", value: totalSpend.euroString),
+            SummaryStat(title: "Status", value: readinessValue(for: readinessOpenItems))
         ])
     }
 
     private static func readinessValue(for readinessOpenItems: Int?) -> String {
         guard let readinessOpenItems else {
-            return "Kein Fahrzeug"
+            return "Noch kein Camper"
         }
 
         return readinessOpenItems == 0 ? "Bereit" : "\(readinessOpenItems) offen"

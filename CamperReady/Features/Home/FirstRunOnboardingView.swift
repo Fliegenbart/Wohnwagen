@@ -15,9 +15,9 @@ struct FirstRunOnboardingView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         FeatureHeader(
-                            eyebrow: "Fahrzeugwahl",
-                            title: "Starte mit deinem ersten Fahrzeug",
-                            subtitle: "Lege deinen Camper einmal an. Danach arbeiten Garage, Gewicht, Checklisten und Fristen immer mit dem richtigen Fahrzeug."
+                            eyebrow: "Dein Camper, dein Startpunkt",
+                            title: "Sag uns kurz, mit wem du unterwegs bist",
+                            subtitle: "Ein paar Angaben zu deinem Camper reichen — danach weiß die App, worüber wir reden."
                         )
                         .padding(.top, 12)
                         .opacity(hasAppeared ? 1 : 0.01)
@@ -25,11 +25,11 @@ struct FirstRunOnboardingView: View {
 
                         AlpineSurface(role: .focus) {
                             VStack(alignment: .leading, spacing: 18) {
-                                Text("Einmal einrichten, dann direkt loslegen")
+                                Text("Einmal kurz einrichten — dann kann’s losgehen")
                                     .font(.system(size: 30, weight: .semibold))
                                     .foregroundStyle(.white)
 
-                                Text("Für den Start reichen ein Name und ein paar Basisdaten. Alles Weitere kannst du später in der Garage ergänzen.")
+                                Text("Ein Name und ein paar Eckdaten reichen völlig. Den Rest kannst du jederzeit in der Garage nachtragen.")
                                     .font(.subheadline)
                                     .foregroundStyle(.white.opacity(0.84))
                                     .fixedSize(horizontal: false, vertical: true)
@@ -47,26 +47,26 @@ struct FirstRunOnboardingView: View {
                         AlpineSurface(role: .section) {
                             VStack(alignment: .leading, spacing: 14) {
                                 sectionHeading(
-                                    title: "Was danach automatisch passt",
-                                    subtitle: "Die App merkt sich dein aktives Fahrzeug und trennt die Daten sauber pro Camper."
+                                    title: "Das läuft danach von allein",
+                                    subtitle: "CamperReady merkt sich, welcher Camper gerade aktiv ist — und hält alles sauber getrennt."
                                 )
 
                                 onboardingLine(
-                                    title: "Der richtige Camper bleibt aktiv",
-                                    text: "Beim Wechsel in der Garage nutzt Home sofort das gewählte Fahrzeug weiter.",
+                                    title: "Immer der richtige Camper im Blick",
+                                    text: "Beim Wechsel in der Garage nutzt das Cockpit sofort den richtigen Camper weiter.",
                                     systemImage: "car.side.fill",
                                     tint: AppTheme.accent
                                 )
 
                                 onboardingLine(
-                                    title: "Gewicht und Wasser bleiben ehrlich",
+                                    title: "Gewicht und Wasser — ehrlich gerechnet",
                                     text: "Kapazitäten und Basiswerte kommen immer vom aktuell ausgewählten Fahrzeug.",
                                     systemImage: "scalemass.fill",
                                     tint: AppTheme.yellow
                                 )
 
                                 onboardingLine(
-                                    title: "Checklisten und Fristen bleiben zugeordnet",
+                                    title: "Checklisten und Fristen gehören zum richtigen Fahrzeug",
                                     text: "So verwechselst du Wartung, Dokumente und Notizen nicht zwischen mehreren Fahrzeugen.",
                                     systemImage: "checklist.checked",
                                     tint: AppTheme.green
@@ -78,20 +78,20 @@ struct FirstRunOnboardingView: View {
 
                         AlpineSurface(role: .raised) {
                             VStack(alignment: .leading, spacing: 14) {
-                                Text("Dein Start in 2 Schritten")
+                                Text("Los geht’s — in zwei Schritten")
                                     .font(.system(.title3, design: .rounded, weight: .bold))
                                     .foregroundStyle(AppTheme.ink)
 
                                 onboardingStep(
                                     number: "1",
-                                    title: "Fahrzeug anlegen",
-                                    text: "Name, Typ und die wichtigsten Daten eintragen."
+                                    title: "Camper anlegen",
+                                    text: "Name, Fahrzeugtyp und die wichtigsten Daten eintragen."
                                 )
 
                                 onboardingStep(
                                     number: "2",
-                                    title: "Später in der Garage ergänzen",
-                                    text: "Gewicht, Wasser, Gas und Service kannst du danach jederzeit nachpflegen."
+                                    title: "Den Rest später in der Garage ergänzen",
+                                    text: "Gewicht, Frischwasser, Gas und Service-Intervalle kannst du danach jederzeit ergänzen."
                                 )
                             }
                         }
@@ -104,7 +104,7 @@ struct FirstRunOnboardingView: View {
                             } label: {
                                 HStack {
                                     Image(systemName: "plus.circle.fill")
-                                    Text("Fahrzeug jetzt einrichten")
+                                    Text("Camper jetzt einrichten")
                                         .fontWeight(.semibold)
                                     Spacer()
                                     Image(systemName: "arrow.right")
@@ -118,7 +118,7 @@ struct FirstRunOnboardingView: View {
                             }
                             .buttonStyle(.plain)
 
-                            Button("Später im Cockpit") {
+                            Button("Erstmal nur schauen") {
                                 hasDismissedOnboarding = true
                                 isPresented = false
                             }

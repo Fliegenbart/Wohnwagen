@@ -7,7 +7,7 @@ struct CostsPresentation: Equatable {
         CostsPresentation(stats: [
             SummaryStat(title: "Diese Reise", value: tripTotal.euroString),
             SummaryStat(title: "Pro Nacht", value: perNight.euroString),
-            SummaryStat(title: "Pro 100 km", value: perHundredKm.map { $0.euroString } ?? "Offen"),
+            SummaryStat(title: "Pro 100 km", value: perHundredKm.map { $0.euroString } ?? "Noch offen"),
             SummaryStat(title: "Dieses Jahr", value: annualTotal.euroString)
         ])
     }

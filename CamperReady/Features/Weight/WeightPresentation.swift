@@ -24,7 +24,7 @@ struct WeightPresentation: Equatable {
             primaryMetrics: [
                 WeightMetric(
                     title: "Gesamtgewicht",
-                    value: assessment.estimatedGrossWeightKg?.kgString ?? "Unklar"
+                    value: assessment.estimatedGrossWeightKg?.kgString ?? "Noch nicht erfasst"
                 ),
                 WeightMetric(
                     title: "Achslast",

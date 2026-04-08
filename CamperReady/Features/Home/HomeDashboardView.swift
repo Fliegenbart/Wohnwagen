@@ -51,7 +51,7 @@ struct HomeDashboardView: View {
             VStack(alignment: .leading, spacing: 16) {
                 if let vehicle {
                     FeatureHeader(
-                        eyebrow: "Morgenübersicht",
+                        eyebrow: "Guten Morgen",
                         title: homeHeadline(for: snapshot),
                         subtitle: homeSubtitle(vehicle: vehicle, tripTitle: trip?.title, snapshot: snapshot)
                     )
@@ -69,8 +69,8 @@ struct HomeDashboardView: View {
                         if UIScreen.main.bounds.width < 402 {
                             VStack(spacing: 12) {
                                 homeQuickActionCard(
-                                    title: "Neue Wiegung",
-                                    subtitle: "Achslast und Verteilung vor der Fahrt prüfen.",
+                                    title: "Kurz auf die Waage",
+                                    subtitle: "Wie verteilt sich das Gewicht? Ein kurzer Check vor der Fahrt.",
                                     systemImage: "scale.3d",
                                     tint: AppTheme.petrol,
                                     action: .weight
@@ -85,8 +85,8 @@ struct HomeDashboardView: View {
                         } else {
                             HStack(alignment: .top, spacing: 12) {
                                 homeQuickActionCard(
-                                    title: "Neue Wiegung",
-                                    subtitle: "Achslast und Verteilung vor der Fahrt prüfen.",
+                                    title: "Kurz auf die Waage",
+                                    subtitle: "Wie verteilt sich das Gewicht? Ein kurzer Check vor der Fahrt.",
                                     systemImage: "scale.3d",
                                     tint: AppTheme.petrol,
                                     action: .weight
@@ -142,11 +142,11 @@ struct HomeDashboardView: View {
     private func homeHeadline(for snapshot: DashboardSnapshot) -> String {
         switch snapshot.overallStatus {
         case .green:
-            return "Abfahrt frei."
+            return "Alles klar — gute Fahrt!"
         case .yellow:
-            return "\(snapshot.openItemsCount) Punkte offen."
+            return "Noch \(snapshot.openItemsCount) offene Punkte."
         case .red:
-            return "Nicht bereit."
+            return "Noch nicht ganz soweit."
         }
     }
 
@@ -163,9 +163,9 @@ struct HomeDashboardView: View {
     ) -> some View {
         let marginText = weight.remainingMarginKg.map { value -> String in
             if value >= 0 {
-                return "+\(Int(value.rounded())) kg Reserve"
+                return "Noch \(Int(value.rounded())) kg Luft"
             }
-            return "\(Int(value.rounded())) kg über Limit"
+            return "\(Int(value.rounded())) kg zu viel"
         } ?? "Werte fehlen"
         let grossText = weight.estimatedGrossWeightKg.map { "\(Int($0.rounded()))" } ?? "—"
         let progress = min(max((weight.estimatedGrossWeightKg ?? 0) / max(vehicle.gvwrKg ?? 1, 1), 0), 1)
@@ -188,7 +188,7 @@ struct HomeDashboardView: View {
                     Spacer()
 
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("Sicherheitsreserve")
+                        Text("Deine Reserve")
                             .font(.caption.weight(.bold))
                             .textCase(.uppercase)
                             .tracking(0.7)
@@ -227,9 +227,9 @@ struct HomeDashboardView: View {
                     .frame(height: 10)
 
                     HStack {
-                        Text("von \(Int((vehicle.gvwrKg ?? 0).rounded())) kg")
+                        Text("von \(Int((vehicle.gvwrKg ?? 0).rounded())) kg erlaubt")
                         Spacer()
-                        Text(weight.nextAction ?? (settings == nil ? "Beladung fehlt" : "Aktive Beladung geprüft"))
+                        Text(weight.nextAction ?? (settings == nil ? "Beladung noch offen" : "Beladung ist erfasst"))
                     }
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(AppTheme.mutedInk)
@@ -276,12 +276,12 @@ struct HomeDashboardView: View {
                 .lineLimit(layout.prefersVertical ? 3 : 2)
                 .minimumScaleFactor(0.82)
 
-            Text(trip.map { "Aktiv für \($0.title)." } ?? "Noch kein Trip geplant.")
+            Text(trip.map { "Unterwegs: \($0.title)" } ?? "Noch keine Reise aktiv.")
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(AppTheme.mutedInk)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text(snapshot.openItemsCount == 0 ? "Heute wirkt alles ruhig und bereit." : "\(snapshot.openItemsCount) Punkte sind noch offen.")
+            Text(snapshot.openItemsCount == 0 ? "Sieht gut aus — alles im grünen Bereich." : "\(snapshot.openItemsCount) Punkte verdienen noch einen Blick.")
                 .font(.footnote.weight(.medium))
                 .foregroundStyle(AppTheme.mutedInk)
                 .fixedSize(horizontal: false, vertical: true)
@@ -358,7 +358,7 @@ struct HomeDashboardView: View {
         let progress = requiredCount == 0 ? 0 : Double(completedRequired) / Double(requiredCount)
         let state = departureChecklist?.state ?? .notStarted
         let title = ChecklistPresentation.make(
-            title: "Abfahrt",
+            title: "Vor der Abfahrt",
             state: state,
             completedRequired: completedRequired,
             requiredCount: requiredCount
@@ -395,7 +395,7 @@ struct HomeDashboardView: View {
                     navigation.navigate(for: .departureChecklist)
                 } label: {
                     HStack {
-                        Text("Liste fortsetzen")
+                        Text("Weitermachen")
                             .font(.footnote.weight(.bold))
                         Image(systemName: "chevron.right")
                             .font(.footnote.weight(.bold))
@@ -415,7 +415,7 @@ struct HomeDashboardView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     HStack {
                         VStack(alignment: .leading, spacing: 5) {
-                            Text("Unterwegs gut versorgt")
+                            Text("Gut versorgt unterwegs")
                                 .font(.caption.weight(.bold))
                                 .textCase(.uppercase)
                                 .tracking(0.8)
@@ -438,7 +438,7 @@ struct HomeDashboardView: View {
                                     tint: AppTheme.tertiaryFixed
                                 )
                                 homeSystemChip(
-                                    title: "Wasser",
+                                    title: "Frischwasser",
                                     value: waterValue(for: vehicle, trip: trip),
                                     systemImage: "drop.fill",
                                     tint: AppTheme.petrolBright
@@ -461,7 +461,7 @@ struct HomeDashboardView: View {
                                 tint: AppTheme.tertiaryFixed
                             )
                             homeSystemChip(
-                                title: "Wasser",
+                                title: "Frischwasser",
                                 value: waterValue(for: vehicle, trip: trip),
                                 systemImage: "drop.fill",
                                 tint: AppTheme.petrolBright
@@ -511,18 +511,18 @@ struct HomeDashboardView: View {
 
     private func gasValue(for vehicle: VehicleProfile, settings: TripLoadSettings?) -> String {
         if let settings, settings.gasBottleFillPercent > 0 {
-            return "\(Int(settings.gasBottleFillPercent.rounded()))%"
+            return "\(Int(settings.gasBottleFillPercent.rounded())) %"
         }
         guard let count = vehicle.gasBottleCount, count > 0 else {
-            return "Offen"
+            return "Noch offen"
         }
         return "\(count) Flaschen"
     }
 
     private func waterValue(for vehicle: VehicleProfile, trip: Trip?) -> String {
         let liters = vehicle.freshWaterCapacityL ?? 0
-        guard liters > 0 else { return "Offen" }
-        return "\(Int(liters.rounded())) l"
+        guard liters > 0 else { return "Noch offen" }
+        return "\(Int(liters.rounded())) Liter"
     }
 
     private func maintenanceValue(for entries: [MaintenanceEntry]) -> String {
@@ -610,7 +610,7 @@ struct HomeDashboardView: View {
                     HStack(spacing: 12) {
                         Image(systemName: "checklist")
                             .font(.subheadline.weight(.bold))
-                        Text("Vor Abfahrt prüfen")
+                        Text("Vor der Fahrt kurz checken")
                             .fontWeight(.semibold)
                         Spacer()
                         Image(systemName: "arrow.right")
@@ -630,8 +630,8 @@ struct HomeDashboardView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Vor Abfahrt prüfen")
-                .accessibilityHint("Öffnet die Checklisten für die Abfahrt.")
+                .accessibilityLabel("Vor der Fahrt kurz checken")
+                .accessibilityHint("Öffnet die Checkliste für die Fahrt.")
             }
         }
         .opacity(hasAppeared ? 1 : 0.01)
@@ -642,9 +642,9 @@ struct HomeDashboardView: View {
         AlpineSurface(role: .section) {
             VStack(alignment: .leading, spacing: 10) {
                 sectionHeading(
-                    title: presentation.actionRows.isEmpty ? "Status heute" : "Jetzt klären",
+                    title: presentation.actionRows.isEmpty ? "Dein Status heute" : "Kurz anschauen",
                     subtitle: presentation.actionRows.isEmpty
-                        ? "Im Moment gibt es keine offenen Bereitschaftspunkte."
+                        ? "Im Moment gibt es keine offenen Punkte."
                         : "Die wichtigsten offenen Punkte stehen hier ruhig untereinander."
                 )
 
@@ -652,7 +652,7 @@ struct HomeDashboardView: View {
                     if presentation.actionRows.isEmpty {
                         UtilityRow(
                             title: "Alles im grünen Bereich",
-                            subtitle: "Du musst vor der Abfahrt aktuell nichts zusätzlich erledigen.",
+                            subtitle: "Aktuell ist nichts dringend — du kannst entspannt losfahren.",
                             systemImage: "checkmark.circle",
                             tint: AppTheme.green
                         )
@@ -697,8 +697,8 @@ struct HomeDashboardView: View {
         AlpineSurface(role: .section) {
             VStack(alignment: .leading, spacing: 10) {
                 sectionHeading(
-                    title: "Bereitschaft im Überblick",
-                    subtitle: "Alle Bereiche auf einen Blick, auch wenn sie schon im grünen Bereich sind."
+                    title: "Alle Bereiche auf einen Blick",
+                    subtitle: "Auch die grünen Bereiche — damit du das gute Gefühl siehst."
                 )
 
                 VStack(spacing: 0) {
@@ -729,8 +729,8 @@ struct HomeDashboardView: View {
         AlpineSurface(role: .section) {
             VStack(alignment: .leading, spacing: 10) {
                 sectionHeading(
-                    title: "Schnellzugriff",
-                    subtitle: "Direkt zu den Bereichen, die du vor der Fahrt am häufigsten öffnest."
+                    title: "Direkt dorthin",
+                    subtitle: "Deine meistgenutzten Bereiche — einen Tipp entfernt."
                 )
 
                 VStack(spacing: 0) {
@@ -746,8 +746,8 @@ struct HomeDashboardView: View {
                         showGarageSheet = true
                     } label: {
                         UtilityRow(
-                            title: "Garage öffnen",
-                            subtitle: "Fahrzeug wählen und Stammdaten pflegen",
+                            title: "Zur Garage",
+                            subtitle: "Camper auswählen und Daten anpassen",
                             systemImage: "car.circle",
                             tint: AppTheme.accent,
                             trailingSystemImage: "arrow.up.forward",
@@ -825,11 +825,11 @@ struct HomeDashboardView: View {
             VStack(alignment: .leading, spacing: 16) {
                 StatusBadge(status: .yellow, text: "Einrichten")
 
-                Text("Noch nicht startklar")
+                Text("Noch nicht ganz startklar")
                     .font(.system(size: 28, weight: .semibold))
                     .foregroundStyle(AppTheme.ink)
 
-                Text("Lege zuerst dein Fahrzeug an. Danach siehst du vor jeder Fahrt Gewicht, Fristen und wichtige Checks an einem Ort.")
+                Text("Leg zuerst deinen Camper an — danach findest du hier vor jeder Fahrt alles Wichtige auf einen Blick.")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(AppTheme.mutedInk)
 
@@ -838,7 +838,7 @@ struct HomeDashboardView: View {
                 } label: {
                     HStack {
                         Image(systemName: "plus.circle.fill")
-                        Text("Garage öffnen")
+                        Text("Zur Garage")
                             .fontWeight(.semibold)
                         Spacer()
                         Image(systemName: "arrow.right")
