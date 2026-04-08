@@ -46,9 +46,12 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Bodensee")
 
-        XCTAssertEqual(presentation.focusEyebrow, "Alles bestätigt")
-        XCTAssertEqual(presentation.focusTitle, "Atlas ist bereit für Bodensee.")
-        XCTAssertEqual(presentation.focusDetail, "Alle Bereiche stehen auf Grün.")
+        XCTAssertEqual(presentation.focusEyebrow, "Gewicht")
+        XCTAssertEqual(presentation.focusTitle, "+220 kg Reserve")
+        XCTAssertEqual(presentation.focusDetail, "Das ist dein ruhigster Kontrollblick vor der Fahrt.")
+        XCTAssertEqual(presentation.focusSystemImage, "scalemass")
+        XCTAssertEqual(presentation.focusStatus, .green)
+        XCTAssertEqual(presentation.focusAction, .weight)
         XCTAssertEqual(presentation.overviewRows.count, 2)
         XCTAssertEqual(presentation.primaryAction.title, "Vor der Fahrt kurz checken")
         XCTAssertEqual(presentation.primaryAction.action, .departureChecklist)
@@ -69,9 +72,10 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: nil)
 
-        XCTAssertEqual(presentation.focusEyebrow, "Alles bestätigt")
-        XCTAssertEqual(presentation.focusTitle, "Atlas ist startklar — alles sieht gut aus.")
-        XCTAssertEqual(presentation.focusDetail, "Alle Bereiche stehen auf Grün.")
+        XCTAssertEqual(presentation.focusEyebrow, "Gewicht")
+        XCTAssertEqual(presentation.focusTitle, "+220 kg Reserve")
+        XCTAssertEqual(presentation.focusDetail, "Das ist dein ruhigster Kontrollblick vor der Fahrt.")
+        XCTAssertEqual(presentation.focusAction, .weight)
         XCTAssertEqual(presentation.primaryAction.subtitle, "Die Abfahrts-Checkliste bleibt dein letzter ruhiger Kontrollblick.")
     }
 

@@ -60,13 +60,20 @@ struct HomeDashboardPresentation: Equatable {
             )
         }
 
+        let greenConfirmationDimension = snapshot.dimensions
+            .sorted { lhs, rhs in
+                lhs.metadata.sortOrder < rhs.metadata.sortOrder
+            }
+            .first
+            ?? snapshot.dimensions.first
+
         return HomeDashboardPresentation(
-            focusEyebrow: "Alles bestätigt",
-            focusTitle: greenDetail(snapshot: snapshot, tripTitle: tripTitle),
-            focusDetail: "Alle Bereiche stehen auf Grün.",
-            focusSystemImage: "checkmark.circle",
-            focusStatus: .green,
-            focusAction: nil,
+            focusEyebrow: greenConfirmationDimension?.title ?? "Alles bestätigt",
+            focusTitle: greenConfirmationDimension?.summary ?? greenDetail(snapshot: snapshot, tripTitle: tripTitle),
+            focusDetail: greenConfirmationDimension?.nextAction ?? "Das ist dein ruhigster Kontrollblick vor der Fahrt.",
+            focusSystemImage: greenConfirmationDimension?.metadata.systemImage ?? "checkmark.circle",
+            focusStatus: greenConfirmationDimension?.status ?? .green,
+            focusAction: greenConfirmationDimension?.metadata.action,
             primaryAction: HomePrimaryAction(
                 title: "Vor der Fahrt kurz checken",
                 subtitle: "Die Abfahrts-Checkliste bleibt dein letzter ruhiger Kontrollblick.",
