@@ -13,42 +13,53 @@ struct FirstRunOnboardingView: View {
         NavigationStack {
             AppCanvas {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 18) {
+                    VStack(alignment: .leading, spacing: 16) {
                         FeatureHeader(
                             eyebrow: "Dein Camper, dein Startpunkt",
                             title: "Sag uns kurz, mit wem du unterwegs bist",
-                            subtitle: "Ein paar Angaben zu deinem Camper reichen — danach weiß die App, worüber wir reden."
+                            subtitle: "Ein paar Angaben zu deinem Camper reichen. Den Rest kannst du später in der Garage ergänzen."
                         )
-                        .padding(.top, 12)
+                        .padding(.top, 16)
                         .opacity(hasAppeared ? 1 : 0.01)
-                        .offset(y: hasAppeared ? 0 : 16)
-
-                        AlpineSurface(role: .focus) {
-                            VStack(alignment: .leading, spacing: 18) {
-                                Text("Einmal kurz einrichten — dann kann’s losgehen")
-                                    .font(.system(size: 30, weight: .semibold))
-                                    .foregroundStyle(.white)
-
-                                Text("Ein Name und ein paar Eckdaten reichen völlig. Den Rest kannst du jederzeit in der Garage nachtragen.")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.white.opacity(0.84))
-                                    .fixedSize(horizontal: false, vertical: true)
-
-                                HStack(spacing: 10) {
-                                    onboardingBadge(title: "Garage")
-                                    onboardingBadge(title: "Gewicht")
-                                    onboardingBadge(title: "Fristen")
-                                }
-                            }
-                        }
-                        .opacity(hasAppeared ? 1 : 0.01)
-                        .offset(y: hasAppeared ? 0 : 18)
+                        .offset(y: hasAppeared ? 0 : 12)
 
                         AlpineSurface(role: .section) {
                             VStack(alignment: .leading, spacing: 14) {
                                 sectionHeading(
-                                    title: "Das läuft danach von allein",
-                                    subtitle: "CamperReady merkt sich, welcher Camper gerade aktiv ist — und hält alles sauber getrennt."
+                                    title: "Was wir am Anfang brauchen",
+                                    subtitle: "Nur die Basis, damit CamperReady direkt mit dem richtigen Fahrzeug arbeitet."
+                                )
+
+                                onboardingLine(
+                                    title: "Name und Fahrzeugtyp",
+                                    text: "Damit du deinen Camper sofort wiedererkennst.",
+                                    systemImage: "car.side",
+                                    tint: AppTheme.petrol
+                                )
+
+                                onboardingLine(
+                                    title: "Wichtige Eckdaten",
+                                    text: "Gewicht, Wasser oder Gas kannst du später ergänzen, wenn du sie gerade nicht parat hast.",
+                                    systemImage: "square.and.pencil",
+                                    tint: AppTheme.yellow
+                                )
+
+                                onboardingLine(
+                                    title: "Ein aktiver Camper",
+                                    text: "Danach bleiben Checklisten, Fristen und Berechnungen sauber dem richtigen Fahrzeug zugeordnet.",
+                                    systemImage: "checkmark.circle",
+                                    tint: AppTheme.green
+                                )
+                            }
+                        }
+                        .opacity(hasAppeared ? 1 : 0.01)
+                        .offset(y: hasAppeared ? 0 : 14)
+
+                        AlpineSurface(role: .section) {
+                            VStack(alignment: .leading, spacing: 14) {
+                                sectionHeading(
+                                    title: "So fühlt sich die App danach an",
+                                    subtitle: "CamperReady merkt sich, welcher Camper aktiv ist, und nutzt diese Auswahl im ganzen Alltag weiter."
                                 )
 
                                 onboardingLine(
@@ -74,12 +85,12 @@ struct FirstRunOnboardingView: View {
                             }
                         }
                         .opacity(hasAppeared ? 1 : 0.01)
-                        .offset(y: hasAppeared ? 0 : 20)
+                        .offset(y: hasAppeared ? 0 : 16)
 
                         AlpineSurface(role: .raised) {
                             VStack(alignment: .leading, spacing: 14) {
-                                Text("Los geht’s — in zwei Schritten")
-                                    .font(.system(.title3, design: .rounded, weight: .bold))
+                                Text("So startest du")
+                                    .font(.system(.title3, design: .default, weight: .semibold))
                                     .foregroundStyle(AppTheme.ink)
 
                                 onboardingStep(
@@ -93,28 +104,31 @@ struct FirstRunOnboardingView: View {
                                     title: "Den Rest später in der Garage ergänzen",
                                     text: "Gewicht, Frischwasser, Gas und Service-Intervalle kannst du danach jederzeit ergänzen."
                                 )
+
+                                Text("Mehr musst du für den ersten Start nicht vorbereiten.")
+                                    .font(.footnote.weight(.medium))
+                                    .foregroundStyle(AppTheme.mutedInk)
                             }
                         }
                         .opacity(hasAppeared ? 1 : 0.01)
-                        .offset(y: hasAppeared ? 0 : 22)
+                        .offset(y: hasAppeared ? 0 : 18)
 
                         VStack(spacing: 12) {
                             Button {
                                 showVehicleSheet = true
                             } label: {
                                 HStack {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("Camper jetzt einrichten")
+                                    Image(systemName: "plus")
+                                        .font(.footnote.weight(.bold))
+                                    Text("Camper anlegen")
                                         .fontWeight(.semibold)
                                     Spacer()
-                                    Image(systemName: "arrow.right")
-                                        .font(.footnote.weight(.bold))
                                 }
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 18)
-                                .padding(.vertical, 16)
+                                .padding(.vertical, 15)
                                 .frame(maxWidth: .infinity)
-                                .background(AppTheme.ink, in: Capsule())
+                                .background(AppTheme.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                             }
                             .buttonStyle(.plain)
 
@@ -126,10 +140,10 @@ struct FirstRunOnboardingView: View {
                             .foregroundStyle(AppTheme.mutedInk)
                         }
                         .opacity(hasAppeared ? 1 : 0.01)
-                        .offset(y: hasAppeared ? 0 : 24)
+                        .offset(y: hasAppeared ? 0 : 20)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 24)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 28)
                 }
             }
             .navigationTitle("Willkommen")
@@ -154,19 +168,10 @@ struct FirstRunOnboardingView: View {
         }
     }
 
-    private func onboardingBadge(title: String) -> some View {
-        Text(title)
-            .font(.footnote.weight(.semibold))
-            .foregroundStyle(.white.opacity(0.92))
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(.white.opacity(0.12), in: Capsule())
-    }
-
     private func sectionHeading(title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.system(.title3, design: .rounded, weight: .bold))
+                .font(.system(.title3, design: .default, weight: .semibold))
                 .foregroundStyle(AppTheme.ink)
             Text(subtitle)
                 .font(.subheadline)
@@ -178,9 +183,10 @@ struct FirstRunOnboardingView: View {
     private func onboardingLine(title: String, text: String, systemImage: String, tint: Color) -> some View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: systemImage)
-                .font(.headline)
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(tint)
-                .frame(width: 32, height: 32)
+                .frame(width: 34, height: 34)
+                .background(AppTheme.surfaceLow, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
@@ -201,7 +207,7 @@ struct FirstRunOnboardingView: View {
                 .font(.footnote.weight(.bold))
                 .foregroundStyle(AppTheme.petrol)
                 .frame(width: 28, height: 28)
-                .background(AppTheme.sand, in: Circle())
+                .background(AppTheme.surfaceLow, in: Circle())
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
