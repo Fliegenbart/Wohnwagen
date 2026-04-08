@@ -1,14 +1,9 @@
 import Foundation
 
-struct HomeActionRow: Equatable, Identifiable {
-    let dimensionTitle: String
+struct HomePrimaryAction: Equatable {
     let title: String
     let subtitle: String
-    let systemImage: String
-    let status: ReadinessStatus
-    let action: ReadinessActionKind?
-
-    var id: String { dimensionTitle }
+    let action: ReadinessActionKind
 }
 
 struct HomeOverviewRow: Equatable, Identifiable {
@@ -22,15 +17,16 @@ struct HomeOverviewRow: Equatable, Identifiable {
 }
 
 struct HomeDashboardPresentation: Equatable {
+    let focusEyebrow: String
     let focusTitle: String
-    let focusSubtitle: String
     let focusDetail: String
-    let focusContext: String
+    let focusSystemImage: String
+    let focusStatus: ReadinessStatus
+    let focusAction: ReadinessActionKind?
+    let primaryAction: HomePrimaryAction
     let overviewRows: [HomeOverviewRow]
-    let actionRows: [HomeActionRow]
 
     static func make(snapshot: DashboardSnapshot, tripTitle: String?) -> Self {
-        let focusContext = tripTitle ?? snapshot.nextTripTitle
         let overviewRows = snapshot.dimensions.map { result in
             HomeOverviewRow(
                 title: result.title,
@@ -41,7 +37,7 @@ struct HomeDashboardPresentation: Equatable {
             )
         }
 
-        let actionRows = snapshot.dimensions
+        let primaryOpenDimension = snapshot.dimensions
             .filter { $0.status != .green }
             .sorted { lhs, rhs in
                 if lhs.status == rhs.status {
@@ -49,26 +45,65 @@ struct HomeDashboardPresentation: Equatable {
                 }
                 return lhs.status.rawValue > rhs.status.rawValue
             }
-            .map { result in
-                HomeActionRow(
-                    dimensionTitle: result.title,
-                    title: result.summary,
-                    subtitle: result.nextAction ?? result.reasons.first ?? "Kurz prüfen",
-                    systemImage: result.metadata.systemImage,
-                    status: result.status,
-                    action: result.metadata.action
-                )
-            }
-        let primaryOpenDimension = actionRows.first
+            .first
+
+        if let primaryOpenDimension {
+            return HomeDashboardPresentation(
+                focusEyebrow: primaryOpenDimension.title,
+                focusTitle: primaryOpenDimension.summary,
+                focusDetail: primaryOpenDimension.nextAction ?? primaryOpenDimension.reasons.first ?? "Kurz prüfen",
+                focusSystemImage: primaryOpenDimension.metadata.systemImage,
+                focusStatus: primaryOpenDimension.status,
+                focusAction: primaryOpenDimension.metadata.action,
+                primaryAction: primaryAction(for: primaryOpenDimension),
+                overviewRows: overviewRows
+            )
+        }
 
         return HomeDashboardPresentation(
-            focusTitle: snapshot.overallHeadline,
-            focusSubtitle: primaryOpenDimension?.title ?? focusContext,
-            focusDetail: primaryOpenDimension?.subtitle ?? greenDetail(snapshot: snapshot, tripTitle: tripTitle),
-            focusContext: focusContext,
+            focusEyebrow: "Alles bestätigt",
+            focusTitle: greenDetail(snapshot: snapshot, tripTitle: tripTitle),
+            focusDetail: "Alle Bereiche stehen auf Grün.",
+            focusSystemImage: "checkmark.circle",
+            focusStatus: .green,
+            focusAction: nil,
+            primaryAction: HomePrimaryAction(
+                title: "Vor der Fahrt kurz checken",
+                subtitle: "Die Abfahrts-Checkliste bleibt dein letzter ruhiger Kontrollblick.",
+                action: .departureChecklist
+            ),
             overviewRows: overviewRows,
-            actionRows: actionRows
         )
+    }
+
+    private static func primaryAction(for dimension: ReadinessDimensionResult) -> HomePrimaryAction {
+        let metadata = dimension.metadata
+        return HomePrimaryAction(
+            title: primaryActionTitle(for: metadata.action),
+            subtitle: dimension.nextAction ?? dimension.summary,
+            action: metadata.action ?? .departureChecklist
+        )
+    }
+
+    private static func primaryActionTitle(for action: ReadinessActionKind?) -> String {
+        switch action {
+        case .weight:
+            return "Gewicht prüfen"
+        case .documents:
+            return "Dokumente prüfen"
+        case .maintenance:
+            return "Wartung ansehen"
+        case .departureChecklist:
+            return "Checkliste öffnen"
+        case .costs:
+            return "Kosten prüfen"
+        case .places:
+            return "Orte ansehen"
+        case .vehicleProfile:
+            return "Garage öffnen"
+        case nil:
+            return "Jetzt prüfen"
+        }
     }
 
     private static func greenDetail(snapshot: DashboardSnapshot, tripTitle: String?) -> String {
