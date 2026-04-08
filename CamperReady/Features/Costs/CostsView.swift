@@ -43,24 +43,20 @@ struct CostsView: View {
                     FeatureHeader(
                         eyebrow: vehicle.name,
                         title: "Kosten",
-                        subtitle: trip?.title ?? "Was dein Camper-Leben kostet — pro Reise und aufs Jahr."
+                        subtitle: "Reisekosten und feste Ausgaben für deinen aktiven Camper."
                     )
                     .opacity(hasAppeared ? 1 : 0.01)
                     .offset(y: hasAppeared ? 0 : 10)
 
-                    CamperSceneCard(
-                        mood: .costs,
-                        eyebrow: "Budget",
-                        title: "Kosten — klar sortiert, ohne Bürokratie.",
-                        subtitle: "Reisekosten, Fixkosten, Jahresüberblick — alles getrennt, alles findbar.",
-                        badge: "Übersicht"
+                    summaryBlock(
+                        stats: presentation.stats,
+                        title: "Überblick",
+                        subtitle: trip == nil
+                            ? "Aktuell gibt es keine aktive Reise. Feste Kosten und Jahreswert bleiben trotzdem sichtbar."
+                            : "Die wichtigsten Werte für \(trip?.title ?? "deine Reise") auf einen Blick."
                     )
-                    .opacity(hasAppeared ? 1 : 0.01)
-                    .offset(y: hasAppeared ? 0 : 12)
 
-                    summaryStats(presentation.stats, emphasisTitle: "Diese Reise")
-
-                    costSection(title: "Reise", subtitle: trip == nil ? "Leg eine Reise an, damit die Kosten sauber zugeordnet werden." : "Laufende Kosten werden automatisch der aktiven Reise zugeordnet.") {
+                    costSection(title: "Aktive Reise", subtitle: trip == nil ? "Leg eine Reise an, damit neue Kosten sauber zugeordnet werden." : "Neue variable Kosten landen automatisch bei der aktiven Reise.") {
                         if let trip {
                             VStack(alignment: .leading, spacing: 12) {
                                 Button {
@@ -115,7 +111,7 @@ struct CostsView: View {
                     }
 
                     costSection(
-                        title: trip == nil ? "Kosten ohne Reise" : "Kosten dieser Reise",
+                        title: trip == nil ? "Reisekosten" : "Kosten dieser Reise",
                         subtitle: trip == nil
                             ? "Diese Einträge sind noch keiner aktiven Reise zugeordnet."
                             : "Alle Einträge der aktiven Reise."
@@ -146,7 +142,7 @@ struct CostsView: View {
                         }
                     }
 
-                    costSection(title: "Laufende Kosten", subtitle: "Versicherung, Stellplatzmiete und Co. — unabhängig von Reisen.") {
+                    costSection(title: "Fixkosten", subtitle: "Versicherung, Stellplatzmiete und andere wiederkehrende Ausgaben.") {
                         VStack(alignment: .leading, spacing: 12) {
                             Button("Laufende Kosten hinzufügen") {
                                 costFormContext = CostFormContext(cost: nil, startsAsFixedCost: true)
@@ -261,17 +257,35 @@ struct CostsView: View {
         .offset(y: hasAppeared ? 0 : 18)
     }
 
-    private func summaryStats(_ stats: [SummaryStat], emphasisTitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            ForEach(stats) { stat in
-                AlpineSurface(role: stat.title == emphasisTitle ? .section : .raised) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(stat.title.uppercased())
-                            .font(.caption2.weight(.bold))
+    private func summaryBlock(stats: [SummaryStat], title: String, subtitle: String) -> some View {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(size: 22, weight: .semibold, design: .default))
+                        .tracking(-0.3)
+                        .foregroundStyle(AppTheme.ink)
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.mutedInk)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
+                    HStack(alignment: .firstTextBaseline, spacing: 12) {
+                        Text(stat.title)
+                            .font(.footnote.weight(.semibold))
                             .foregroundStyle(AppTheme.mutedInk)
+
+                        Spacer()
+
                         Text(stat.value)
-                            .font(.system(size: 28, weight: .semibold))
+                            .font(.headline.weight(.semibold))
                             .foregroundStyle(AppTheme.ink)
+                    }
+
+                    if index < stats.count - 1 {
+                        Divider()
                     }
                 }
             }

@@ -184,14 +184,6 @@ struct VehicleSelectionView: View {
                         )
                         .padding(.top, 20)
 
-                        CamperSceneCard(
-                            mood: .garage,
-                            eyebrow: "Garage",
-                            title: "Ein Camper, viele Geschichten.",
-                            subtitle: "CamperReady merkt sich, wer zuletzt gefahren ist — und hält alles getrennt.",
-                            badge: "Wechseln"
-                        )
-
                         if vehicles.isEmpty {
                             GarageEmptyState {
                                 editorContext = VehicleEditorContext(vehicle: nil)
@@ -336,7 +328,7 @@ private struct GarageFleetSection: View {
             }
 
             ForEach(vehicles) { vehicle in
-                GarageFleetCard(
+                GarageSelectionRow(
                     vehicle: vehicle,
                     isActive: vehicle.id == activeVehicleID,
                     onSelect: { onSelect(vehicle) },
@@ -347,48 +339,51 @@ private struct GarageFleetSection: View {
     }
 }
 
-private struct GarageFleetCard: View {
+private struct GarageSelectionRow: View {
     let vehicle: VehicleProfile
     let isActive: Bool
     let onSelect: () -> Void
     let onEdit: () -> Void
 
     var body: some View {
-        AlpineSurface(role: isActive ? .raised : .section) {
-            VStack(alignment: .leading, spacing: 14) {
+        AlpineSurface(role: .section) {
+            VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(isActive ? AppTheme.accent : AppTheme.mutedInk)
+                        .padding(.top, 2)
+
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(vehicle.name)
-                            .font(.title3.weight(.semibold))
-                            .foregroundStyle(AppTheme.ink)
+                        HStack(spacing: 8) {
+                            Text(vehicle.name)
+                                .font(.headline.weight(.semibold))
+                                .foregroundStyle(AppTheme.ink)
+
+                            if isActive {
+                                GarageTag(title: "Aktiv", isHighlighted: true)
+                            }
+                        }
 
                         Text(vehicleHeadline(vehicle))
                             .font(.subheadline)
                             .foregroundStyle(AppTheme.mutedInk)
                             .fixedSize(horizontal: false, vertical: true)
+
+                        HStack(spacing: 8) {
+                            GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                            GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                        }
                     }
 
                     Spacer()
-
-                    if isActive {
-                        GarageTag(title: "Aktiv", isHighlighted: true)
-                    }
-                }
-
-                HStack(spacing: 10) {
-                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
-                    GarageTag(title: vehicle.country.title, isHighlighted: false)
-                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
                 }
 
                 HStack(spacing: 12) {
                     if isActive {
                         Text("Ausgewählt")
-                            .font(.footnote.weight(.bold))
+                            .font(.footnote.weight(.semibold))
                             .foregroundStyle(AppTheme.petrol)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 11)
-                            .background(AppTheme.sand, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                     } else {
                         Button("Auswählen", action: onSelect)
                             .buttonStyle(.borderedProminent)
@@ -407,109 +402,42 @@ private struct GarageSelectionCard: View {
     let isActive: Bool
 
     var body: some View {
-        let compactLayout = ScenicCardLayout.metrics(forScreenWidth: UIScreen.main.bounds.width, emphasis: .support).sizeClass != .regular
+        AlpineSurface(role: .section) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(isActive ? AppTheme.accent : AppTheme.mutedInk)
+                    .padding(.top, 2)
 
-        AlpineSurface(role: isActive ? .raised : .section) {
-            VStack(alignment: .leading, spacing: 14) {
-                ZStack(alignment: .bottomLeading) {
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [AppTheme.lavenderSoft, AppTheme.skySoft, AppTheme.canvasWarm],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(height: compactLayout ? 160 : 180)
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Text(vehicle.name)
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(AppTheme.ink)
 
-                    CamperSceneArtwork(mood: .garage)
-                        .frame(height: compactLayout ? 160 : 180)
-                        .opacity(0.92)
-
-                    if isActive {
-                        GarageTag(title: "Aktiv", isHighlighted: true)
-                            .padding(14)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                        if isActive {
+                            GarageTag(title: "Aktiv", isHighlighted: true)
+                        }
                     }
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(vehicle.name)
-                        .font(.system(size: compactLayout ? 22 : 24, weight: .medium, design: .default))
-                        .foregroundStyle(AppTheme.petrol)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.82)
 
                     Text(vehicleHeadline(vehicle))
                         .font(.subheadline)
                         .foregroundStyle(AppTheme.mutedInk)
                         .fixedSize(horizontal: false, vertical: true)
-                }
 
-                if compactLayout {
-                    VStack(spacing: 10) {
-                        statTile(title: "Leergewicht", value: vehicle.preferredBaseWeightKg.map { "\($0.kgString)" } ?? "Offen")
-                        statTile(title: "Nutzlast", value: payloadValue(for: vehicle))
-                    }
-                } else {
-                    HStack(spacing: 10) {
-                        statTile(title: "Leergewicht", value: vehicle.preferredBaseWeightKg.map { "\($0.kgString)" } ?? "Offen")
-                        statTile(title: "Nutzlast", value: payloadValue(for: vehicle))
+                    HStack(spacing: 8) {
+                        GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
                     }
                 }
 
-                if compactLayout {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 10) {
-                            GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
-                            GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
-                        }
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
-                    }
-                } else {
-                    HStack(spacing: 10) {
-                        GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
-                        GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
-                    }
-                }
+                Spacer()
 
-                HStack {
-                    Text(isActive ? "Ausgewählt" : "Camper wählen")
-                        .font(.footnote.weight(.bold))
-                    Spacer()
-                    Image(systemName: isActive ? "checkmark" : "arrow.right")
-                        .font(.footnote.weight(.bold))
-                }
-                .foregroundStyle(isActive ? AppTheme.petrol : AppTheme.ink)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
-                .background(isActive ? AppTheme.sand : AppTheme.surfaceRaised, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.bold))
+                    .foregroundStyle(AppTheme.mutedInk)
             }
         }
-    }
-
-    private func statTile(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption.weight(.bold))
-                .textCase(.uppercase)
-                .tracking(0.7)
-                .foregroundStyle(AppTheme.mutedInk)
-            Text(value)
-                .font(.system(size: 20, weight: .semibold, design: .default))
-                .foregroundStyle(AppTheme.ink)
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.surfaceLow, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-    }
-
-    private func payloadValue(for vehicle: VehicleProfile) -> String {
-        guard let gvwr = vehicle.gvwrKg, let baseWeight = vehicle.preferredBaseWeightKg else {
-            return "Offen"
-        }
-        return "\(Int(max(gvwr - baseWeight, 0).rounded())) kg"
     }
 }
 
