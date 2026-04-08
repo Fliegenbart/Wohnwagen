@@ -103,4 +103,23 @@ final class HomeDashboardPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.primaryAction.action, .documents)
         XCTAssertEqual(presentation.overviewRows.map(\.systemImage), ["wrench.and.screwdriver", "doc.text", "scalemass"])
     }
+
+    func testPrimaryActionPresentationCoversRemainingMappings() {
+        let cases: [(ReadinessActionKind?, String, String, ReadinessActionKind)] = [
+            (.maintenance, "Wartung ansehen", "wrench.and.screwdriver", .maintenance),
+            (.costs, "Kosten prüfen", "eurosign.circle", .costs),
+            (.places, "Orte ansehen", "map", .places),
+            (.vehicleProfile, "Garage öffnen", "car.circle", .vehicleProfile),
+            (nil, "Jetzt prüfen", "checklist", .departureChecklist)
+        ]
+
+        for (action, expectedTitle, expectedSystemImage, expectedResolvedAction) in cases {
+            let primaryAction = HomeDashboardPresentation.makePrimaryAction(for: action, subtitle: "Kurz prüfen")
+
+            XCTAssertEqual(primaryAction.title, expectedTitle)
+            XCTAssertEqual(primaryAction.subtitle, "Kurz prüfen")
+            XCTAssertEqual(primaryAction.systemImage, expectedSystemImage)
+            XCTAssertEqual(primaryAction.action, expectedResolvedAction)
+        }
+    }
 }

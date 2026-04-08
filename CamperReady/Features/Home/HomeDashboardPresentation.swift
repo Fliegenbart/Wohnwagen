@@ -90,14 +90,21 @@ struct HomeDashboardPresentation: Equatable {
         )
     }
 
-    private static func primaryAction(for dimension: ReadinessDimensionResult) -> HomePrimaryAction {
-        let metadata = dimension.metadata
-        let descriptor = primaryActionDescriptor(for: metadata.action)
+    static func makePrimaryAction(for action: ReadinessActionKind?, subtitle: String) -> HomePrimaryAction {
+        let descriptor = primaryActionDescriptor(for: action)
         return HomePrimaryAction(
             title: descriptor.title,
-            subtitle: dimension.nextAction ?? dimension.summary,
+            subtitle: subtitle,
             systemImage: descriptor.systemImage,
-            action: metadata.action ?? .departureChecklist
+            action: action ?? .departureChecklist
+        )
+    }
+
+    private static func primaryAction(for dimension: ReadinessDimensionResult) -> HomePrimaryAction {
+        let metadata = dimension.metadata
+        return makePrimaryAction(
+            for: metadata.action,
+            subtitle: dimension.nextAction ?? dimension.summary
         )
     }
 
