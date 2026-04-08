@@ -21,6 +21,7 @@ final class WeightPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.support, "Bodensee")
         XCTAssertEqual(presentation.primaryMetrics.map(\.title), ["Gesamtgewicht", "Achslast"])
         XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["3050 kg", "Niedrig"])
+        XCTAssertEqual(presentation.confidenceNote, "Schätzung wirkt aktuell plausibel.")
     }
 
     func testWeightPresentationFallsBackToCurrentTripSupport() {
@@ -40,12 +41,23 @@ final class WeightPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.support, "Aktuelle Fahrt")
         XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["Noch nicht erfasst", "Niedrig"])
+        XCTAssertEqual(
+            presentation.confidenceNote,
+            "Schätzung bleibt vorsichtig, bis zGG und Leergewicht vollständig sind."
+        )
     }
 
     func testWeightPresentationMapsAxleRiskStatesWithoutLosingInformation() {
         XCTAssertEqual(makePresentation(axleRisk: .low).primaryMetrics.last?.value, "Niedrig")
         XCTAssertEqual(makePresentation(axleRisk: .elevated).primaryMetrics.last?.value, "Erhöht")
         XCTAssertEqual(makePresentation(axleRisk: .measured).primaryMetrics.last?.value, "Gemessen")
+    }
+
+    func testWeightPresentationHighlightsMeasuredAxleConfidence() {
+        XCTAssertEqual(
+            makePresentation(axleRisk: .measured).confidenceNote,
+            "Achslast basiert auf echten Messwerten."
+        )
     }
 
     func testWeightMetricUsesStableIdentityFromContent() {

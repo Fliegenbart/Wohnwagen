@@ -30,62 +30,57 @@ struct WeightView: View {
             settings: activeSettings
         )
         let presentation = WeightPresentation.make(assessment: assessment, tripTitle: trip?.title)
+        let topContributors = Array(assessment.contributors.prefix(4))
 
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 FeatureHeader(
-                    eyebrow: "Sicherheit & Reserve",
+                    eyebrow: "Gewicht & Reserve",
                     title: "Beladung",
-                    subtitle: "Wirf vor der Fahrt einen Blick auf Reserve, Frischwasser und Zusatzlasten."
+                    subtitle: "Gesamtgewicht, Reserve und die wichtigsten Lasten für diese Fahrt."
                 )
 
                 if let vehicle {
-                    CamperSceneCard(
-                        mood: .weight,
-                        eyebrow: "Beladung",
-                        title: "Dein Gewicht — übersichtlich und ehrlich.",
-                        subtitle: "Alles Wichtige für die Fahrt auf einen Blick.",
-                        badge: assessment.status.title
-                    )
-
                     analysisPanel(
                         vehicle: vehicle,
-                        trip: trip,
                         assessment: assessment,
-                        presentation: presentation,
-                        settings: activeSettings
+                        presentation: presentation
                     )
 
                     weightSection(title: "Beladung", subtitle: "Wasser, Gas und Zusatzlasten für diese Fahrt anpassen.") {
-                        if let activeSettings {
-                            LoadSettingsSummaryCard(vehicle: vehicle, loadSettings: activeSettings) {
-                                loadSettingsFormContext = LoadSettingsFormContext(settings: activeSettings, trip: trip)
-                            }
-                        } else {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Für diese Fahrt ist noch keine Beladung eingetragen. Kein Stress — das geht schnell.")
-                                    .foregroundStyle(AppTheme.mutedInk)
-                                Button("Beladung eintragen") {
-                                    loadSettingsFormContext = LoadSettingsFormContext(settings: nil, trip: trip)
+                        VStack(alignment: .leading, spacing: 14) {
+                            if let activeSettings {
+                                LoadSettingsSummaryCard(loadSettings: activeSettings) {
+                                    loadSettingsFormContext = LoadSettingsFormContext(settings: activeSettings, trip: trip)
                                 }
-                                .buttonStyle(.borderedProminent)
+                            } else {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Für diese Fahrt ist noch keine Beladung eingetragen. Kein Stress — das geht schnell.")
+                                        .foregroundStyle(AppTheme.mutedInk)
+                                    Button("Beladung eintragen") {
+                                        loadSettingsFormContext = LoadSettingsFormContext(settings: nil, trip: trip)
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                }
                             }
-                        }
-                    }
 
-                    weightSection(title: "Die größten Brocken", subtitle: "Was am meisten wiegt, siehst du hier zuerst.") {
-                        let topContributors = Array(assessment.contributors.prefix(6))
-                        if topContributors.isEmpty {
-                            Text("Noch keine größeren Gewichte erfasst.")
-                                .foregroundStyle(AppTheme.mutedInk)
-                        } else {
-                            ForEach(topContributors) { contributor in
-                                WeightContributorRow(
-                                    contributor: contributor,
-                                    maxWeightKg: topContributors.first?.weightKg ?? contributor.weightKg
-                                )
-                                if contributor.id != topContributors.last?.id {
-                                    Divider()
+                            if !topContributors.isEmpty {
+                                Divider()
+
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("Größte Lasten")
+                                        .font(.footnote.weight(.semibold))
+                                        .foregroundStyle(AppTheme.mutedInk)
+
+                                    ForEach(topContributors) { contributor in
+                                        WeightContributorRow(
+                                            contributor: contributor,
+                                            maxWeightKg: topContributors.first?.weightKg ?? contributor.weightKg
+                                        )
+                                        if contributor.id != topContributors.last?.id {
+                                            Divider()
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -215,71 +210,23 @@ struct WeightView: View {
 
     private func analysisPanel(
         vehicle: VehicleProfile,
-        trip: Trip?,
         assessment: WeightAssessmentOutput,
-        presentation: WeightPresentation,
-        settings: TripLoadSettings?
+        presentation: WeightPresentation
     ) -> some View {
-        let compactLayout = UIScreen.main.bounds.width < 402
-
         return VStack(alignment: .leading, spacing: 12) {
-            AlpineSurface(role: .raised) {
-                VStack(alignment: .leading, spacing: 18) {
-                    LoadDistributionArtwork()
-
-                    Text("Fahrzeugchassis: \(vehicle.vehicleKind.title) \(Int(vehicle.gvwrKg ?? 0)) kg")
-                        .font(.caption.weight(.bold))
-                        .textCase(.uppercase)
-                        .tracking(0.7)
-                        .foregroundStyle(AppTheme.mutedInk)
-                }
-            }
-
-            if compactLayout {
-                VStack(spacing: 12) {
-                    axleMetricCard(
-                        title: "Hinterachse",
-                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
-                        progress: axleProgress(for: vehicle.rearAxleMeasuredKg, baseline: vehicle.gvwrKg)
-                    )
-
-                    axleMetricCard(
-                        title: "Vorderachse",
-                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
-                        progress: axleProgress(for: vehicle.frontAxleMeasuredKg, baseline: vehicle.gvwrKg)
-                    )
-                }
-            } else {
-                HStack(spacing: 12) {
-                    axleMetricCard(
-                        title: "Hinterachse",
-                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
-                        progress: axleProgress(for: vehicle.rearAxleMeasuredKg, baseline: vehicle.gvwrKg)
-                    )
-
-                    axleMetricCard(
-                        title: "Vorderachse",
-                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Noch nicht erfasst",
-                        progress: axleProgress(for: vehicle.frontAxleMeasuredKg, baseline: vehicle.gvwrKg)
-                    )
-                }
-            }
-
             AlpineSurface(role: .focus) {
-                VStack(alignment: .leading, spacing: 14) {
-                    HStack {
+                VStack(alignment: .leading, spacing: 18) {
+                    HStack(alignment: .top, spacing: 12) {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Gesamtgewicht")
+                            Text("Beladungsanalyse")
                                 .font(.caption.weight(.bold))
                                 .textCase(.uppercase)
                                 .tracking(0.8)
                                 .foregroundStyle(.white.opacity(0.76))
 
-                            Text(presentation.headline)
-                                .font(.system(size: 30, weight: .semibold, design: .default))
-                                .foregroundStyle(.white)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.84)
+                            Text(presentation.support)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.white.opacity(0.82))
                         }
 
                         Spacer()
@@ -289,7 +236,7 @@ struct WeightView: View {
 
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(weightSummaryValue(for: assessment))
-                            .font(.system(size: 42, weight: .semibold, design: .default))
+                            .font(.system(size: 46, weight: .semibold, design: .default))
                             .foregroundStyle(.white)
                         Text("kg")
                             .font(.headline.weight(.semibold))
@@ -297,14 +244,22 @@ struct WeightView: View {
                         Spacer()
                     }
 
-                    Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
+                    Text("Aktuelles Gesamtgewicht")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.80))
+
+                    weightHeroRow(title: "Reserve", value: presentation.headline)
+
+                    Text(presentation.confidenceNote)
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.white.opacity(0.82))
                         .fixedSize(horizontal: false, vertical: true)
 
-                    VStack(spacing: 10) {
-                        metricRow(title: "Reserve", value: assessment.remainingMarginKg.map { $0.kgString } ?? "—")
-                        metricRow(title: "Achslast-Risiko", value: axleLabel(for: assessment.axleRisk))
+                    if let nextAction = assessment.nextAction {
+                        Text(nextAction)
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.70))
+                            .fixedSize(horizontal: false, vertical: true)
                     }
 
                     GeometryReader { proxy in
@@ -317,6 +272,14 @@ struct WeightView: View {
                             }
                     }
                     .frame(height: 10)
+
+                    HStack(spacing: 12) {
+                        Text("zGG \(vehicle.gvwrKg?.kgString ?? "—")")
+                        Spacer()
+                        Text(vehicle.vehicleKind.title)
+                    }
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.70))
                 }
             }
         }
@@ -324,73 +287,26 @@ struct WeightView: View {
         .offset(y: hasAppeared ? 0 : 16)
     }
 
-    private func metricRow(title: String, value: String) -> some View {
+    private func weightHeroRow(title: String, value: String) -> some View {
         HStack(spacing: 12) {
             Text(title)
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.70))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.72))
 
             Spacer()
 
             Text(value)
-                .font(.headline.weight(.semibold))
+                .font(.title3.weight(.semibold))
                 .foregroundStyle(.white)
         }
-    }
-
-    private func axleMetricCard(title: String, value: String, progress: Double) -> some View {
-        AlpineSurface(role: .raised) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text(title)
-                        .font(.caption.weight(.bold))
-                        .textCase(.uppercase)
-                        .tracking(0.8)
-                        .foregroundStyle(AppTheme.mutedInk)
-                    Spacer()
-                    Image(systemName: "straighten")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(AppTheme.petrol)
-                }
-
-                Text(value)
-                    .font(.system(size: 24, weight: .semibold, design: .default))
-                    .foregroundStyle(AppTheme.ink)
-                    .lineLimit(1)
-
-                GeometryReader { proxy in
-                    RoundedRectangle(cornerRadius: 999, style: .continuous)
-                        .fill(AppTheme.surfaceHigh)
-                        .overlay(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 999, style: .continuous)
-                                .fill(AppTheme.petrol)
-                                .frame(width: proxy.size.width * progress, height: 6)
-                        }
-                }
-                .frame(height: 6)
-            }
-        }
-    }
-
-    private func axleProgress(for value: Double?, baseline: Double?) -> Double {
-        guard let value, let baseline, baseline > 0 else { return 0.25 }
-        return min(max(value / baseline, 0.1), 1)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 14)
+        .background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func weightSummaryValue(for assessment: WeightAssessmentOutput) -> String {
         guard let value = assessment.estimatedGrossWeightKg else { return "—" }
         return "\(Int(value.rounded()))"
-    }
-
-    private func axleLabel(for risk: LoadRiskLevel) -> String {
-        switch risk {
-        case .low:
-            return "Niedrig"
-        case .elevated:
-            return "Erhöht"
-        case .measured:
-            return "Gemessen"
-        }
     }
 
     private func weightProgress(for assessment: WeightAssessmentOutput, gvwr: Double?) -> Double {
@@ -400,30 +316,8 @@ struct WeightView: View {
         return min(max(total / max(gvwr, 1), 0), 1)
     }
 
-    private func weightSupportLine(vehicle: VehicleProfile, trip: Trip?, assessment: WeightAssessmentOutput) -> String {
-        if assessment.status == .green {
-            return trip.map { "\(vehicle.name) hat für \($0.title) noch genügend Reserve — keine Auffälligkeiten." }
-                ?? "\(vehicle.name) bleibt aktuell in einem plausiblen Gewichtsfenster."
-        }
-
-        if assessment.status == .red {
-            return "Die Beladung passt so nicht ganz. Nimm etwas raus oder reduziere den Wasserstand, bevor du losfährst."
-        }
-
-        return "Die Beladung ist noch nicht eindeutig unkritisch. Prüfe Reserve, Wasserstand und mögliche Achslast-Risiken vor der Abfahrt."
-    }
-
     private func weightSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(title)
-                    .font(.system(size: 22, weight: .semibold, design: .default))
-                    .tracking(-0.3)
-                    .foregroundStyle(AppTheme.ink)
-                Text(subtitle)
-                    .font(.callout)
-                    .foregroundStyle(AppTheme.mutedInk)
-            }
+        SectionCard(title: title, subtitle: subtitle) {
             content()
         }
         .opacity(hasAppeared ? 1 : 0.01)
@@ -455,27 +349,24 @@ private struct LoadSettingsFormContext: Identifiable {
 }
 
 private struct LoadSettingsSummaryCard: View {
-    let vehicle: VehicleProfile
     let loadSettings: TripLoadSettings
     let onEdit: () -> Void
 
     var body: some View {
-        SectionCard(title: "Beladung für diese Reise") {
-            VStack(alignment: .leading, spacing: 10) {
-                summaryRow("Frischwasser", "\(Int(loadSettings.freshWaterLiters.rounded())) l")
-                summaryRow("Grauwasser", "\(Int(loadSettings.greyWaterLiters.rounded())) l")
-                summaryRow("Gasflaschen", "\(Int(loadSettings.gasBottleFillPercent.rounded())) %")
-                summaryRow("Heckträger", "\(Int(loadSettings.rearCarrierLoadKg.rounded())) kg")
-                summaryRow("Dachlast", "\(Int(loadSettings.roofLoadKg.rounded())) kg")
-                summaryRow("Zusatzlast", "\(Int(loadSettings.extraLoadKg.rounded())) kg")
-                if loadSettings.bikesOnRearCarrier {
-                    Text("Fahrräder am Heckträger sind mit eingerechnet.")
-                        .font(.footnote)
-                        .foregroundStyle(AppTheme.mutedInk)
-                }
-                Button("Beladung anpassen", action: onEdit)
-                    .buttonStyle(.borderedProminent)
+        VStack(alignment: .leading, spacing: 10) {
+            summaryRow("Frischwasser", "\(Int(loadSettings.freshWaterLiters.rounded())) l")
+            summaryRow("Grauwasser", "\(Int(loadSettings.greyWaterLiters.rounded())) l")
+            summaryRow("Gasflaschen", "\(Int(loadSettings.gasBottleFillPercent.rounded())) %")
+            summaryRow("Heckträger", "\(Int(loadSettings.rearCarrierLoadKg.rounded())) kg")
+            summaryRow("Dachlast", "\(Int(loadSettings.roofLoadKg.rounded())) kg")
+            summaryRow("Zusatzlast", "\(Int(loadSettings.extraLoadKg.rounded())) kg")
+            if loadSettings.bikesOnRearCarrier {
+                Text("Fahrräder am Heckträger sind mit eingerechnet.")
+                    .font(.footnote)
+                    .foregroundStyle(AppTheme.mutedInk)
             }
+            Button("Beladung anpassen", action: onEdit)
+                .buttonStyle(.borderedProminent)
         }
     }
 

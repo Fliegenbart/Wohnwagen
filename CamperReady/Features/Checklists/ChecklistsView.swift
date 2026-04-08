@@ -25,29 +25,33 @@ struct ChecklistsView: View {
         let selectedItems = AppDataLocator.checklistItems(for: selectedChecklist, items: items)
         let requiredItems = selectedItems.filter(\.isRequired)
         let completedRequired = requiredItems.filter(\.isCompleted).count
-        let progress = requiredItems.isEmpty ? 0 : Double(completedRequired) / Double(requiredItems.count)
+        let nextRequiredItem = requiredItems.first(where: { !$0.isCompleted })
+        let progress = requiredItems.isEmpty
+            ? ((selectedChecklist?.state == .complete) ? 1 : 0)
+            : Double(completedRequired) / Double(requiredItems.count)
         let presentation = ChecklistPresentation.make(
             title: selectedChecklist?.title ?? "Checklisten",
             state: selectedChecklist?.state ?? .notStarted,
             completedRequired: completedRequired,
-            requiredCount: requiredItems.count
+            requiredCount: requiredItems.count,
+            nextRequiredTitle: nextRequiredItem?.title
         )
         let heroStatus = selectedChecklist.map(status(for:)) ?? .yellow
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                CamperSceneCard(
-                    mood: .checklists,
-                    eyebrow: "Deine Modi",
-                    title: "Vor der Fahrt wird’s ruhiger — und übersichtlicher.",
-                    subtitle: "Abfahrt, Ankunft, Winterschlaf — jeder Modus hat seine eigene Liste.",
-                    badge: "Neu"
+            VStack(alignment: .leading, spacing: 18) {
+                FeatureHeader(
+                    eyebrow: "Aktiver Ablauf",
+                    title: "Checklisten",
+                    subtitle: vehicleChecklists.isEmpty
+                        ? "Starte einen Modus und arbeite die Punkte ruhig nacheinander ab."
+                        : "Wähle einen Modus und hake die offenen Pflichtpunkte nacheinander ab."
                 )
                 .opacity(hasAppeared ? 1 : 0.01)
                 .offset(y: hasAppeared ? 0 : 10)
 
                 if vehicleChecklists.isEmpty {
-                    SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Wähl einen Modus — die App sammelt die passenden Punkte für dich.") {
+                    SectionCard(title: "Neue Checkliste starten", subtitle: "Wähl einen Modus. Die passende Liste wird direkt angelegt.") {
                         VStack(alignment: .leading, spacing: 16) {
                             ContentUnavailableView(
                                 "Noch keine Checkliste gestartet",
@@ -56,11 +60,16 @@ struct ChecklistsView: View {
                             )
 
                             if let vehicle {
-                                ForEach(ChecklistMode.allCases) { mode in
-                                    Button(mode.title) {
-                                        startChecklist(mode: mode, vehicle: vehicle, trip: trip)
+                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 10)], spacing: 10) {
+                                    ForEach(ChecklistMode.allCases) { mode in
+                                        Button {
+                                            startChecklist(mode: mode, vehicle: vehicle, trip: trip)
+                                        } label: {
+                                            Label(mode.title, systemImage: mode.iconName)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        .buttonStyle(.bordered)
                                     }
-                                    .buttonStyle(.borderedProminent)
                                 }
                             }
                         }
@@ -68,21 +77,42 @@ struct ChecklistsView: View {
                     .opacity(hasAppeared ? 1 : 0.01)
                     .offset(y: hasAppeared ? 0 : 16)
                 } else {
-                    FeatureHeader(
-                        eyebrow: "Checklisten",
-                        title: selectedChecklist?.title ?? "Checklisten",
-                        subtitle: presentation.progressText
-                    )
-                    .opacity(hasAppeared ? 1 : 0.01)
-                    .offset(y: hasAppeared ? 0 : 10)
+                    AlpineSurface(role: .focus) {
+                        VStack(alignment: .leading, spacing: 16) {
+                            HStack(alignment: .top, spacing: 12) {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text(presentation.title)
+                                        .font(.system(size: 28, weight: .semibold, design: .default))
+                                        .foregroundStyle(.white)
+                                        .fixedSize(horizontal: false, vertical: true)
 
-                    AlpineSurface(role: .raised) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            StatusBadge(status: heroStatus, text: presentation.stateText)
+                                    Text(presentation.progressText)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(.white.opacity(0.82))
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+
+                                Spacer()
+
+                                StatusBadge(status: heroStatus, text: presentation.stateText, surface: .dark)
+                            }
 
                             ProgressView(value: progress)
                                 .progressViewStyle(.linear)
-                                .tint(AppTheme.statusColor(heroStatus))
+                                .tint(.white.opacity(0.88))
+
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Nächster Fokus")
+                                    .font(.caption.weight(.bold))
+                                    .textCase(.uppercase)
+                                    .tracking(0.8)
+                                    .foregroundStyle(.white.opacity(0.72))
+
+                                Text(presentation.focusText)
+                                    .font(.headline.weight(.semibold))
+                                    .foregroundStyle(.white)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
 
                             if compactActions {
                                 VStack(alignment: .leading, spacing: 10) {
@@ -119,7 +149,7 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Aktive Checklisten")
+                        Text("Modus")
                             .font(.caption.weight(.semibold))
                             .textCase(.uppercase)
                             .foregroundStyle(AppTheme.mutedInk)
@@ -167,7 +197,10 @@ struct ChecklistsView: View {
                     .offset(y: hasAppeared ? 0 : 16)
 
                     if let selectedChecklist {
-                        SectionCard(title: "Offene Punkte", subtitle: "Das steht für diesen Modus noch an.") {
+                        SectionCard(
+                            title: "Offene Punkte",
+                            subtitle: nextRequiredItem == nil ? "Im Moment ist nichts Dringendes offen." : "Arbeite mit dem nächsten offenen Pflichtpunkt weiter."
+                        ) {
                             VStack(alignment: .leading, spacing: 14) {
                                 if selectedItems.isEmpty {
                                     Text("Diese Liste ist noch leer — füg einfach Punkte hinzu.")
