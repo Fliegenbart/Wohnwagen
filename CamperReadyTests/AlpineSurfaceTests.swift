@@ -35,6 +35,27 @@ final class AlpineSurfaceTests: XCTestCase {
         XCTAssertEqual(focus.shadowYOffset, 8)
     }
 
+    func testTopBarAccessoryKeepsQuietTabsSemanticallyClear() {
+        XCTAssertEqual(ZipTopBarAccessory.weight.systemImage, "scalemass")
+        XCTAssertEqual(ZipTopBarAccessory.weight.accessibilityLabel, "Gewicht")
+
+        XCTAssertEqual(ZipTopBarAccessory.checklists.systemImage, "checklist")
+        XCTAssertEqual(ZipTopBarAccessory.checklists.accessibilityLabel, "Checklisten")
+
+        XCTAssertEqual(ZipTopBarAccessory.logbook.systemImage, "book.closed")
+        XCTAssertEqual(ZipTopBarAccessory.logbook.accessibilityLabel, "Logbuch")
+
+        XCTAssertEqual(ZipTopBarAccessory.costs.systemImage, "eurosign")
+        XCTAssertEqual(ZipTopBarAccessory.costs.accessibilityLabel, "Kosten")
+    }
+
+    func testZipAvatarBubbleStoresAccessibilityLabel() {
+        let bubble = ZipAvatarBubble(systemImage: "checklist", accessibilityLabel: "Checklisten")
+
+        XCTAssertEqual(bubble.systemImage, "checklist")
+        XCTAssertEqual(bubble.accessibilityLabel, "Checklisten")
+    }
+
     func testRoadSheetHeaderFeedsSharedHeaderAndUtilityRow() {
         let header = RoadSheetHeader(
             eyebrow: "Planung",

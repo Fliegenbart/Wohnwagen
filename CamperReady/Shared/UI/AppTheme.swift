@@ -68,17 +68,6 @@ enum AppTheme {
         case .red: red
         }
     }
-
-    static func statusGradient(_ status: ReadinessStatus) -> LinearGradient {
-        switch status {
-        case .green:
-            LinearGradient(colors: [green, greenSoft], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .yellow:
-            LinearGradient(colors: [yellow, yellowSoft], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .red:
-            LinearGradient(colors: [red, redSoft], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
-    }
 }
 
 struct AppCanvas<Content: View>: View {

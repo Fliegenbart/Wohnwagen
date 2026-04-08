@@ -5,6 +5,39 @@ enum ScenicCardEmphasis {
     case support
 }
 
+enum ZipTopBarAccessory {
+    case weight
+    case checklists
+    case logbook
+    case costs
+
+    var systemImage: String {
+        switch self {
+        case .weight:
+            "scalemass"
+        case .checklists:
+            "checklist"
+        case .logbook:
+            "book.closed"
+        case .costs:
+            "eurosign"
+        }
+    }
+
+    var accessibilityLabel: String {
+        switch self {
+        case .weight:
+            "Gewicht"
+        case .checklists:
+            "Checklisten"
+        case .logbook:
+            "Logbuch"
+        case .costs:
+            "Kosten"
+        }
+    }
+}
+
 enum ScenicCardSizeClass {
     case regular
     case compact
@@ -218,6 +251,7 @@ struct ZipStatusPill: View {
 
 struct ZipAvatarBubble: View {
     let systemImage: String
+    let accessibilityLabel: String
 
     var body: some View {
         Image(systemName: systemImage)
@@ -229,6 +263,8 @@ struct ZipAvatarBubble: View {
                 Circle()
                     .strokeBorder(AppTheme.outlineVariant.opacity(0.6), lineWidth: 1)
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(accessibilityLabel)
     }
 }
 
