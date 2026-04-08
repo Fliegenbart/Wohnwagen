@@ -69,4 +69,18 @@ final class ChecklistPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.focusText, "Alle Pflichtpunkte sind erledigt.")
     }
+
+    func testChecklistWorkflowSectionsKeepOpenItemsFocusedAndCompletedAccessible() {
+        let checklistID = UUID()
+        let items = [
+            ChecklistItemRecord(checklistID: checklistID, title: "Gas prüfen", isCompleted: false, sortOrder: 0),
+            ChecklistItemRecord(checklistID: checklistID, title: "Strom trennen", isCompleted: true, sortOrder: 1),
+            ChecklistItemRecord(checklistID: checklistID, title: "Fenster schließen", isCompleted: false, sortOrder: 2)
+        ]
+
+        let sections = ChecklistWorkflowSections.make(items: items)
+
+        XCTAssertEqual(sections.openItems.map(\.title), ["Gas prüfen", "Fenster schließen"])
+        XCTAssertEqual(sections.completedItems.map(\.title), ["Strom trennen"])
+    }
 }

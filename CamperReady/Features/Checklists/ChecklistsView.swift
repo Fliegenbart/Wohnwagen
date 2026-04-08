@@ -23,6 +23,7 @@ struct ChecklistsView: View {
         let vehicleChecklists = AppDataLocator.checklists(for: vehicle, checklists: checklists)
         let selectedChecklist = vehicleChecklists.first(where: { $0.id == selectedChecklistID }) ?? vehicleChecklists.first
         let selectedItems = AppDataLocator.checklistItems(for: selectedChecklist, items: items)
+        let workflowSections = ChecklistWorkflowSections.make(items: selectedItems)
         let requiredItems = selectedItems.filter(\.isRequired)
         let completedRequired = requiredItems.filter(\.isCompleted).count
         let nextRequiredItem = requiredItems.first(where: { !$0.isCompleted })
@@ -205,8 +206,12 @@ struct ChecklistsView: View {
                                 if selectedItems.isEmpty {
                                     Text("Diese Liste ist noch leer — füg einfach Punkte hinzu.")
                                         .foregroundStyle(AppTheme.mutedInk)
+                                } else if workflowSections.openItems.isEmpty {
+                                    Text("Alle Punkte dieser Liste sind gerade erledigt.")
+                                        .foregroundStyle(AppTheme.mutedInk)
                                 } else {
-                                    ForEach(Array(selectedItems.enumerated()), id: \.element.id) { index, item in
+                                    ForEach(workflowSections.openItems) { item in
+                                        let index = selectedItems.firstIndex(where: { $0.id == item.id }) ?? 0
                                         ChecklistItemRow(
                                             item: item,
                                             onToggle: {
@@ -233,6 +238,41 @@ struct ChecklistsView: View {
                         }
                         .opacity(hasAppeared ? 1 : 0.01)
                         .offset(y: hasAppeared ? 0 : 18)
+
+                        if !workflowSections.completedItems.isEmpty {
+                            SectionCard(
+                                title: "Erledigt",
+                                subtitle: "Bereits abgehakt. Bei Bedarf kannst du Punkte weiter bearbeiten."
+                            ) {
+                                VStack(alignment: .leading, spacing: 14) {
+                                    ForEach(workflowSections.completedItems) { item in
+                                        let index = selectedItems.firstIndex(where: { $0.id == item.id }) ?? 0
+                                        ChecklistItemRow(
+                                            item: item,
+                                            onToggle: {
+                                                refreshState(for: selectedChecklist)
+                                            },
+                                            onEdit: {
+                                                checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: item)
+                                            },
+                                            onMoveUp: {
+                                                moveItem(item, in: selectedChecklist, direction: -1)
+                                            },
+                                            onMoveDown: {
+                                                moveItem(item, in: selectedChecklist, direction: 1)
+                                            },
+                                            onDelete: {
+                                                deleteItem(item, from: selectedChecklist)
+                                            },
+                                            canMoveUp: index > 0,
+                                            canMoveDown: index < selectedItems.count - 1
+                                        )
+                                    }
+                                }
+                            }
+                            .opacity(hasAppeared ? 1 : 0.01)
+                            .offset(y: hasAppeared ? 0 : 18)
+                        }
                     }
                 }
             }

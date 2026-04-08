@@ -1,5 +1,17 @@
 import Foundation
 
+struct ChecklistWorkflowSections {
+    let openItems: [ChecklistItemRecord]
+    let completedItems: [ChecklistItemRecord]
+
+    static func make(items: [ChecklistItemRecord]) -> Self {
+        ChecklistWorkflowSections(
+            openItems: items.filter { !$0.isCompleted },
+            completedItems: items.filter(\.isCompleted)
+        )
+    }
+}
+
 struct ChecklistPresentation: Equatable {
     let title: String
     let stateText: String

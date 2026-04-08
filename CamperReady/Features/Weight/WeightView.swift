@@ -213,6 +213,8 @@ struct WeightView: View {
         assessment: WeightAssessmentOutput,
         presentation: WeightPresentation
     ) -> some View {
+        let compactSignals = UIScreen.main.bounds.width < 402
+
         return VStack(alignment: .leading, spacing: 12) {
             AlpineSurface(role: .focus) {
                 VStack(alignment: .leading, spacing: 18) {
@@ -248,7 +250,37 @@ struct WeightView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.80))
 
-                    weightHeroRow(title: "Reserve", value: presentation.headline)
+                    if compactSignals {
+                        VStack(spacing: 10) {
+                            weightHeroSignalCard(
+                                title: "Reserve",
+                                value: presentation.headline,
+                                systemImage: "scalemass.fill",
+                                accent: .white.opacity(0.92)
+                            )
+                            weightHeroSignalCard(
+                                title: "Achslast",
+                                value: presentation.axleRiskLabel,
+                                systemImage: "gauge.with.dots.needle.50percent",
+                                accent: axleRiskAccent(for: assessment.axleRisk)
+                            )
+                        }
+                    } else {
+                        HStack(spacing: 10) {
+                            weightHeroSignalCard(
+                                title: "Reserve",
+                                value: presentation.headline,
+                                systemImage: "scalemass.fill",
+                                accent: .white.opacity(0.92)
+                            )
+                            weightHeroSignalCard(
+                                title: "Achslast",
+                                value: presentation.axleRiskLabel,
+                                systemImage: "gauge.with.dots.needle.50percent",
+                                accent: axleRiskAccent(for: assessment.axleRisk)
+                            )
+                        }
+                    }
 
                     Text(presentation.confidenceNote)
                         .font(.subheadline.weight(.medium))
@@ -287,21 +319,32 @@ struct WeightView: View {
         .offset(y: hasAppeared ? 0 : 16)
     }
 
-    private func weightHeroRow(title: String, value: String) -> some View {
-        HStack(spacing: 12) {
-            Text(title)
+    private func weightHeroSignalCard(title: String, value: String, systemImage: String, accent: Color) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            Image(systemName: systemImage)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.72))
+                .foregroundStyle(accent)
+                .frame(width: 32, height: 32)
+                .background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.caption.weight(.bold))
+                    .textCase(.uppercase)
+                    .tracking(0.8)
+                    .foregroundStyle(.white.opacity(0.68))
+
+                Text(value)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(.white)
+            }
 
             Spacer()
-
-            Text(value)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(.white)
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 14)
         .background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func weightSummaryValue(for assessment: WeightAssessmentOutput) -> String {
@@ -314,6 +357,17 @@ struct WeightView: View {
             return 0.0
         }
         return min(max(total / max(gvwr, 1), 0), 1)
+    }
+
+    private func axleRiskAccent(for risk: LoadRiskLevel) -> Color {
+        switch risk {
+        case .low:
+            return .white.opacity(0.92)
+        case .elevated:
+            return AppTheme.yellow
+        case .measured:
+            return AppTheme.green
+        }
     }
 
     private func weightSection<Content: View>(title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
