@@ -3,7 +3,13 @@ import Foundation
 struct HomePrimaryAction: Equatable {
     let title: String
     let subtitle: String
+    let systemImage: String
     let action: ReadinessActionKind
+}
+
+private struct HomePrimaryActionDescriptor {
+    let title: String
+    let systemImage: String
 }
 
 struct HomeOverviewRow: Equatable, Identifiable {
@@ -77,6 +83,7 @@ struct HomeDashboardPresentation: Equatable {
             primaryAction: HomePrimaryAction(
                 title: "Vor der Fahrt kurz checken",
                 subtitle: "Die Abfahrts-Checkliste bleibt dein letzter ruhiger Kontrollblick.",
+                systemImage: "checklist",
                 action: .departureChecklist
             ),
             overviewRows: overviewRows,
@@ -85,31 +92,33 @@ struct HomeDashboardPresentation: Equatable {
 
     private static func primaryAction(for dimension: ReadinessDimensionResult) -> HomePrimaryAction {
         let metadata = dimension.metadata
+        let descriptor = primaryActionDescriptor(for: metadata.action)
         return HomePrimaryAction(
-            title: primaryActionTitle(for: metadata.action),
+            title: descriptor.title,
             subtitle: dimension.nextAction ?? dimension.summary,
+            systemImage: descriptor.systemImage,
             action: metadata.action ?? .departureChecklist
         )
     }
 
-    private static func primaryActionTitle(for action: ReadinessActionKind?) -> String {
+    private static func primaryActionDescriptor(for action: ReadinessActionKind?) -> HomePrimaryActionDescriptor {
         switch action {
         case .weight:
-            return "Gewicht prüfen"
+            return HomePrimaryActionDescriptor(title: "Gewicht prüfen", systemImage: "scalemass")
         case .documents:
-            return "Dokumente prüfen"
+            return HomePrimaryActionDescriptor(title: "Dokumente prüfen", systemImage: "doc.text")
         case .maintenance:
-            return "Wartung ansehen"
+            return HomePrimaryActionDescriptor(title: "Wartung ansehen", systemImage: "wrench.and.screwdriver")
         case .departureChecklist:
-            return "Checkliste öffnen"
+            return HomePrimaryActionDescriptor(title: "Checkliste öffnen", systemImage: "checklist")
         case .costs:
-            return "Kosten prüfen"
+            return HomePrimaryActionDescriptor(title: "Kosten prüfen", systemImage: "eurosign.circle")
         case .places:
-            return "Orte ansehen"
+            return HomePrimaryActionDescriptor(title: "Orte ansehen", systemImage: "map")
         case .vehicleProfile:
-            return "Garage öffnen"
+            return HomePrimaryActionDescriptor(title: "Garage öffnen", systemImage: "car.circle")
         case nil:
-            return "Jetzt prüfen"
+            return HomePrimaryActionDescriptor(title: "Jetzt prüfen", systemImage: "checklist")
         }
     }
 

@@ -27,6 +27,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.overviewRows.map(\.title), ["Gewicht", "Dokumente & Fristen", "Wartung"])
         XCTAssertEqual(presentation.primaryAction.title, "Dokumente prüfen")
         XCTAssertEqual(presentation.primaryAction.subtitle, "Nachweis erneuern")
+        XCTAssertEqual(presentation.primaryAction.systemImage, "doc.text")
         XCTAssertEqual(presentation.primaryAction.action, .documents)
     }
 
@@ -54,6 +55,7 @@ final class HomeDashboardPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.focusAction, .weight)
         XCTAssertEqual(presentation.overviewRows.count, 2)
         XCTAssertEqual(presentation.primaryAction.title, "Vor der Fahrt kurz checken")
+        XCTAssertEqual(presentation.primaryAction.systemImage, "checklist")
         XCTAssertEqual(presentation.primaryAction.action, .departureChecklist)
     }
 
