@@ -1,4 +1,5 @@
 import XCTest
+import SwiftUI
 @testable import CamperReady
 
 final class LogbookPresentationTests: XCTestCase {
@@ -19,5 +20,10 @@ final class LogbookPresentationTests: XCTestCase {
         let presentation = LogbookPresentation.make(totalDistance: 0, totalSpend: 0, readinessOpenItems: nil)
 
         XCTAssertEqual(presentation.stats.last?.value, "Noch kein Camper")
+    }
+
+    func testCalmSummaryRowLayoutPrefersVerticalAtAccessibilitySizes() {
+        XCTAssertTrue(CalmSummaryRowLayout.prefersVertical(for: DynamicTypeSize.accessibility1))
+        XCTAssertFalse(CalmSummaryRowLayout.prefersVertical(for: DynamicTypeSize.large))
     }
 }

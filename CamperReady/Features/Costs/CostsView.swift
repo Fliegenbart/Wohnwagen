@@ -4,6 +4,7 @@ import SwiftUI
 struct CostsView: View {
     @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \VehicleProfile.createdAt) private var vehicles: [VehicleProfile]
     @Query(sort: \Trip.startDate) private var trips: [Trip]
     @Query(sort: \CostEntry.date, order: .reverse) private var costs: [CostEntry]
@@ -52,7 +53,7 @@ struct CostsView: View {
                         stats: presentation.stats,
                         title: "Überblick",
                         subtitle: trip == nil
-                            ? "Aktuell gibt es keine aktive Reise. Feste Kosten und Jahreswert bleiben trotzdem sichtbar."
+                            ? "Ohne aktive Reise siehst du hier Fixkosten und noch nicht zugeordnete Ausgaben."
                             : "Die wichtigsten Werte für \(trip?.title ?? "deine Reise") auf einen Blick."
                     )
 
@@ -272,17 +273,7 @@ struct CostsView: View {
                 }
 
                 ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
-                    HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text(stat.title)
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(AppTheme.mutedInk)
-
-                        Spacer()
-
-                        Text(stat.value)
-                            .font(.headline.weight(.semibold))
-                            .foregroundStyle(AppTheme.ink)
-                    }
+                    summaryStatRow(stat)
 
                     if index < stats.count - 1 {
                         Divider()
@@ -292,6 +283,45 @@ struct CostsView: View {
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 14)
+    }
+
+    @ViewBuilder
+    private func summaryStatRow(_ stat: SummaryStat) -> some View {
+        if CalmSummaryRowLayout.prefersVertical(for: dynamicTypeSize) {
+            summaryStatRowVertical(stat)
+        } else {
+            ViewThatFits(in: .horizontal) {
+                summaryStatRowHorizontal(stat)
+                summaryStatRowVertical(stat)
+            }
+        }
+    }
+
+    private func summaryStatRowHorizontal(_ stat: SummaryStat) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            Text(stat.title)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(AppTheme.mutedInk)
+
+            Spacer(minLength: 12)
+
+            Text(stat.value)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(AppTheme.ink)
+                .multilineTextAlignment(.trailing)
+        }
+    }
+
+    private func summaryStatRowVertical(_ stat: SummaryStat) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(stat.title)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(AppTheme.mutedInk)
+            Text(stat.value)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(AppTheme.ink)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }
 

@@ -6,6 +6,17 @@ private struct VehicleEditorContext: Identifiable {
     let vehicle: VehicleProfile?
 }
 
+enum GarageRowLayout {
+    static func prefersStackedMetadata(for dynamicTypeSize: DynamicTypeSize) -> Bool {
+        dynamicTypeSize >= .accessibility1
+    }
+}
+
+private enum GarageVehicleRowMode {
+    case selector
+    case manager(onSelect: () -> Void, onEdit: () -> Void)
+}
+
 struct GarageView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
@@ -194,9 +205,10 @@ struct VehicleSelectionView: View {
                                     Button {
                                         activeVehicleStore.select(vehicle)
                                     } label: {
-                                        GarageSelectionCard(
+                                        GarageVehicleRow(
                                             vehicle: vehicle,
-                                            isActive: vehicle.id == activeVehicleStore.selectedVehicleID
+                                            isActive: vehicle.id == activeVehicleStore.selectedVehicleID,
+                                            mode: .selector
                                         )
                                     }
                                     .buttonStyle(.plain)
@@ -328,22 +340,25 @@ private struct GarageFleetSection: View {
             }
 
             ForEach(vehicles) { vehicle in
-                GarageSelectionRow(
+                GarageVehicleRow(
                     vehicle: vehicle,
                     isActive: vehicle.id == activeVehicleID,
-                    onSelect: { onSelect(vehicle) },
-                    onEdit: { onEdit(vehicle) }
+                    mode: .manager(
+                        onSelect: { onSelect(vehicle) },
+                        onEdit: { onEdit(vehicle) }
+                    )
                 )
             }
         }
     }
 }
 
-private struct GarageSelectionRow: View {
+private struct GarageVehicleRow: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let vehicle: VehicleProfile
     let isActive: Bool
-    let onSelect: () -> Void
-    let onEdit: () -> Void
+    let mode: GarageVehicleRowMode
 
     var body: some View {
         AlpineSurface(role: .section) {
@@ -355,13 +370,15 @@ private struct GarageSelectionRow: View {
                         .padding(.top, 2)
 
                     VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Text(vehicle.name)
-                                .font(.headline.weight(.semibold))
-                                .foregroundStyle(AppTheme.ink)
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: 8) {
+                                rowTitle
+                                activeBadge
+                            }
 
-                            if isActive {
-                                GarageTag(title: "Aktiv", isHighlighted: true)
+                            VStack(alignment: .leading, spacing: 6) {
+                                rowTitle
+                                activeBadge
                             }
                         }
 
@@ -370,73 +387,102 @@ private struct GarageSelectionRow: View {
                             .foregroundStyle(AppTheme.mutedInk)
                             .fixedSize(horizontal: false, vertical: true)
 
-                        HStack(spacing: 8) {
-                            GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
-                            GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
-                        }
+                        GarageMetadataTags(vehicle: vehicle)
                     }
 
                     Spacer()
+
+                    if case .selector = mode {
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(AppTheme.mutedInk)
+                    }
                 }
 
-                HStack(spacing: 12) {
-                    if isActive {
-                        Text("Ausgewählt")
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(AppTheme.petrol)
-                    } else {
-                        Button("Auswählen", action: onSelect)
-                            .buttonStyle(.borderedProminent)
+                if case let .manager(onSelect, onEdit) = mode {
+                    ViewThatFits(in: .horizontal) {
+                        actionRow(onSelect: onSelect, onEdit: onEdit)
+                        VStack(alignment: .leading, spacing: 10) {
+                            selectionStatus(onSelect: onSelect)
+                            Button("Bearbeiten", action: onEdit)
+                                .buttonStyle(.bordered)
+                        }
                     }
-
-                    Button("Bearbeiten", action: onEdit)
-                        .buttonStyle(.bordered)
                 }
             }
         }
     }
+
+    private var rowTitle: some View {
+        Text(vehicle.name)
+            .font(.headline.weight(.semibold))
+            .foregroundStyle(AppTheme.ink)
+    }
+
+    @ViewBuilder
+    private var activeBadge: some View {
+        if isActive {
+            GarageTag(title: "Aktiv", isHighlighted: true)
+        }
+    }
+
+    private func actionRow(onSelect: @escaping () -> Void, onEdit: @escaping () -> Void) -> some View {
+        HStack(spacing: 12) {
+            selectionStatus(onSelect: onSelect)
+
+            Button("Bearbeiten", action: onEdit)
+                .buttonStyle(.bordered)
+        }
+    }
+
+    @ViewBuilder
+    private func selectionStatus(onSelect: @escaping () -> Void) -> some View {
+        if isActive {
+            Text("Ausgewählt")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(AppTheme.petrol)
+        } else {
+            Button("Auswählen", action: onSelect)
+                .buttonStyle(.borderedProminent)
+        }
+    }
 }
 
-private struct GarageSelectionCard: View {
+private struct GarageMetadataTags: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let vehicle: VehicleProfile
-    let isActive: Bool
 
     var body: some View {
-        AlpineSurface(role: .section) {
-            HStack(alignment: .top, spacing: 12) {
-                Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(isActive ? AppTheme.accent : AppTheme.mutedInk)
-                    .padding(.top, 2)
-
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
-                        Text(vehicle.name)
-                            .font(.headline.weight(.semibold))
-                            .foregroundStyle(AppTheme.ink)
-
-                        if isActive {
-                            GarageTag(title: "Aktiv", isHighlighted: true)
-                        }
-                    }
-
-                    Text(vehicleHeadline(vehicle))
-                        .font(.subheadline)
-                        .foregroundStyle(AppTheme.mutedInk)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    HStack(spacing: 8) {
-                        GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
-                    }
+        if GarageRowLayout.prefersStackedMetadata(for: dynamicTypeSize) {
+            stackedMetadata(singleColumn: true)
+        } else {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                    GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
+                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
                 }
 
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.bold))
-                    .foregroundStyle(AppTheme.mutedInk)
+                stackedMetadata(singleColumn: false)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func stackedMetadata(singleColumn: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if singleColumn {
+                GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
+            } else {
+                HStack(spacing: 8) {
+                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                    GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
+                }
+            }
+
+            GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
         }
     }
 }

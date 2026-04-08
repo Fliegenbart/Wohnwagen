@@ -18,10 +18,17 @@ private enum LogbookSection: String, CaseIterable, Identifiable {
     }
 }
 
+enum CalmSummaryRowLayout {
+    static func prefersVertical(for dynamicTypeSize: DynamicTypeSize) -> Bool {
+        dynamicTypeSize >= .accessibility1
+    }
+}
+
 struct LogbookView: View {
     @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
     @EnvironmentObject private var navigation: AppNavigationState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \VehicleProfile.createdAt) private var vehicles: [VehicleProfile]
     @Query(sort: \MaintenanceEntry.date, order: .reverse) private var maintenanceEntries: [MaintenanceEntry]
     @Query(sort: \DocumentRecord.validUntil) private var documents: [DocumentRecord]
@@ -262,17 +269,7 @@ struct LogbookView: View {
                 }
 
                 ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
-                    HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text(stat.title)
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(AppTheme.mutedInk)
-
-                        Spacer()
-
-                        Text(stat.value)
-                            .font(.headline.weight(.semibold))
-                            .foregroundStyle(AppTheme.ink)
-                    }
+                    summaryStatRow(stat)
 
                     if index < stats.count - 1 {
                         Divider()
@@ -282,6 +279,45 @@ struct LogbookView: View {
         }
         .opacity(hasAppeared ? 1 : 0.01)
         .offset(y: hasAppeared ? 0 : 14)
+    }
+
+    @ViewBuilder
+    private func summaryStatRow(_ stat: SummaryStat) -> some View {
+        if CalmSummaryRowLayout.prefersVertical(for: dynamicTypeSize) {
+            summaryStatRowVertical(stat)
+        } else {
+            ViewThatFits(in: .horizontal) {
+                summaryStatRowHorizontal(stat)
+                summaryStatRowVertical(stat)
+            }
+        }
+    }
+
+    private func summaryStatRowHorizontal(_ stat: SummaryStat) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            Text(stat.title)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(AppTheme.mutedInk)
+
+            Spacer(minLength: 12)
+
+            Text(stat.value)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(AppTheme.ink)
+                .multilineTextAlignment(.trailing)
+        }
+    }
+
+    private func summaryStatRowVertical(_ stat: SummaryStat) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(stat.title)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(AppTheme.mutedInk)
+            Text(stat.value)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(AppTheme.ink)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     private func region(for places: [PlaceNote]) -> MKCoordinateRegion {

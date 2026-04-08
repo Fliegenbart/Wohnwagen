@@ -1,4 +1,5 @@
 import XCTest
+import SwiftUI
 @testable import CamperReady
 
 final class GaragePresentationTests: XCTestCase {
@@ -36,6 +37,11 @@ final class GaragePresentationTests: XCTestCase {
         let presentation = GaragePresentation.make(vehicles: [first, second], activeVehicleID: missingID)
 
         XCTAssertEqual(presentation.orderedVehicleIDs, [earlierID, laterID])
+    }
+
+    func testGarageRowLayoutPrefersStackedMetadataAtAccessibilitySizes() {
+        XCTAssertTrue(GarageRowLayout.prefersStackedMetadata(for: DynamicTypeSize.accessibility1))
+        XCTAssertFalse(GarageRowLayout.prefersStackedMetadata(for: DynamicTypeSize.large))
     }
 
     private func makeVehicle(id: UUID, createdAt: Date, name: String) -> VehicleProfile {
