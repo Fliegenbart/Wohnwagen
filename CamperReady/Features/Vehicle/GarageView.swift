@@ -200,18 +200,25 @@ struct VehicleSelectionView: View {
                                 editorContext = VehicleEditorContext(vehicle: nil)
                             }
                         } else {
-                            VStack(alignment: .leading, spacing: 12) {
-                                ForEach(orderedVehicles) { vehicle in
-                                    Button {
-                                        activeVehicleStore.select(vehicle)
-                                    } label: {
-                                        GarageVehicleRow(
-                                            vehicle: vehicle,
-                                            isActive: vehicle.id == activeVehicleStore.selectedVehicleID,
-                                            mode: .selector
-                                        )
+                            AlpineSurface(role: .section) {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    ForEach(Array(orderedVehicles.enumerated()), id: \.element.id) { index, vehicle in
+                                        Button {
+                                            activeVehicleStore.select(vehicle)
+                                        } label: {
+                                            GarageVehicleRow(
+                                                vehicle: vehicle,
+                                                isActive: vehicle.id == activeVehicleStore.selectedVehicleID,
+                                                mode: .selector
+                                            )
+                                        }
+                                        .buttonStyle(.plain)
+
+                                        if index < orderedVehicles.count - 1 {
+                                            Divider()
+                                                .padding(.leading, 36)
+                                        }
                                     }
-                                    .buttonStyle(.plain)
                                 }
                             }
 
@@ -339,15 +346,24 @@ private struct GarageFleetSection: View {
                     .buttonStyle(.bordered)
             }
 
-            ForEach(vehicles) { vehicle in
-                GarageVehicleRow(
-                    vehicle: vehicle,
-                    isActive: vehicle.id == activeVehicleID,
-                    mode: .manager(
-                        onSelect: { onSelect(vehicle) },
-                        onEdit: { onEdit(vehicle) }
-                    )
-                )
+            AlpineSurface(role: .section) {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(Array(vehicles.enumerated()), id: \.element.id) { index, vehicle in
+                        GarageVehicleRow(
+                            vehicle: vehicle,
+                            isActive: vehicle.id == activeVehicleID,
+                            mode: .manager(
+                                onSelect: { onSelect(vehicle) },
+                                onEdit: { onEdit(vehicle) }
+                            )
+                        )
+
+                        if index < vehicles.count - 1 {
+                            Divider()
+                                .padding(.leading, 36)
+                        }
+                    }
+                }
             }
         }
     }
@@ -361,56 +377,55 @@ private struct GarageVehicleRow: View {
     let mode: GarageVehicleRowMode
 
     var body: some View {
-        AlpineSurface(role: .section) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
-                        .font(.title3.weight(.semibold))
-                        .foregroundStyle(isActive ? AppTheme.accent : AppTheme.mutedInk)
-                        .padding(.top, 2)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(isActive ? AppTheme.accent : AppTheme.mutedInk)
+                    .padding(.top, 2)
 
-                    VStack(alignment: .leading, spacing: 6) {
-                        ViewThatFits(in: .horizontal) {
-                            HStack(spacing: 8) {
-                                rowTitle
-                                activeBadge
-                            }
-
-                            VStack(alignment: .leading, spacing: 6) {
-                                rowTitle
-                                activeBadge
-                            }
+                VStack(alignment: .leading, spacing: 6) {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: 8) {
+                            rowTitle
+                            activeBadge
                         }
 
-                        Text(vehicleHeadline(vehicle))
-                            .font(.subheadline)
-                            .foregroundStyle(AppTheme.mutedInk)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        GarageMetadataTags(vehicle: vehicle)
+                        VStack(alignment: .leading, spacing: 6) {
+                            rowTitle
+                            activeBadge
+                        }
                     }
 
-                    Spacer()
+                    Text(vehicleHeadline(vehicle))
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.mutedInk)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                    if case .selector = mode {
-                        Image(systemName: "chevron.right")
-                            .font(.footnote.weight(.bold))
-                            .foregroundStyle(AppTheme.mutedInk)
-                    }
+                    GarageMetadataTags(vehicle: vehicle)
                 }
 
-                if case let .manager(onSelect, onEdit) = mode {
-                    ViewThatFits(in: .horizontal) {
-                        actionRow(onSelect: onSelect, onEdit: onEdit)
-                        VStack(alignment: .leading, spacing: 10) {
-                            selectionStatus(onSelect: onSelect)
-                            Button("Bearbeiten", action: onEdit)
-                                .buttonStyle(.bordered)
-                        }
+                Spacer()
+
+                if case .selector = mode {
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(AppTheme.mutedInk)
+                }
+            }
+
+            if case let .manager(onSelect, onEdit) = mode {
+                ViewThatFits(in: .horizontal) {
+                    actionRow(onSelect: onSelect, onEdit: onEdit)
+                    VStack(alignment: .leading, spacing: 10) {
+                        selectionStatus(onSelect: onSelect)
+                        Button("Bearbeiten", action: onEdit)
+                            .buttonStyle(.bordered)
                     }
                 }
             }
         }
+        .padding(.vertical, 14)
     }
 
     private var rowTitle: some View {
