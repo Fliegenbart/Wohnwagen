@@ -48,6 +48,16 @@ struct CostsView: View {
                     .opacity(hasAppeared ? 1 : 0.01)
                     .offset(y: hasAppeared ? 0 : 10)
 
+                    CamperSceneCard(
+                        mood: .costs,
+                        eyebrow: "Budget",
+                        title: "Kosten klar und freundlich sortiert.",
+                        subtitle: "Die App trennt Reise, Jahreskosten und Fixkosten, ohne dass du viel suchen musst.",
+                        badge: "Übersicht"
+                    )
+                    .opacity(hasAppeared ? 1 : 0.01)
+                    .offset(y: hasAppeared ? 0 : 12)
+
                     summaryStats(presentation.stats, emphasisTitle: "Diese Reise")
 
                     costSection(title: "Reise", subtitle: trip == nil ? "Lege eine Reise an, um Kosten getrennt zuzuordnen." : "Die aktive Reise bestimmt die Zuordnung der laufenden Kosten.") {
@@ -210,6 +220,7 @@ struct CostsView: View {
                 }
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $tripFormContext) { context in
             if let vehicle {
                 TripFormView(vehicle: vehicle, existingTrip: context.trip, allTrips: vehicleTrips)

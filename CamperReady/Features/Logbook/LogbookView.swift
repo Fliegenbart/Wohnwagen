@@ -59,12 +59,22 @@ struct LogbookView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 FeatureHeader(
-                    eyebrow: "Logbuch",
-                    title: "Logbuch",
-                    subtitle: "Wartung, Dokumente und Orte pro Fahrzeug."
+                    eyebrow: "Reiseverlauf",
+                    title: "Das Logbuch.",
+                    subtitle: "Wartung, Kosten und Orte pro Fahrzeug."
                 )
                 .opacity(hasAppeared ? 1 : 0.01)
                 .offset(y: hasAppeared ? 0 : 10)
+
+                CamperSceneCard(
+                    mood: .logbook,
+                    eyebrow: "Unterwegs",
+                    title: "Wartung, Orte und Notizen an einem Ort.",
+                    subtitle: "Jeder Eintrag bleibt sauber beim richtigen Fahrzeug und fühlt sich wie ein echtes Reisetagebuch an.",
+                    badge: "Archiv"
+                )
+                .opacity(hasAppeared ? 1 : 0.01)
+                .offset(y: hasAppeared ? 0 : 12)
 
                 summaryStats(presentation.stats, emphasisTitle: "Bereitschaft")
 
@@ -188,45 +198,7 @@ struct LogbookView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
-        .navigationTitle("")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    if vehicle != nil {
-                        switch selectedSection {
-                        case .maintenance:
-                            Button("Wartung eintragen") {
-                                maintenanceFormContext = MaintenanceFormContext(entry: nil)
-                            }
-                        case .documents:
-                            Button("Dokument hinzufügen") {
-                                documentFormContext = DocumentFormContext(document: nil)
-                            }
-                        case .places:
-                            Button("Ort hinzufügen") {
-                                placeFormContext = PlaceFormContext(place: nil)
-                            }
-                        }
-                    }
-
-                    if selectedSection == .maintenance && !vehicleMaintenance.isEmpty {
-                        Divider()
-                        Button("Wartung als CSV exportieren") {
-                            exportFile = try? ExportService.exportMaintenanceCSV(entries: vehicleMaintenance)
-                        }
-                    }
-
-                    if let exportFile {
-                        ShareLink(item: exportFile.url) {
-                            Label("Letzte Datei teilen", systemImage: "square.and.arrow.up")
-                        }
-                    }
-                } label: {
-                    Label("Mehr", systemImage: "ellipsis.circle")
-                }
-            }
-        }
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $maintenanceFormContext) { context in
             if let vehicle {
                 MaintenanceEntryFormView(vehicle: vehicle, existingEntry: context.entry)
@@ -264,10 +236,11 @@ struct LogbookView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .font(.system(size: 22, weight: .semibold, design: .default))
+                    .tracking(-0.3)
                     .foregroundStyle(AppTheme.ink)
                 Text(subtitle)
-                    .font(.subheadline)
+                    .font(.callout)
                     .foregroundStyle(AppTheme.mutedInk)
             }
             AlpineSurface(role: .section) {

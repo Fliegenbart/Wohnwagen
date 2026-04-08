@@ -28,15 +28,20 @@ struct FeatureHeader: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(eyebrow.uppercased())
                 .font(.caption.weight(.bold))
+                .tracking(0.9)
                 .foregroundStyle(eyebrowColor)
 
             Text(title)
-                .font(.system(size: 34, weight: .semibold))
+                .font(.system(size: 34, weight: .semibold, design: .default))
+                .tracking(-0.6)
                 .foregroundStyle(titleColor)
+                .lineLimit(3)
+                .minimumScaleFactor(0.82)
 
             Text(subtitle)
-                .font(.subheadline)
+                .font(.callout)
                 .foregroundStyle(subtitleColor)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

@@ -14,10 +14,21 @@ struct SectionCard<Content: View>: View {
     var body: some View {
         AlpineSurface(role: .section) {
             VStack(alignment: .leading, spacing: 14) {
+                RoundedRectangle(cornerRadius: 999, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [AppTheme.sky, AppTheme.mint, AppTheme.coral],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: 64, height: 4)
+
                 if let subtitle, !subtitle.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(title)
-                            .font(.system(.title3, design: .rounded, weight: .bold))
+                            .font(.system(size: 22, weight: .semibold, design: .default))
+                            .tracking(-0.3)
                             .foregroundStyle(AppTheme.ink)
 
                         Text(subtitle)
@@ -26,7 +37,8 @@ struct SectionCard<Content: View>: View {
                     }
                 } else {
                     Text(title)
-                        .font(.system(.title3, design: .rounded, weight: .bold))
+                        .font(.system(size: 22, weight: .semibold, design: .default))
+                        .tracking(-0.3)
                         .foregroundStyle(AppTheme.ink)
                 }
                 content

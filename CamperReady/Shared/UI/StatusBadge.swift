@@ -20,16 +20,16 @@ struct StatusBadge: View {
         HStack(spacing: 7) {
             Circle()
                 .fill(color)
-                .frame(width: 8, height: 8)
+                .frame(width: 7, height: 7)
             Text(text)
-                .font(.system(.caption, design: .rounded, weight: .bold))
+                .font(.system(size: 10, weight: .bold, design: .default))
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
                 .textCase(.uppercase)
-                .tracking(0.9)
+                .tracking(1.1)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 9)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
         .foregroundStyle(foregroundColor)
         .background(
             Capsule(style: .continuous)
@@ -56,14 +56,14 @@ struct StatusBadge: View {
         case .light:
             switch status {
             case .green:
-                AppTheme.green.opacity(0.12)
+                AppTheme.mintSoft
             case .yellow:
-                AppTheme.sand
+                AppTheme.sunSoft
             case .red:
-                AppTheme.red.opacity(0.12)
+                AppTheme.coralSoft
             }
         case .dark:
-            Color.white.opacity(0.10)
+            Color.white.opacity(0.12)
         }
     }
 
@@ -79,9 +79,9 @@ struct StatusBadge: View {
     private var borderColor: Color? {
         switch surface {
         case .light:
-            nil
+            color.opacity(0.18)
         case .dark:
-            Color.white.opacity(0.18)
+            Color.white.opacity(0.22)
         }
     }
 

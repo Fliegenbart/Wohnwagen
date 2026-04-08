@@ -33,7 +33,21 @@ struct WeightView: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                FeatureHeader(
+                    eyebrow: "Sicherheitswerte",
+                    title: "Beladung",
+                    subtitle: "Prüfe Reserve, Wasser und Zusatzlasten vor der Abfahrt."
+                )
+
                 if let vehicle {
+                    CamperSceneCard(
+                        mood: .weight,
+                        eyebrow: "Beladung",
+                        title: "Gewicht freundlich im Blick.",
+                        subtitle: "Alles Wichtige für die Abfahrt liegt auf einen Blick vor dir.",
+                        badge: assessment.status.title
+                    )
+
                     analysisPanel(
                         vehicle: vehicle,
                         trip: trip,
@@ -165,27 +179,7 @@ struct WeightView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
-        .navigationTitle("Gewicht")
-        .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    if vehicle != nil {
-                        Button("Packstück hinzufügen") {
-                            packingItemFormContext = PackingItemFormContext(item: nil, trip: trip)
-                        }
-                        Button("Mitfahrende hinzufügen") {
-                            passengerFormContext = PassengerFormContext(passenger: nil, trip: trip)
-                        }
-                        Button("Beladung bearbeiten") {
-                            loadSettingsFormContext = LoadSettingsFormContext(settings: activeSettings, trip: trip)
-                        }
-                    }
-                } label: {
-                    Label("Mehr", systemImage: "plus.circle")
-                }
-            }
-        }
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $packingItemFormContext) { context in
             if let vehicle {
                 PackingItemFormView(vehicle: vehicle, trip: context.trip, existingItem: context.item)
@@ -226,65 +220,103 @@ struct WeightView: View {
         presentation: WeightPresentation,
         settings: TripLoadSettings?
     ) -> some View {
-        AlpineSurface(role: .focus) {
-            VStack(alignment: .leading, spacing: 18) {
-                HStack(alignment: .top, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Lastanalyse")
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(.white.opacity(0.72))
+        let compactLayout = UIScreen.main.bounds.width < 402
 
-                        Text(presentation.headline)
-                            .font(.system(size: 34, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.82)
+        return VStack(alignment: .leading, spacing: 12) {
+            AlpineSurface(role: .raised) {
+                VStack(alignment: .leading, spacing: 18) {
+                    LoadDistributionArtwork()
 
-                        Text("\(vehicle.name) · \(presentation.support)")
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.72))
-                    }
-
-                    Spacer(minLength: 12)
-
-                    StatusBadge(status: assessment.status, text: assessment.status.title, surface: .dark)
+                    Text("Fahrzeugchassis: \(vehicle.vehicleKind.title) \(Int(vehicle.gvwrKg ?? 0)) kg")
+                        .font(.caption.weight(.bold))
+                        .textCase(.uppercase)
+                        .tracking(0.7)
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
+            }
 
-                Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.82))
-                    .fixedSize(horizontal: false, vertical: true)
-
+            if compactLayout {
                 VStack(spacing: 12) {
-                    ForEach(presentation.primaryMetrics) { metric in
-                        metricRow(title: metric.title, value: metric.value)
-                    }
+                    axleMetricCard(
+                        title: "Hinterachse",
+                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        progress: axleProgress(for: vehicle.rearAxleMeasuredKg, baseline: vehicle.gvwrKg)
+                    )
+
+                    axleMetricCard(
+                        title: "Vorderachse",
+                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        progress: axleProgress(for: vehicle.frontAxleMeasuredKg, baseline: vehicle.gvwrKg)
+                    )
                 }
-
-                Text("Volles Frischwasser bedeutet im Vergleich zur aktuellen Einstellung etwa +\(Int(assessment.waterComparisonDeltaKg.rounded())) kg.")
-                    .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.70))
-
-                if let nextAction = assessment.nextAction {
-                    UtilityRow(
-                        title: "Nächster Schritt",
-                        subtitle: nextAction,
-                        systemImage: "arrow.trianglehead.turn.up.right.diamond.fill",
-                        tint: .white.opacity(0.86),
-                        titleColor: .white,
-                        subtitleColor: .white.opacity(0.72),
-                        trailingSystemImage: "arrow.right",
-                        trailingTint: .white.opacity(0.72)
+            } else {
+                HStack(spacing: 12) {
+                    axleMetricCard(
+                        title: "Hinterachse",
+                        value: vehicle.rearAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        progress: axleProgress(for: vehicle.rearAxleMeasuredKg, baseline: vehicle.gvwrKg)
                     )
-                } else if let settings {
-                    UtilityRow(
-                        title: "Aktive Beladung",
-                        subtitle: "Frischwasser \(Int(settings.freshWaterLiters.rounded())) l, Zusatzlast \(Int(settings.extraLoadKg.rounded())) kg",
-                        systemImage: "shippingbox.fill",
-                        tint: .white.opacity(0.86),
-                        titleColor: .white,
-                        subtitleColor: .white.opacity(0.72)
+
+                    axleMetricCard(
+                        title: "Vorderachse",
+                        value: vehicle.frontAxleMeasuredKg.map { "\($0.kgString)" } ?? "Unbekannt",
+                        progress: axleProgress(for: vehicle.frontAxleMeasuredKg, baseline: vehicle.gvwrKg)
                     )
+                }
+            }
+
+            AlpineSurface(role: .focus) {
+                VStack(alignment: .leading, spacing: 14) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Gesamtgewicht")
+                                .font(.caption.weight(.bold))
+                                .textCase(.uppercase)
+                                .tracking(0.8)
+                                .foregroundStyle(.white.opacity(0.76))
+
+                            Text(presentation.headline)
+                                .font(.system(size: 30, weight: .semibold, design: .default))
+                                .foregroundStyle(.white)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.84)
+                        }
+
+                        Spacer()
+
+                        StatusBadge(status: assessment.status, text: assessment.status.title, surface: .dark)
+                    }
+
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(weightSummaryValue(for: assessment))
+                            .font(.system(size: 42, weight: .semibold, design: .default))
+                            .foregroundStyle(.white)
+                        Text("kg")
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.85))
+                        Spacer()
+                    }
+
+                    Text(weightSupportLine(vehicle: vehicle, trip: trip, assessment: assessment))
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.82))
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    VStack(spacing: 10) {
+                        metricRow(title: "Reserve", value: assessment.remainingMarginKg.map { $0.kgString } ?? "—")
+                        metricRow(title: "Achsrisko", value: axleLabel(for: assessment.axleRisk))
+                    }
+
+                    GeometryReader { proxy in
+                        RoundedRectangle(cornerRadius: 999, style: .continuous)
+                            .fill(.white.opacity(0.18))
+                            .overlay(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 999, style: .continuous)
+                                    .fill(AppTheme.secondaryFixed)
+                                    .frame(width: proxy.size.width * weightProgress(for: assessment, gvwr: vehicle.gvwrKg), height: 10)
+                            }
+                    }
+                    .frame(height: 10)
                 }
             }
         }
@@ -306,6 +338,68 @@ struct WeightView: View {
         }
     }
 
+    private func axleMetricCard(title: String, value: String, progress: Double) -> some View {
+        AlpineSurface(role: .raised) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text(title)
+                        .font(.caption.weight(.bold))
+                        .textCase(.uppercase)
+                        .tracking(0.8)
+                        .foregroundStyle(AppTheme.mutedInk)
+                    Spacer()
+                    Image(systemName: "straighten")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(AppTheme.petrol)
+                }
+
+                Text(value)
+                    .font(.system(size: 24, weight: .semibold, design: .default))
+                    .foregroundStyle(AppTheme.ink)
+                    .lineLimit(1)
+
+                GeometryReader { proxy in
+                    RoundedRectangle(cornerRadius: 999, style: .continuous)
+                        .fill(AppTheme.surfaceHigh)
+                        .overlay(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 999, style: .continuous)
+                                .fill(AppTheme.petrol)
+                                .frame(width: proxy.size.width * progress, height: 6)
+                        }
+                }
+                .frame(height: 6)
+            }
+        }
+    }
+
+    private func axleProgress(for value: Double?, baseline: Double?) -> Double {
+        guard let value, let baseline, baseline > 0 else { return 0.25 }
+        return min(max(value / baseline, 0.1), 1)
+    }
+
+    private func weightSummaryValue(for assessment: WeightAssessmentOutput) -> String {
+        guard let value = assessment.estimatedGrossWeightKg else { return "—" }
+        return "\(Int(value.rounded()))"
+    }
+
+    private func axleLabel(for risk: LoadRiskLevel) -> String {
+        switch risk {
+        case .low:
+            return "Niedrig"
+        case .elevated:
+            return "Erhöht"
+        case .measured:
+            return "Gemessen"
+        }
+    }
+
+    private func weightProgress(for assessment: WeightAssessmentOutput, gvwr: Double?) -> Double {
+        guard let total = assessment.estimatedGrossWeightKg, let gvwr, gvwr > 0 else {
+            return 0.0
+        }
+        return min(max(total / max(gvwr, 1), 0), 1)
+    }
+
     private func weightSupportLine(vehicle: VehicleProfile, trip: Trip?, assessment: WeightAssessmentOutput) -> String {
         if assessment.status == .green {
             return trip.map { "\(vehicle.name) hat für \($0.title) noch ausreichend Reserve und keine auffälligen Lastmuster." }
@@ -323,10 +417,11 @@ struct WeightView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .font(.system(size: 22, weight: .semibold, design: .default))
+                    .tracking(-0.3)
                     .foregroundStyle(AppTheme.ink)
                 Text(subtitle)
-                    .font(.subheadline)
+                    .font(.callout)
                     .foregroundStyle(AppTheme.mutedInk)
             }
             content()

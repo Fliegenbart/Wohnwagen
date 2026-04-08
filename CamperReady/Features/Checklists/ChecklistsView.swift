@@ -17,6 +17,7 @@ struct ChecklistsView: View {
     @State private var hasAppeared = false
 
     var body: some View {
+        let compactActions = UIScreen.main.bounds.width < 402
         let vehicle = activeVehicleStore.activeVehicle(in: vehicles)
         let trip = AppDataLocator.activeTrip(for: vehicle, trips: trips)
         let vehicleChecklists = AppDataLocator.checklists(for: vehicle, checklists: checklists)
@@ -35,6 +36,16 @@ struct ChecklistsView: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
+                CamperSceneCard(
+                    mood: .checklists,
+                    eyebrow: "Modi",
+                    title: "Vor der Fahrt startet alles ruhiger.",
+                    subtitle: "Abfahrt, Winter und Ankunft bleiben sauber getrennt und leicht zu verstehen.",
+                    badge: "Neu"
+                )
+                .opacity(hasAppeared ? 1 : 0.01)
+                .offset(y: hasAppeared ? 0 : 10)
+
                 if vehicleChecklists.isEmpty {
                     SectionCard(title: "Noch keine Checkliste gestartet", subtitle: "Starte einen Modus, um offene Punkte zu sammeln.") {
                         VStack(alignment: .leading, spacing: 16) {
@@ -73,18 +84,34 @@ struct ChecklistsView: View {
                                 .progressViewStyle(.linear)
                                 .tint(AppTheme.statusColor(heroStatus))
 
-                            HStack(spacing: 12) {
-                                Button("Punkt hinzufügen") {
-                                    guard let selectedChecklist else { return }
-                                    checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
-                                }
-                                .buttonStyle(.borderedProminent)
+                            if compactActions {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Button("Punkt hinzufügen") {
+                                        guard let selectedChecklist else { return }
+                                        checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
+                                    }
+                                    .buttonStyle(.borderedProminent)
 
-                                Button(selectedChecklist?.isPinned == true ? "Lösen" : "Anheften") {
-                                    guard let selectedChecklist else { return }
-                                    togglePinned(selectedChecklist)
+                                    Button(selectedChecklist?.isPinned == true ? "Lösen" : "Anheften") {
+                                        guard let selectedChecklist else { return }
+                                        togglePinned(selectedChecklist)
+                                    }
+                                    .buttonStyle(.bordered)
                                 }
-                                .buttonStyle(.bordered)
+                            } else {
+                                HStack(spacing: 12) {
+                                    Button("Punkt hinzufügen") {
+                                        guard let selectedChecklist else { return }
+                                        checklistItemFormContext = ChecklistItemFormContext(checklist: selectedChecklist, item: nil)
+                                    }
+                                    .buttonStyle(.borderedProminent)
+
+                                    Button(selectedChecklist?.isPinned == true ? "Lösen" : "Anheften") {
+                                        guard let selectedChecklist else { return }
+                                        togglePinned(selectedChecklist)
+                                    }
+                                    .buttonStyle(.bordered)
+                                }
                             }
                         }
                     }
@@ -219,6 +246,7 @@ struct ChecklistsView: View {
                 }
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $checklistItemFormContext) { context in
             ChecklistItemFormView(checklist: context.checklist, existingItem: context.item)
         }

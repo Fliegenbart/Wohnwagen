@@ -34,6 +34,7 @@ struct AlpineSurfaceMetrics: Equatable {
 }
 
 struct AlpineSurfaceStyle: Equatable {
+    let role: AlpineSurfaceRole
     let background: AlpineSurfaceBackground
     let metrics: AlpineSurfaceMetrics
     let contentInsets: EdgeInsets
@@ -44,26 +45,29 @@ struct AlpineSurfaceStyle: Equatable {
         switch role {
         case .section:
             .init(
+                role: role,
                 background: .surfaceLow,
-                metrics: .init(cornerRadius: 24, isDark: false, shadowOpacity: 0.00),
-                contentInsets: EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20),
-                shadowRadius: 12,
-                shadowYOffset: 8
+                metrics: .init(cornerRadius: 28, isDark: false, shadowOpacity: 0.04),
+                contentInsets: EdgeInsets(top: 22, leading: 20, bottom: 22, trailing: 20),
+                shadowRadius: 16,
+                shadowYOffset: 10
             )
         case .raised:
             .init(
+                role: role,
                 background: .surfaceRaised,
-                metrics: .init(cornerRadius: 20, isDark: false, shadowOpacity: 0.04),
+                metrics: .init(cornerRadius: 22, isDark: false, shadowOpacity: 0.05),
                 contentInsets: EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16),
-                shadowRadius: 12,
+                shadowRadius: 14,
                 shadowYOffset: 8
             )
         case .focus:
             .init(
+                role: role,
                 background: .petrol,
-                metrics: .init(cornerRadius: 24, isDark: true, shadowOpacity: 0.08),
-                contentInsets: EdgeInsets(top: 22, leading: 20, bottom: 22, trailing: 20),
-                shadowRadius: 18,
+                metrics: .init(cornerRadius: 28, isDark: true, shadowOpacity: 0.12),
+                contentInsets: EdgeInsets(top: 24, leading: 22, bottom: 24, trailing: 22),
+                shadowRadius: 20,
                 shadowYOffset: 12
             )
         }
@@ -93,5 +97,9 @@ struct AlpineSurface<Content: View>: View {
                 x: 0,
                 y: style.shadowYOffset
             )
+            .overlay {
+                RoundedRectangle(cornerRadius: style.metrics.cornerRadius, style: .continuous)
+                    .strokeBorder(AppTheme.outlineVariant.opacity(style.role == .focus ? 0 : 0.14), lineWidth: style.role == .focus ? 0 : 0.75)
+            }
     }
 }

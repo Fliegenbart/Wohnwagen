@@ -18,71 +18,76 @@ struct RootTabView: View {
     @State private var showOnboarding = false
 
     init() {
-        let appearance = UITabBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
-        appearance.backgroundColor = UIColor(AppTheme.surface).withAlphaComponent(0.90)
-        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(AppTheme.accent)
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(AppTheme.accent)]
-        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(AppTheme.mutedInk).withAlphaComponent(0.72)
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(AppTheme.mutedInk).withAlphaComponent(0.72)]
-        appearance.shadowColor = UIColor(AppTheme.accent).withAlphaComponent(0.10)
-
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
 
     var body: some View {
-        AppCanvas {
-            VStack(spacing: 0) {
-                if let warningMessage = persistenceStatus.warningMessage {
-                    HStack(alignment: .top, spacing: 12) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(AppTheme.yellow)
-                        Text(warningMessage)
-                            .font(.footnote.weight(.medium))
-                            .foregroundStyle(AppTheme.ink)
-                        Spacer()
-                    }
-                    .padding(14)
-                    .background(Color.white.opacity(0.76), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                    .padding(.horizontal, 12)
-                    .padding(.top, 8)
-                }
+        let vehicle = activeVehicleStore.activeVehicle(in: vehicles)
+        let trip = AppDataLocator.activeTrip(for: vehicle, trips: trips)
+        let weight = AppDataLocator.weightAssessment(vehicle: vehicle, trip: trip, items: [], passengers: [], settings: nil)
+        let maintenance = AppDataLocator.maintenance(for: vehicle, entries: maintenanceEntries)
+        let costsForVehicle = AppDataLocator.costs(for: vehicle, costs: costs)
+        let snapshot = ReadinessEngine.buildDashboard(
+            vehicle: vehicle,
+            nextTrip: trip,
+            weight: weight,
+            documents: AppDataLocator.documents(for: vehicle, documents: documents),
+            maintenance: maintenance,
+            checklists: AppDataLocator.checklists(for: vehicle, checklists: checklists),
+            checklistItems: checklistItems,
+            costs: costsForVehicle,
+            currentOdometerKm: AppDataLocator.currentOdometerKm(maintenance: maintenance, costs: costsForVehicle)
+        )
 
+        AppCanvas {
+            ZStack {
                 TabView(selection: $navigation.selectedTab) {
                     NavigationStack {
                         HomeDashboardView()
                     }
-                    .tabItem { Label(AppTab.home.title, systemImage: AppTab.home.systemImage) }
                     .tag(AppTab.home)
 
                     NavigationStack {
                         WeightView()
                     }
-                    .tabItem { Label(AppTab.weight.title, systemImage: AppTab.weight.systemImage) }
                     .tag(AppTab.weight)
 
                     NavigationStack {
                         ChecklistsView()
                     }
-                    .tabItem { Label(AppTab.checklists.title, systemImage: AppTab.checklists.systemImage) }
                     .tag(AppTab.checklists)
 
                     NavigationStack {
                         LogbookView()
                     }
-                    .tabItem { Label(AppTab.logbook.title, systemImage: AppTab.logbook.systemImage) }
                     .tag(AppTab.logbook)
 
                     NavigationStack {
                         CostsView()
                     }
-                    .tabItem { Label(AppTab.costs.title, systemImage: AppTab.costs.systemImage) }
                     .tag(AppTab.costs)
                 }
-                .toolbarBackground(.visible, for: .tabBar)
-                .toolbarBackground(.thinMaterial, for: .tabBar)
+            }
+            .toolbar(.hidden, for: .tabBar)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                VStack(spacing: 0) {
+                    ZipTopBar(trailing: {
+                        topBarTrailing(snapshot: snapshot)
+                    }, onMenuTap: {
+                        navigation.navigate(for: .vehicleProfile)
+                    })
+
+                    if let warningMessage = persistenceStatus.warningMessage {
+                        persistenceBanner(message: warningMessage)
+                    }
+                }
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                ZipBottomNavigationBar(selectedTab: $navigation.selectedTab, onAddTap: {
+                    navigation.navigate(for: .vehicleProfile)
+                })
+                .padding(.horizontal, 14)
+                .padding(.top, 8)
+                .padding(.bottom, 8)
             }
         }
         .environmentObject(navigation)
@@ -107,6 +112,18 @@ struct RootTabView: View {
                 hasDismissedOnboarding: $hasDismissedOnboarding
             )
         }
+        .sheet(
+            isPresented: Binding(
+                get: { navigation.pendingRoute == .vehicleProfile },
+                set: { presented in
+                    if !presented {
+                        navigation.clearPendingRoute()
+                    }
+                }
+            )
+        ) {
+            GarageView()
+        }
         .fullScreenCover(
             isPresented: Binding(
                 get: { !showOnboarding && activeVehicleStore.needsSelection },
@@ -120,6 +137,41 @@ struct RootTabView: View {
     private func updatePresentationState() {
         showOnboarding = vehicles.isEmpty && !hasDismissedOnboarding
         activeVehicleStore.reconcile(with: vehicles)
+    }
+
+    @ViewBuilder
+    private func topBarTrailing(snapshot: DashboardSnapshot?) -> some View {
+        switch navigation.selectedTab {
+        case .home:
+            if let snapshot {
+                StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.title)
+            } else {
+                ZipStatusPill(title: "Bereit", tint: AppTheme.petrol)
+            }
+        case .weight:
+            ZipAvatarBubble(systemImage: "scalemass")
+        case .checklists:
+            ZipStatusPill(title: "Checklisten", tint: AppTheme.petrolBright)
+        case .logbook:
+            ZipAvatarBubble(systemImage: "book.closed.fill")
+        case .costs:
+            ZipStatusPill(title: "Kosten", tint: AppTheme.green)
+        }
+    }
+
+    private func persistenceBanner(message: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(AppTheme.yellow)
+            Text(message)
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(AppTheme.ink)
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 10)
+        .padding(.top, 8)
+        .background(AppTheme.surface.opacity(0.92))
     }
 
     private var vehicleIDsToken: String {

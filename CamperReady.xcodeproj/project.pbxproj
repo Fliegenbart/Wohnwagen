@@ -41,6 +41,7 @@
 		64BCFB33648A3935E7F29D8A /* FeatureHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */; };
 		64BCFB35648A3935E7F29D8A /* RoadSheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */; };
 		64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */; };
+		B7C3D4E5F60123456789ABCD /* ZipChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C3D4E5F60123456789ABCE /* ZipChrome.swift */; };
 		67E38828AC9EC98A150CD835 /* ChecklistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA5325CA425478B4B66B76 /* ChecklistsView.swift */; };
 		6E2C55748B865DB290DE8CFF /* CostEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3562945C27A8645EEBDF2E /* CostEntry.swift */; };
 		75B0CC5F26A910D4B7AA3AE9 /* MaintenanceEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA13573CEB2D95F33B352BE /* MaintenanceEntry.swift */; };
@@ -137,6 +138,7 @@
 		64BCFB34648A3935E7F29D8A /* FeatureHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FeatureHeader.swift; path = CamperReady/Shared/UI/FeatureHeader.swift; sourceTree = "<group>"; };
 		64BCFB36648A3935E7F29D8A /* RoadSheetHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetHeader.swift; path = CamperReady/Shared/UI/RoadSheetHeader.swift; sourceTree = "<group>"; };
 		64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RoadSheetScaffold.swift; path = CamperReady/Shared/UI/RoadSheetScaffold.swift; sourceTree = "<group>"; };
+		B7C3D4E5F60123456789ABCE /* ZipChrome.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ZipChrome.swift; path = CamperReady/Shared/UI/ZipChrome.swift; sourceTree = "<group>"; };
 		6E0DCCFAA435454628133420 /* ReminderPlanner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReminderPlanner.swift; path = CamperReady/Services/ReminderPlanner.swift; sourceTree = "<group>"; };
 		6F01469D5E49EE352F500BE9 /* PackingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PackingItem.swift; path = CamperReady/Domain/Models/PackingItem.swift; sourceTree = "<group>"; };
 		78F0A7287C6326B700DBA8EE /* ReadinessDimensionMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReadinessDimensionMetadata.swift; path = CamperReady/Domain/Readiness/ReadinessDimensionMetadata.swift; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 				64BCFB38648A3935E7F29D8A /* RoadSheetScaffold.swift */,
 				7A5186C5E35D8FE0D0ADD704 /* SectionCard.swift */,
 				1C0F754B4CD6114C82BC706F /* StatusBadge.swift */,
+				B7C3D4E5F60123456789ABCE /* ZipChrome.swift */,
 				93B1C8D47C09134E6733011C /* UtilityRow.swift */,
 			);
 			name = UI;
@@ -643,6 +646,7 @@
 				64BCFB37648A3935E7F29D8A /* RoadSheetScaffold.swift in Sources */,
 				501B9A3256268100511CE96A /* SectionCard.swift in Sources */,
 				F8FB0A974C00B7E4E7ADE61F /* StatusBadge.swift in Sources */,
+				B7C3D4E5F60123456789ABCD /* ZipChrome.swift in Sources */,
 				93B1C8D37C09134E6733011C /* UtilityRow.swift in Sources */,
 				50A5DB6C4E634694F41B936E /* LogbookPresentation.swift in Sources */,
 				9C3070815601C79DC63B94C9 /* CostsPresentation.swift in Sources */,

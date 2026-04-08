@@ -29,13 +29,18 @@ struct HomeDashboardView: View {
         let weight = AppDataLocator.weightAssessment(vehicle: vehicle, trip: trip, items: packingItems, passengers: passengers, settings: settings)
         let vehicleMaintenance = AppDataLocator.maintenance(for: vehicle, entries: maintenanceEntries)
         let vehicleCosts = AppDataLocator.costs(for: vehicle, costs: costs)
+        let vehicleChecklists = AppDataLocator.checklists(for: vehicle, checklists: checklists)
+        let departureChecklist = vehicleChecklists.first { $0.mode == .departure }
+        let departureItems = AppDataLocator.checklistItems(for: departureChecklist, items: checklistItems)
+        let requiredCount = departureItems.filter(\.isRequired).count
+        let completedRequired = departureItems.filter { $0.isRequired && $0.isCompleted }.count
         let snapshot = ReadinessEngine.buildDashboard(
             vehicle: vehicle,
             nextTrip: trip,
             weight: weight,
             documents: AppDataLocator.documents(for: vehicle, documents: documents),
             maintenance: vehicleMaintenance,
-            checklists: AppDataLocator.checklists(for: vehicle, checklists: checklists),
+            checklists: vehicleChecklists,
             checklistItems: checklistItems,
             costs: vehicleCosts,
             currentOdometerKm: AppDataLocator.currentOdometerKm(maintenance: vehicleMaintenance, costs: vehicleCosts)
@@ -43,86 +48,79 @@ struct HomeDashboardView: View {
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: trip?.title)
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                if vehicle == nil {
-                    emptyStateHero
-                } else {
+            VStack(alignment: .leading, spacing: 16) {
+                if let vehicle {
                     FeatureHeader(
-                        eyebrow: snapshot.vehicleName,
-                        title: "CamperReady",
-                        subtitle: "Dein Fahrzeugstatus vor der Abfahrt."
+                        eyebrow: "Morgenübersicht",
+                        title: homeHeadline(for: snapshot),
+                        subtitle: homeSubtitle(vehicle: vehicle, tripTitle: trip?.title, snapshot: snapshot)
                     )
-                    .opacity(hasAppeared ? 1 : 0.01)
-                    .offset(y: hasAppeared ? 0 : 10)
 
-                    focusPanel(snapshot: snapshot, presentation: presentation)
-                    readinessOverviewPanel(presentation: presentation)
-                    actionPanel(presentation: presentation)
-                    quickAccessPanel()
-                }
-            }
-            .padding(.horizontal, 14)
-            .padding(.top, 8)
-            .padding(.bottom, 24)
-        }
-        .navigationTitle("")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    showInfoSheet = true
-                } label: {
-                    Image(systemName: "info.circle")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(AppTheme.accent)
-                        .frame(width: 40, height: 40)
-                        .background(.thinMaterial, in: Circle())
-                }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    if vehicle != nil {
-                        Button("Dashboard als PDF exportieren") {
-                            exportFile = try? ExportService.exportDashboardPDF(snapshot: snapshot)
-                        }
-                        if let vehicle {
-                            Button("Datenarchiv exportieren") {
-                                exportFile = try? ExportService.exportVehicleArchive(
-                                    vehicle: vehicle,
-                                    trips: trips,
-                                    packingItems: packingItems,
-                                    passengers: passengers,
-                                    loadSettings: loadSettings,
-                                    checklists: checklists,
-                                    checklistItems: checklistItems,
-                                    maintenance: maintenanceEntries,
-                                    documents: documents,
-                                    places: places,
-                                    costs: costs
+                    VStack(spacing: 14) {
+                        homeMoodCard(vehicle: vehicle, trip: trip, snapshot: snapshot)
+
+                        homeWeightCard(
+                            vehicle: vehicle,
+                            trip: trip,
+                            weight: weight,
+                            settings: settings
+                        )
+
+                        if UIScreen.main.bounds.width < 402 {
+                            VStack(spacing: 12) {
+                                homeQuickActionCard(
+                                    title: "Neue Wiegung",
+                                    subtitle: "Achslast und Verteilung vor der Fahrt prüfen.",
+                                    systemImage: "scale.3d",
+                                    tint: AppTheme.petrol,
+                                    action: .weight
+                                )
+
+                                homeChecklistCard(
+                                    departureChecklist: departureChecklist,
+                                    requiredCount: requiredCount,
+                                    completedRequired: completedRequired
+                                )
+                            }
+                        } else {
+                            HStack(alignment: .top, spacing: 12) {
+                                homeQuickActionCard(
+                                    title: "Neue Wiegung",
+                                    subtitle: "Achslast und Verteilung vor der Fahrt prüfen.",
+                                    systemImage: "scale.3d",
+                                    tint: AppTheme.petrol,
+                                    action: .weight
+                                )
+
+                                homeChecklistCard(
+                                    departureChecklist: departureChecklist,
+                                    requiredCount: requiredCount,
+                                    completedRequired: completedRequired
                                 )
                             }
                         }
+
+                        homeSystemsCard(
+                            vehicle: vehicle,
+                            trip: trip,
+                            maintenance: vehicleMaintenance,
+                            settings: settings,
+                            snapshot: snapshot
+                        )
+
+                        homeUtilityStrip(presentation: presentation)
                     }
-                    if let exportFile {
-                        ShareLink(item: exportFile.url) {
-                            Label("Letzte Datei teilen", systemImage: "square.and.arrow.up")
-                        }
-                    }
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(AppTheme.accent)
-                        .frame(width: 40, height: 40)
-                        .background(.thinMaterial, in: Circle())
+                } else {
+                    emptyStateHero
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 44)
+            .padding(.bottom, 28)
+            .opacity(hasAppeared ? 1 : 0.01)
+            .offset(y: hasAppeared ? 0 : 12)
         }
-        .sheet(isPresented: $showGarageSheet) {
-            GarageView()
-        }
-        .sheet(isPresented: $showInfoSheet) {
-            AppInfoView()
-        }
+        .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             handlePendingRoute()
         }
@@ -139,6 +137,441 @@ struct HomeDashboardView: View {
                 }
             }
         }
+    }
+
+    private func homeHeadline(for snapshot: DashboardSnapshot) -> String {
+        switch snapshot.overallStatus {
+        case .green:
+            return "Abfahrt frei."
+        case .yellow:
+            return "\(snapshot.openItemsCount) Punkte offen."
+        case .red:
+            return "Nicht bereit."
+        }
+    }
+
+    private func homeSubtitle(vehicle: VehicleProfile, tripTitle: String?, snapshot: DashboardSnapshot) -> String {
+        let trip = tripTitle ?? snapshot.nextTripTitle
+        return "\(vehicle.name) · \(trip)"
+    }
+
+    private func homeWeightCard(
+        vehicle: VehicleProfile,
+        trip: Trip?,
+        weight: WeightAssessmentOutput,
+        settings: TripLoadSettings?
+    ) -> some View {
+        let marginText = weight.remainingMarginKg.map { value -> String in
+            if value >= 0 {
+                return "+\(Int(value.rounded())) kg Reserve"
+            }
+            return "\(Int(value.rounded())) kg über Limit"
+        } ?? "Werte fehlen"
+        let grossText = weight.estimatedGrossWeightKg.map { "\(Int($0.rounded()))" } ?? "—"
+        let progress = min(max((weight.estimatedGrossWeightKg ?? 0) / max(vehicle.gvwrKg ?? 1, 1), 0), 1)
+
+        return AlpineSurface(role: .raised) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Image(systemName: "scalemass")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(AppTheme.petrol)
+                            .frame(width: 34, height: 34)
+                            .background(AppTheme.primaryFixed.opacity(0.28), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+                        Text("Gesamtgewicht")
+                            .font(.system(size: 22, weight: .medium, design: .default))
+                            .foregroundStyle(AppTheme.ink)
+                    }
+
+                    Spacer()
+
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text("Sicherheitsreserve")
+                            .font(.caption.weight(.bold))
+                            .textCase(.uppercase)
+                            .tracking(0.7)
+                            .foregroundStyle(AppTheme.mutedInk)
+                        Text(marginText)
+                            .font(.headline.weight(.bold))
+                            .foregroundStyle(weight.remainingMarginKg.map { $0 >= 0 ? AppTheme.green : AppTheme.red } ?? AppTheme.petrol)
+                    }
+                }
+
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(grossText)
+                        .font(.system(size: 42, weight: .semibold, design: .default))
+                        .foregroundStyle(AppTheme.petrol)
+                    Text("kg")
+                        .font(.system(size: 18, weight: .semibold, design: .default))
+                        .foregroundStyle(AppTheme.mutedInk)
+                    Spacer()
+                }
+
+                Text(weight.summary)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(AppTheme.mutedInk)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    GeometryReader { proxy in
+                        RoundedRectangle(cornerRadius: 999, style: .continuous)
+                            .fill(AppTheme.surfaceHigh)
+                            .overlay(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 999, style: .continuous)
+                                    .fill(AppTheme.petrol)
+                                    .frame(width: proxy.size.width * progress, height: 10)
+                            }
+                    }
+                    .frame(height: 10)
+
+                    HStack {
+                        Text("von \(Int((vehicle.gvwrKg ?? 0).rounded())) kg")
+                        Spacer()
+                        Text(weight.nextAction ?? (settings == nil ? "Beladung fehlt" : "Aktive Beladung geprüft"))
+                    }
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(AppTheme.mutedInk)
+                }
+            }
+        }
+    }
+
+    private func homeMoodCard(vehicle: VehicleProfile, trip: Trip?, snapshot: DashboardSnapshot) -> some View {
+        let layout = ScenicCardLayout.metrics(forScreenWidth: UIScreen.main.bounds.width, emphasis: .hero)
+
+        return AlpineSurface(role: .raised) {
+            Group {
+                if layout.prefersVertical {
+                    VStack(alignment: .leading, spacing: 14) {
+                        homeMoodText(vehicle: vehicle, trip: trip, snapshot: snapshot, layout: layout)
+                        homeMoodArtwork(layout: layout)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                } else {
+                    HStack(alignment: .center, spacing: 16) {
+                        homeMoodText(vehicle: vehicle, trip: trip, snapshot: snapshot, layout: layout)
+                        Spacer(minLength: 0)
+                        homeMoodArtwork(layout: layout)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: layout.minimumHeight, alignment: .leading)
+        }
+    }
+
+    private func homeMoodText(
+        vehicle: VehicleProfile,
+        trip: Trip?,
+        snapshot: DashboardSnapshot,
+        layout: ScenicCardLayout
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.title)
+
+            Text(vehicle.name)
+                .font(.system(size: layout.titleSize, weight: .semibold, design: .default))
+                .foregroundStyle(AppTheme.ink)
+                .lineLimit(layout.prefersVertical ? 3 : 2)
+                .minimumScaleFactor(0.82)
+
+            Text(trip.map { "Aktiv für \($0.title)." } ?? "Noch kein Trip geplant.")
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.mutedInk)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(snapshot.openItemsCount == 0 ? "Heute wirkt alles ruhig und bereit." : "\(snapshot.openItemsCount) Punkte sind noch offen.")
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(AppTheme.mutedInk)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func homeMoodArtwork(layout: ScenicCardLayout) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 26, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            AppTheme.skySoft.opacity(0.74),
+                            AppTheme.mintSoft.opacity(0.64),
+                            AppTheme.canvasWarm.opacity(0.58)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+            Circle()
+                .fill(AppTheme.sun.opacity(0.26))
+                .frame(width: layout.prefersVertical ? 56 : 50, height: layout.prefersVertical ? 56 : 50)
+                .offset(x: 40, y: -28)
+
+            Circle()
+                .fill(AppTheme.coral.opacity(0.20))
+                .frame(width: layout.prefersVertical ? 38 : 34, height: layout.prefersVertical ? 38 : 34)
+                .offset(x: -50, y: 34)
+
+            CamperSceneArtwork(mood: .home)
+                .frame(width: layout.artworkSize.width, height: layout.artworkSize.height)
+                .shadow(color: AppTheme.ink.opacity(0.08), radius: 12, x: 0, y: 8)
+                .padding(6)
+        }
+        .frame(width: layout.containerSize.width, height: layout.containerSize.height)
+    }
+
+    private func homeQuickActionCard(title: String, subtitle: String, systemImage: String, tint: Color, action: ReadinessActionKind) -> some View {
+        Button {
+            navigation.navigate(for: action)
+        } label: {
+            AlpineSurface(role: .focus) {
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Image(systemName: systemImage)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.95))
+                            .frame(width: 34, height: 34)
+                            .background(tint.opacity(0.20), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(.white.opacity(0.65))
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(title)
+                            .font(.system(size: 22, weight: .semibold, design: .default))
+                            .foregroundStyle(.white)
+                        Text(subtitle)
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(.white.opacity(0.78))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func homeChecklistCard(departureChecklist: ChecklistRun?, requiredCount: Int, completedRequired: Int) -> some View {
+        let progress = requiredCount == 0 ? 0 : Double(completedRequired) / Double(requiredCount)
+        let state = departureChecklist?.state ?? .notStarted
+        let title = ChecklistPresentation.make(
+            title: "Abfahrt",
+            state: state,
+            completedRequired: completedRequired,
+            requiredCount: requiredCount
+        )
+
+        return AlpineSurface(role: .raised) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack {
+                    Text("Checkliste")
+                        .font(.caption.weight(.bold))
+                        .textCase(.uppercase)
+                        .tracking(0.8)
+                        .foregroundStyle(AppTheme.mutedInk)
+                    Spacer()
+                    Text(title.progressText)
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(AppTheme.petrol)
+                }
+
+                HStack(alignment: .center, spacing: 14) {
+                    ZipProgressRing(progress: progress, text: "\(Int(progress * 100))%", accent: AppTheme.green, size: 78)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(title.title)
+                            .font(.system(size: 21, weight: .medium, design: .default))
+                            .foregroundStyle(AppTheme.ink)
+                        Text(title.stateText)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(AppTheme.mutedInk)
+                    }
+                    Spacer()
+                }
+
+                Button {
+                    navigation.navigate(for: .departureChecklist)
+                } label: {
+                    HStack {
+                        Text("Liste fortsetzen")
+                            .font(.footnote.weight(.bold))
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.bold))
+                    }
+                    .foregroundStyle(AppTheme.petrol)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private func homeSystemsCard(vehicle: VehicleProfile, trip: Trip?, maintenance: [MaintenanceEntry], settings: TripLoadSettings?, snapshot: DashboardSnapshot) -> some View {
+        let compactLayout = ScenicCardLayout.metrics(forScreenWidth: UIScreen.main.bounds.width, emphasis: .support).sizeClass != .regular
+
+        return AlpineSurface(role: .section) {
+            ZStack(alignment: .bottomTrailing) {
+                VStack(alignment: .leading, spacing: 14) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Unterwegs gut versorgt")
+                                .font(.caption.weight(.bold))
+                                .textCase(.uppercase)
+                                .tracking(0.8)
+                                .foregroundStyle(AppTheme.mutedInk)
+                            Text("Alles ruhig")
+                                .font(.system(size: 22, weight: .medium, design: .default))
+                                .foregroundStyle(AppTheme.ink)
+                        }
+                        Spacer()
+                        StatusBadge(status: snapshot.overallStatus, text: snapshot.overallStatus.title)
+                    }
+
+                    if compactLayout {
+                        VStack(spacing: 10) {
+                            HStack(spacing: 10) {
+                                homeSystemChip(
+                                    title: "Gas",
+                                    value: gasValue(for: vehicle, settings: settings),
+                                    systemImage: "flame.fill",
+                                    tint: AppTheme.tertiaryFixed
+                                )
+                                homeSystemChip(
+                                    title: "Wasser",
+                                    value: waterValue(for: vehicle, trip: trip),
+                                    systemImage: "drop.fill",
+                                    tint: AppTheme.petrolBright
+                                )
+                            }
+
+                            homeSystemChip(
+                                title: "Wartung",
+                                value: maintenanceValue(for: maintenance),
+                                systemImage: "wrench.and.screwdriver.fill",
+                                tint: AppTheme.green
+                            )
+                        }
+                    } else {
+                        HStack(spacing: 10) {
+                            homeSystemChip(
+                                title: "Gas",
+                                value: gasValue(for: vehicle, settings: settings),
+                                systemImage: "flame.fill",
+                                tint: AppTheme.tertiaryFixed
+                            )
+                            homeSystemChip(
+                                title: "Wasser",
+                                value: waterValue(for: vehicle, trip: trip),
+                                systemImage: "drop.fill",
+                                tint: AppTheme.petrolBright
+                            )
+                            homeSystemChip(
+                                title: "Wartung",
+                                value: maintenanceValue(for: maintenance),
+                                systemImage: "wrench.and.screwdriver.fill",
+                                tint: AppTheme.green
+                            )
+                        }
+                    }
+                }
+
+                CamperSceneArtwork(mood: .home)
+                    .frame(width: compactLayout ? 168 : 210, height: compactLayout ? 108 : 132)
+                    .offset(x: compactLayout ? 12 : 26, y: compactLayout ? 16 : 20)
+                    .allowsHitTesting(false)
+            }
+            .frame(maxWidth: .infinity, minHeight: compactLayout ? 212 : 190, alignment: .leading)
+        }
+    }
+
+    private func homeSystemChip(title: String, value: String, systemImage: String, tint: Color) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 12, weight: .semibold))
+                Text(title)
+                    .font(.caption.weight(.bold))
+                    .textCase(.uppercase)
+                    .tracking(0.6)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            Text(value)
+                .font(.subheadline.weight(.bold))
+                .lineLimit(2)
+                .minimumScaleFactor(0.82)
+        }
+        .foregroundStyle(AppTheme.onPrimaryFixedVariant)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(tint.opacity(0.16), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    private func gasValue(for vehicle: VehicleProfile, settings: TripLoadSettings?) -> String {
+        if let settings, settings.gasBottleFillPercent > 0 {
+            return "\(Int(settings.gasBottleFillPercent.rounded()))%"
+        }
+        guard let count = vehicle.gasBottleCount, count > 0 else {
+            return "Offen"
+        }
+        return "\(count) Flaschen"
+    }
+
+    private func waterValue(for vehicle: VehicleProfile, trip: Trip?) -> String {
+        let liters = vehicle.freshWaterCapacityL ?? 0
+        guard liters > 0 else { return "Offen" }
+        return "\(Int(liters.rounded())) l"
+    }
+
+    private func maintenanceValue(for entries: [MaintenanceEntry]) -> String {
+        if let nextDate = entries.compactMap(\.nextDueDate).sorted().first {
+            return nextDate.shortDateString()
+        }
+        return "\(entries.count) Einträge"
+    }
+
+    private func homeUtilityStrip(presentation: HomeDashboardPresentation) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(presentation.overviewRows.prefix(3)) { row in
+                    homeUtilityChip(row)
+                }
+            }
+        }
+    }
+
+    private func homeUtilityChip(_ row: HomeOverviewRow) -> some View {
+        let background: Color = switch row.status {
+        case .green: AppTheme.secondaryFixed
+        case .yellow: AppTheme.tertiaryFixed
+        case .red: AppTheme.redSoft
+        }
+
+        let foreground: Color = switch row.status {
+        case .green: AppTheme.onSecondaryFixedVariant
+        case .yellow: AppTheme.onTertiaryFixedVariant
+        case .red: AppTheme.red
+        }
+
+        return VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 6) {
+                Image(systemName: row.systemImage)
+                    .font(.system(size: 12, weight: .semibold))
+                Text(row.title)
+                    .font(.caption.weight(.bold))
+                    .textCase(.uppercase)
+                    .tracking(0.7)
+            }
+            Text(row.summary)
+                .font(.footnote.weight(.bold))
+                .lineLimit(1)
+        }
+        .foregroundStyle(foreground)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(background, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func focusPanel(snapshot: DashboardSnapshot, presentation: HomeDashboardPresentation) -> some View {
@@ -401,7 +834,7 @@ struct HomeDashboardView: View {
                     .foregroundStyle(AppTheme.mutedInk)
 
                 Button {
-                    showGarageSheet = true
+                    navigation.navigate(for: .vehicleProfile)
                 } label: {
                     HStack {
                         Image(systemName: "plus.circle.fill")
