@@ -4,25 +4,35 @@ import SwiftUI
 
 final class AlpineSurfaceTests: XCTestCase {
     func testSurfaceMetricsMatchDesignRoles() {
-        XCTAssertEqual(AlpineSurfaceMetrics.metrics(for: .section).cornerRadius, 28)
-        XCTAssertEqual(AlpineSurfaceMetrics.metrics(for: .raised).cornerRadius, 22)
+        XCTAssertEqual(AlpineSurfaceMetrics.metrics(for: .section).cornerRadius, 24)
+        XCTAssertEqual(AlpineSurfaceMetrics.metrics(for: .raised).cornerRadius, 18)
         XCTAssertTrue(AlpineSurfaceMetrics.metrics(for: .focus).isDark)
-        XCTAssertGreaterThan(AlpineSurfaceMetrics.metrics(for: .focus).shadowOpacity, 0.10)
+        XCTAssertEqual(AlpineSurfaceMetrics.metrics(for: .focus).cornerRadius, 24)
+        XCTAssertLessThan(AlpineSurfaceMetrics.metrics(for: .section).shadowOpacity, 0.03)
+        XCTAssertLessThan(AlpineSurfaceMetrics.metrics(for: .focus).shadowOpacity, 0.10)
     }
 
     func testSurfaceStyleCentralizesRoleSpecificValues() {
         let section = AlpineSurfaceStyle.style(for: .section)
-        XCTAssertEqual(section.metrics, AlpineSurfaceMetrics(cornerRadius: 28, isDark: false, shadowOpacity: 0.04))
-        XCTAssertEqual(section.background, .surfaceLow)
-        XCTAssertEqual(section.contentInsets, EdgeInsets(top: 22, leading: 20, bottom: 22, trailing: 20))
-        XCTAssertEqual(section.shadowRadius, 16)
-        XCTAssertEqual(section.shadowYOffset, 10)
+        XCTAssertEqual(section.metrics, AlpineSurfaceMetrics(cornerRadius: 24, isDark: false, shadowOpacity: 0.025))
+        XCTAssertEqual(section.background, .surface)
+        XCTAssertEqual(section.contentInsets, EdgeInsets(top: 20, leading: 18, bottom: 20, trailing: 18))
+        XCTAssertEqual(section.shadowRadius, 10)
+        XCTAssertEqual(section.shadowYOffset, 6)
+
+        let raised = AlpineSurfaceStyle.style(for: .raised)
+        XCTAssertEqual(raised.background, .surfaceRaised)
+        XCTAssertEqual(raised.metrics, AlpineSurfaceMetrics(cornerRadius: 18, isDark: false, shadowOpacity: 0.035))
+        XCTAssertEqual(raised.contentInsets, EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
+        XCTAssertEqual(raised.shadowRadius, 8)
+        XCTAssertEqual(raised.shadowYOffset, 4)
 
         let focus = AlpineSurfaceStyle.style(for: .focus)
         XCTAssertEqual(focus.background, .petrol)
-        XCTAssertEqual(focus.contentInsets, EdgeInsets(top: 24, leading: 22, bottom: 24, trailing: 22))
-        XCTAssertEqual(focus.shadowRadius, 20)
-        XCTAssertEqual(focus.shadowYOffset, 12)
+        XCTAssertEqual(focus.metrics, AlpineSurfaceMetrics(cornerRadius: 24, isDark: true, shadowOpacity: 0.08))
+        XCTAssertEqual(focus.contentInsets, EdgeInsets(top: 22, leading: 20, bottom: 22, trailing: 20))
+        XCTAssertEqual(focus.shadowRadius, 14)
+        XCTAssertEqual(focus.shadowYOffset, 8)
     }
 
     func testRoadSheetHeaderFeedsSharedHeaderAndUtilityRow() {

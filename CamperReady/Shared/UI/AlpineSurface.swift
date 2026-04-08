@@ -7,12 +7,15 @@ enum AlpineSurfaceRole {
 }
 
 enum AlpineSurfaceBackground: Equatable {
+    case surface
     case surfaceLow
     case surfaceRaised
     case petrol
 
     var color: Color {
         switch self {
+        case .surface:
+            AppTheme.surface
         case .surfaceLow:
             AppTheme.surfaceLow
         case .surfaceRaised:
@@ -46,29 +49,29 @@ struct AlpineSurfaceStyle: Equatable {
         case .section:
             .init(
                 role: role,
-                background: .surfaceLow,
-                metrics: .init(cornerRadius: 28, isDark: false, shadowOpacity: 0.04),
-                contentInsets: EdgeInsets(top: 22, leading: 20, bottom: 22, trailing: 20),
-                shadowRadius: 16,
-                shadowYOffset: 10
+                background: .surface,
+                metrics: .init(cornerRadius: 24, isDark: false, shadowOpacity: 0.025),
+                contentInsets: EdgeInsets(top: 20, leading: 18, bottom: 20, trailing: 18),
+                shadowRadius: 10,
+                shadowYOffset: 6
             )
         case .raised:
             .init(
                 role: role,
                 background: .surfaceRaised,
-                metrics: .init(cornerRadius: 22, isDark: false, shadowOpacity: 0.05),
-                contentInsets: EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16),
-                shadowRadius: 14,
-                shadowYOffset: 8
+                metrics: .init(cornerRadius: 18, isDark: false, shadowOpacity: 0.035),
+                contentInsets: EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15),
+                shadowRadius: 8,
+                shadowYOffset: 4
             )
         case .focus:
             .init(
                 role: role,
                 background: .petrol,
-                metrics: .init(cornerRadius: 28, isDark: true, shadowOpacity: 0.12),
-                contentInsets: EdgeInsets(top: 24, leading: 22, bottom: 24, trailing: 22),
-                shadowRadius: 20,
-                shadowYOffset: 12
+                metrics: .init(cornerRadius: 24, isDark: true, shadowOpacity: 0.08),
+                contentInsets: EdgeInsets(top: 22, leading: 20, bottom: 22, trailing: 20),
+                shadowRadius: 14,
+                shadowYOffset: 8
             )
         }
     }
@@ -85,12 +88,20 @@ struct AlpineSurface<Content: View>: View {
 
     var body: some View {
         let style = AlpineSurfaceStyle.style(for: role)
+        let shape = RoundedRectangle(cornerRadius: style.metrics.cornerRadius, style: .continuous)
+        let borderColor: Color = switch style.role {
+        case .section:
+            AppTheme.outlineVariant.opacity(0.55)
+        case .raised:
+            AppTheme.outlineVariant.opacity(0.42)
+        case .focus:
+            Color.white.opacity(0.08)
+        }
 
         content
             .padding(style.contentInsets)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(style.background.color)
-            .clipShape(RoundedRectangle(cornerRadius: style.metrics.cornerRadius, style: .continuous))
+            .background(shape.fill(style.background.color))
             .shadow(
                 color: AppTheme.ink.opacity(style.metrics.shadowOpacity),
                 radius: style.shadowRadius,
@@ -98,8 +109,8 @@ struct AlpineSurface<Content: View>: View {
                 y: style.shadowYOffset
             )
             .overlay {
-                RoundedRectangle(cornerRadius: style.metrics.cornerRadius, style: .continuous)
-                    .strokeBorder(AppTheme.outlineVariant.opacity(style.role == .focus ? 0 : 0.14), lineWidth: style.role == .focus ? 0 : 0.75)
+                shape
+                    .strokeBorder(borderColor, lineWidth: 1)
             }
     }
 }

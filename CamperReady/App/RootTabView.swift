@@ -151,11 +151,11 @@ struct RootTabView: View {
         case .weight:
             ZipAvatarBubble(systemImage: "scalemass")
         case .checklists:
-            ZipStatusPill(title: "Checklisten", tint: AppTheme.petrolBright)
+            ZipAvatarBubble(systemImage: "checklist")
         case .logbook:
-            ZipAvatarBubble(systemImage: "book.closed.fill")
+            ZipAvatarBubble(systemImage: "book.closed")
         case .costs:
-            ZipStatusPill(title: "Kosten", tint: AppTheme.green)
+            ZipAvatarBubble(systemImage: "eurosign")
         }
     }
 
