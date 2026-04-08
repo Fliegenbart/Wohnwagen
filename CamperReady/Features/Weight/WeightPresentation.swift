@@ -3,7 +3,6 @@ import Foundation
 struct WeightPresentation: Equatable {
     let headline: String
     let support: String
-    let grossWeightValue: String
     let axleRiskLabel: String
     let confidenceNote: String
 
@@ -11,7 +10,6 @@ struct WeightPresentation: Equatable {
         WeightPresentation(
             headline: assessment.summary,
             support: tripTitle ?? "Aktuelle Fahrt",
-            grossWeightValue: assessment.estimatedGrossWeightKg?.kgString ?? "Noch nicht erfasst",
             axleRiskLabel: axleLabel(for: assessment.axleRisk),
             confidenceNote: confidenceNote(for: assessment)
         )

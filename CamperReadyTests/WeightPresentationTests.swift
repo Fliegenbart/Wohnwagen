@@ -19,7 +19,6 @@ final class WeightPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.headline, "+450 kg Reserve")
         XCTAssertEqual(presentation.support, "Bodensee")
-        XCTAssertEqual(presentation.grossWeightValue, "3050 kg")
         XCTAssertEqual(presentation.axleRiskLabel, "Niedrig")
         XCTAssertEqual(presentation.confidenceNote, "Schätzung wirkt aktuell plausibel.")
     }
@@ -40,7 +39,6 @@ final class WeightPresentationTests: XCTestCase {
         let presentation = WeightPresentation.make(assessment: output, tripTitle: nil)
 
         XCTAssertEqual(presentation.support, "Aktuelle Fahrt")
-        XCTAssertEqual(presentation.grossWeightValue, "Noch nicht erfasst")
         XCTAssertEqual(presentation.axleRiskLabel, "Niedrig")
         XCTAssertEqual(
             presentation.confidenceNote,
