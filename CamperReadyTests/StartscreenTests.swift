@@ -75,3 +75,36 @@ final class StartscreenTests: XCTestCase {
         XCTAssertLessThan(reducedMotionDuration, defaultDuration)
     }
 }
+
+final class FirstRunOnboardingPresentationTests: XCTestCase {
+    func testPresentationKeepsOnboardingFocusedOnSetup() {
+        let presentation = FirstRunOnboardingPresentation.current
+
+        XCTAssertEqual(presentation.setupItems.count, 3)
+        XCTAssertEqual(
+            presentation.setupItems.map(\.title),
+            [
+                "Name und Fahrzeugtyp",
+                "Wichtige Basisdaten",
+                "Rest später in der Garage"
+            ]
+        )
+        XCTAssertEqual(presentation.steps.count, 2)
+        XCTAssertEqual(
+            presentation.steps.map(\.title),
+            [
+                "Camper anlegen",
+                "Später ergänzen"
+            ]
+        )
+    }
+
+    func testPresentationExposesStableHeaderAndPrimaryActions() {
+        let presentation = FirstRunOnboardingPresentation.current
+
+        XCTAssertEqual(presentation.headerEyebrow, "Dein Camper, dein Startpunkt")
+        XCTAssertEqual(presentation.headerTitle, "Sag uns kurz, mit wem du unterwegs bist")
+        XCTAssertEqual(presentation.primaryActionTitle, "Camper anlegen")
+        XCTAssertEqual(presentation.secondaryActionTitle, "Erstmal nur schauen")
+    }
+}
