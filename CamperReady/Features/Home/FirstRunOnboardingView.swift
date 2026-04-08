@@ -33,12 +33,12 @@ struct FirstRunOnboardingPresentation: Equatable {
     let headerEyebrow: String
     let headerTitle: String
     let headerSubtitle: String
-    let setupTitle: String
-    let setupSubtitle: String
+    let flowTitle: String
+    let flowSubtitle: String
     let setupItems: [FirstRunOnboardingItem]
-    let stepsTitle: String
+    let stepsLabel: String
     let steps: [FirstRunOnboardingStep]
-    let footerNote: String
+    let flowFooterNote: String
     let primaryActionTitle: String
     let secondaryActionTitle: String
 
@@ -46,8 +46,8 @@ struct FirstRunOnboardingPresentation: Equatable {
         headerEyebrow: "Dein Camper, dein Startpunkt",
         headerTitle: "Sag uns kurz, mit wem du unterwegs bist",
         headerSubtitle: "Ein paar Angaben reichen für den Start. Alles Weitere kannst du später ergänzen.",
-        setupTitle: "Für den ersten Start wichtig",
-        setupSubtitle: "CamperReady braucht nur genug, um direkt mit dem richtigen Fahrzeug weiterzuarbeiten.",
+        flowTitle: "Für den Start brauchst du nur wenig",
+        flowSubtitle: "CamperReady braucht nur genug, um direkt mit dem richtigen Fahrzeug weiterzuarbeiten.",
         setupItems: [
             FirstRunOnboardingItem(
                 title: "Name und Fahrzeugtyp",
@@ -68,7 +68,7 @@ struct FirstRunOnboardingPresentation: Equatable {
                 tintRole: .green
             )
         ],
-        stepsTitle: "So startest du",
+        stepsLabel: "So geht es weiter",
         steps: [
             FirstRunOnboardingStep(
                 title: "Camper anlegen",
@@ -79,7 +79,7 @@ struct FirstRunOnboardingPresentation: Equatable {
                 text: "Fehlende Angaben kannst du danach in der Garage ergänzen."
             )
         ],
-        footerNote: "Mehr musst du für den ersten Start nicht vorbereiten.",
+        flowFooterNote: "Mehr musst du für den ersten Start nicht vorbereiten.",
         primaryActionTitle: "Camper anlegen",
         secondaryActionTitle: "Erstmal nur schauen"
     )
@@ -129,8 +129,8 @@ struct FirstRunOnboardingView: View {
                         AlpineSurface(role: .section) {
                             VStack(alignment: .leading, spacing: 14) {
                                 sectionHeading(
-                                    title: presentation.setupTitle,
-                                    subtitle: presentation.setupSubtitle
+                                    title: presentation.flowTitle,
+                                    subtitle: presentation.flowSubtitle
                                 )
 
                                 ForEach(Array(presentation.setupItems.enumerated()), id: \.offset) { _, item in
@@ -142,20 +142,16 @@ struct FirstRunOnboardingView: View {
                                     )
                                 }
 
-                                Text("Sobald ein Camper angelegt ist, arbeitet die App mit genau diesem Fahrzeug weiter.")
-                                    .font(.footnote.weight(.medium))
-                                    .foregroundStyle(AppTheme.mutedInk)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .padding(.top, 2)
-                            }
-                        }
-                        .onboardingReveal(isVisible: hasAppeared, offset: 14)
+                                Rectangle()
+                                    .fill(AppTheme.outlineVariant.opacity(0.55))
+                                    .frame(height: 1)
+                                    .padding(.vertical, 4)
 
-                        AlpineSurface(role: .raised) {
-                            VStack(alignment: .leading, spacing: 14) {
-                                Text(presentation.stepsTitle)
-                                    .font(.system(.title3, design: .default, weight: .semibold))
-                                    .foregroundStyle(AppTheme.ink)
+                                Text(presentation.stepsLabel)
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundStyle(AppTheme.mutedInk)
+                                    .textCase(.uppercase)
+                                    .accessibilityAddTraits(.isHeader)
 
                                 ForEach(Array(presentation.steps.enumerated()), id: \.offset) { index, step in
                                     onboardingStep(
@@ -165,44 +161,28 @@ struct FirstRunOnboardingView: View {
                                     )
                                 }
 
-                                Text(presentation.footerNote)
+                                Text(presentation.flowFooterNote)
                                     .font(.footnote.weight(.medium))
                                     .foregroundStyle(AppTheme.mutedInk)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
                         }
-                        .onboardingReveal(isVisible: hasAppeared, offset: 16)
-
-                        VStack(spacing: 12) {
-                            Button {
-                                showVehicleSheet = true
-                            } label: {
-                                HStack {
-                                    Image(systemName: "plus")
-                                        .font(.footnote.weight(.bold))
-                                    Text(presentation.primaryActionTitle)
-                                        .fontWeight(.semibold)
-                                    Spacer()
-                                }
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 18)
-                                .padding(.vertical, 15)
-                                .frame(maxWidth: .infinity)
-                                .background(AppTheme.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                            }
-                            .buttonStyle(.plain)
-
-                            Button(presentation.secondaryActionTitle) {
-                                hasDismissedOnboarding = true
-                                isPresented = false
-                            }
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(AppTheme.mutedInk)
-                        }
-                        .onboardingReveal(isVisible: hasAppeared, offset: 18)
+                        .onboardingReveal(isVisible: hasAppeared, offset: 14)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 28)
+                    .padding(.bottom, 24)
                 }
+            }
+            .safeAreaInset(edge: .bottom) {
+                onboardingActions
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 12)
+                    .background {
+                        Rectangle()
+                            .fill(AppTheme.canvas.opacity(0.96))
+                            .ignoresSafeArea(edges: .bottom)
+                    }
             }
             .navigationTitle("Willkommen")
             .navigationBarTitleDisplayMode(.inline)
@@ -224,6 +204,36 @@ struct FirstRunOnboardingView: View {
                 isPresented = false
             }
         }
+    }
+
+    private var onboardingActions: some View {
+        VStack(spacing: 12) {
+            Button {
+                showVehicleSheet = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus")
+                        .font(.footnote.weight(.bold))
+                    Text(presentation.primaryActionTitle)
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 15)
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            }
+            .buttonStyle(.plain)
+
+            Button(presentation.secondaryActionTitle) {
+                hasDismissedOnboarding = true
+                isPresented = false
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(AppTheme.mutedInk)
+        }
+        .onboardingReveal(isVisible: hasAppeared, offset: 18)
     }
 
     private func sectionHeading(title: String, subtitle: String) -> some View {

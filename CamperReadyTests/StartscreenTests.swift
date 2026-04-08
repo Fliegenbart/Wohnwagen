@@ -77,9 +77,12 @@ final class StartscreenTests: XCTestCase {
 }
 
 final class FirstRunOnboardingPresentationTests: XCTestCase {
-    func testPresentationKeepsOnboardingFocusedOnSetup() {
+    func testPresentationKeepsOnboardingFocusedOnOneCalmSetupFlow() {
         let presentation = FirstRunOnboardingPresentation.current
 
+        XCTAssertEqual(presentation.flowTitle, "Für den Start brauchst du nur wenig")
+        XCTAssertEqual(presentation.flowSubtitle, "CamperReady braucht nur genug, um direkt mit dem richtigen Fahrzeug weiterzuarbeiten.")
+        XCTAssertEqual(presentation.stepsLabel, "So geht es weiter")
         XCTAssertEqual(presentation.setupItems.count, 3)
         XCTAssertEqual(
             presentation.setupItems.map(\.title),
@@ -97,6 +100,7 @@ final class FirstRunOnboardingPresentationTests: XCTestCase {
                 "Später ergänzen"
             ]
         )
+        XCTAssertEqual(presentation.flowFooterNote, "Mehr musst du für den ersten Start nicht vorbereiten.")
     }
 
     func testPresentationExposesStableHeaderAndPrimaryActions() {
@@ -106,5 +110,12 @@ final class FirstRunOnboardingPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.headerTitle, "Sag uns kurz, mit wem du unterwegs bist")
         XCTAssertEqual(presentation.primaryActionTitle, "Camper anlegen")
         XCTAssertEqual(presentation.secondaryActionTitle, "Erstmal nur schauen")
+    }
+
+    func testPresentationKeepsClearTextBoundaryBetweenSetupAndNextSteps() {
+        let presentation = FirstRunOnboardingPresentation.current
+
+        XCTAssertFalse(presentation.stepsLabel.isEmpty)
+        XCTAssertNotEqual(presentation.flowTitle, presentation.stepsLabel)
     }
 }
