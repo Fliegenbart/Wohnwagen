@@ -7,12 +7,14 @@ final class ChecklistPresentationTests: XCTestCase {
             title: "Abfahrt",
             state: .inProgress,
             completedRequired: 8,
-            requiredCount: 12
+            requiredCount: 12,
+            nextRequiredTitle: "Gas abdrehen"
         )
 
         XCTAssertEqual(presentation.title, "Abfahrt")
         XCTAssertEqual(presentation.progressText, "8 von 12 Pflichtpunkten erledigt")
         XCTAssertEqual(presentation.stateText, "In Arbeit")
+        XCTAssertEqual(presentation.focusText, "Als Nächstes: Gas abdrehen")
     }
 
     func testChecklistPresentationMapsAllStatesToGermanLabels() {
@@ -54,5 +56,31 @@ final class ChecklistPresentationTests: XCTestCase {
             XCTAssertEqual(presentation.progressText, expectedProgressText)
             XCTAssertFalse(presentation.progressText.contains("0 von 0"))
         }
+    }
+
+    func testChecklistPresentationFallsBackToStateSummaryWhenAllRequiredItemsAreDone() {
+        let presentation = ChecklistPresentation.make(
+            title: "Abfahrt",
+            state: .complete,
+            completedRequired: 4,
+            requiredCount: 4,
+            nextRequiredTitle: nil
+        )
+
+        XCTAssertEqual(presentation.focusText, "Alle Pflichtpunkte sind erledigt.")
+    }
+
+    func testChecklistWorkflowSectionsKeepOpenItemsFocusedAndCompletedAccessible() {
+        let checklistID = UUID()
+        let items = [
+            ChecklistItemRecord(checklistID: checklistID, title: "Gas prüfen", isCompleted: false, sortOrder: 0),
+            ChecklistItemRecord(checklistID: checklistID, title: "Strom trennen", isCompleted: true, sortOrder: 1),
+            ChecklistItemRecord(checklistID: checklistID, title: "Fenster schließen", isCompleted: false, sortOrder: 2)
+        ]
+
+        let sections = ChecklistWorkflowSections.make(items: items)
+
+        XCTAssertEqual(sections.openItems.map(\.title), ["Gas prüfen", "Fenster schließen"])
+        XCTAssertEqual(sections.completedItems.map(\.title), ["Strom trennen"])
     }
 }

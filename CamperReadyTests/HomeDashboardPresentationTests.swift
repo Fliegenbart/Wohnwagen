@@ -19,14 +19,16 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Bodensee")
 
-        XCTAssertEqual(presentation.focusTitle, "2 Punkte offen")
-        XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
+        XCTAssertEqual(presentation.focusEyebrow, "Dokumente & Fristen")
+        XCTAssertEqual(presentation.focusTitle, "Gasprüfung abgelaufen")
         XCTAssertEqual(presentation.focusDetail, "Nachweis erneuern")
-        XCTAssertEqual(presentation.focusContext, "Bodensee")
+        XCTAssertEqual(presentation.focusSystemImage, "doc.text")
+        XCTAssertEqual(presentation.focusStatus, .red)
         XCTAssertEqual(presentation.overviewRows.map(\.title), ["Gewicht", "Dokumente & Fristen", "Wartung"])
-        XCTAssertEqual(presentation.actionRows.count, 2)
-        XCTAssertEqual(presentation.actionRows.first?.title, "Gasprüfung abgelaufen")
-        XCTAssertEqual(presentation.actionRows.first?.systemImage, "doc.text")
+        XCTAssertEqual(presentation.primaryAction.title, "Dokumente prüfen")
+        XCTAssertEqual(presentation.primaryAction.subtitle, "Nachweis erneuern")
+        XCTAssertEqual(presentation.primaryAction.systemImage, "doc.text")
+        XCTAssertEqual(presentation.primaryAction.action, .documents)
     }
 
     func testPresentationFallsBackToTripWhenNoOpenDimensionsExist() {
@@ -45,11 +47,16 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Bodensee")
 
-        XCTAssertEqual(presentation.focusTitle, "Abfahrbereit")
-        XCTAssertEqual(presentation.focusSubtitle, "Bodensee")
-        XCTAssertEqual(presentation.focusDetail, "Atlas ist bereit für Bodensee.")
+        XCTAssertEqual(presentation.focusEyebrow, "Gewicht")
+        XCTAssertEqual(presentation.focusTitle, "+220 kg Reserve")
+        XCTAssertEqual(presentation.focusDetail, "Das ist dein ruhigster Kontrollblick vor der Fahrt.")
+        XCTAssertEqual(presentation.focusSystemImage, "scalemass")
+        XCTAssertEqual(presentation.focusStatus, .green)
+        XCTAssertEqual(presentation.focusAction, .weight)
         XCTAssertEqual(presentation.overviewRows.count, 2)
-        XCTAssertTrue(presentation.actionRows.isEmpty)
+        XCTAssertEqual(presentation.primaryAction.title, "Vor der Fahrt kurz checken")
+        XCTAssertEqual(presentation.primaryAction.systemImage, "checklist")
+        XCTAssertEqual(presentation.primaryAction.action, .departureChecklist)
     }
 
     func testPresentationFallsBackWithoutExplicitTripTitle() {
@@ -67,12 +74,14 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: nil)
 
-        XCTAssertEqual(presentation.focusContext, "Keine Reise geplant")
-        XCTAssertEqual(presentation.focusSubtitle, "Keine Reise geplant")
-        XCTAssertEqual(presentation.focusDetail, "Atlas ist startklar — alles sieht gut aus.")
+        XCTAssertEqual(presentation.focusEyebrow, "Gewicht")
+        XCTAssertEqual(presentation.focusTitle, "+220 kg Reserve")
+        XCTAssertEqual(presentation.focusDetail, "Das ist dein ruhigster Kontrollblick vor der Fahrt.")
+        XCTAssertEqual(presentation.focusAction, .weight)
+        XCTAssertEqual(presentation.primaryAction.subtitle, "Die Abfahrts-Checkliste bleibt dein letzter ruhiger Kontrollblick.")
     }
 
-    func testPresentationUsesDimensionMetadataForTieBreakingAndActionRows() {
+    func testPresentationUsesDimensionMetadataForTieBreakingAndOverviewRows() {
         let snapshot = DashboardSnapshot(
             vehicleName: "Atlas",
             nextTripTitle: "Nordsee",
@@ -89,8 +98,28 @@ final class HomeDashboardPresentationTests: XCTestCase {
 
         let presentation = HomeDashboardPresentation.make(snapshot: snapshot, tripTitle: "Nordsee")
 
-        XCTAssertEqual(presentation.focusSubtitle, "Gasprüfung abgelaufen")
-        XCTAssertEqual(presentation.actionRows.map(\.systemImage), ["doc.text", "wrench.and.screwdriver", "scalemass"])
-        XCTAssertEqual(presentation.actionRows.map(\.dimensionTitle), ["Dokumente & Fristen", "Wartung", "Gewicht"])
+        XCTAssertEqual(presentation.focusEyebrow, "Dokumente & Fristen")
+        XCTAssertEqual(presentation.focusTitle, "Gasprüfung abgelaufen")
+        XCTAssertEqual(presentation.primaryAction.action, .documents)
+        XCTAssertEqual(presentation.overviewRows.map(\.systemImage), ["wrench.and.screwdriver", "doc.text", "scalemass"])
+    }
+
+    func testPrimaryActionPresentationCoversRemainingMappings() {
+        let cases: [(ReadinessActionKind?, String, String, ReadinessActionKind)] = [
+            (.maintenance, "Wartung ansehen", "wrench.and.screwdriver", .maintenance),
+            (.costs, "Kosten prüfen", "eurosign.circle", .costs),
+            (.places, "Orte ansehen", "map", .places),
+            (.vehicleProfile, "Garage öffnen", "car.circle", .vehicleProfile),
+            (nil, "Jetzt prüfen", "checklist", .departureChecklist)
+        ]
+
+        for (action, expectedTitle, expectedSystemImage, expectedResolvedAction) in cases {
+            let primaryAction = HomeDashboardPresentation.makePrimaryAction(for: action, subtitle: "Kurz prüfen")
+
+            XCTAssertEqual(primaryAction.title, expectedTitle)
+            XCTAssertEqual(primaryAction.subtitle, "Kurz prüfen")
+            XCTAssertEqual(primaryAction.systemImage, expectedSystemImage)
+            XCTAssertEqual(primaryAction.action, expectedResolvedAction)
+        }
     }
 }

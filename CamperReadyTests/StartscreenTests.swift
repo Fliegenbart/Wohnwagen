@@ -75,3 +75,47 @@ final class StartscreenTests: XCTestCase {
         XCTAssertLessThan(reducedMotionDuration, defaultDuration)
     }
 }
+
+final class FirstRunOnboardingPresentationTests: XCTestCase {
+    func testPresentationKeepsOnboardingFocusedOnOneCalmSetupFlow() {
+        let presentation = FirstRunOnboardingPresentation.current
+
+        XCTAssertEqual(presentation.flowTitle, "Für den Start brauchst du nur wenig")
+        XCTAssertEqual(presentation.flowSubtitle, "CamperReady braucht nur genug, um direkt mit dem richtigen Fahrzeug weiterzuarbeiten.")
+        XCTAssertEqual(presentation.stepsLabel, "So geht es weiter")
+        XCTAssertEqual(presentation.setupItems.count, 3)
+        XCTAssertEqual(
+            presentation.setupItems.map(\.title),
+            [
+                "Name und Fahrzeugtyp",
+                "Wichtige Basisdaten",
+                "Rest später in der Garage"
+            ]
+        )
+        XCTAssertEqual(presentation.steps.count, 2)
+        XCTAssertEqual(
+            presentation.steps.map(\.title),
+            [
+                "Camper anlegen",
+                "Später ergänzen"
+            ]
+        )
+        XCTAssertEqual(presentation.flowFooterNote, "Mehr musst du für den ersten Start nicht vorbereiten.")
+    }
+
+    func testPresentationExposesStableHeaderAndPrimaryActions() {
+        let presentation = FirstRunOnboardingPresentation.current
+
+        XCTAssertEqual(presentation.headerEyebrow, "Dein Camper, dein Startpunkt")
+        XCTAssertEqual(presentation.headerTitle, "Sag uns kurz, mit wem du unterwegs bist")
+        XCTAssertEqual(presentation.primaryActionTitle, "Camper anlegen")
+        XCTAssertEqual(presentation.secondaryActionTitle, "Erstmal nur schauen")
+    }
+
+    func testPresentationKeepsClearTextBoundaryBetweenSetupAndNextSteps() {
+        let presentation = FirstRunOnboardingPresentation.current
+
+        XCTAssertFalse(presentation.stepsLabel.isEmpty)
+        XCTAssertNotEqual(presentation.flowTitle, presentation.stepsLabel)
+    }
+}

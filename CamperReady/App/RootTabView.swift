@@ -149,14 +149,21 @@ struct RootTabView: View {
                 ZipStatusPill(title: "Bereit", tint: AppTheme.petrol)
             }
         case .weight:
-            ZipAvatarBubble(systemImage: "scalemass")
+            topBarAccessoryBubble(.weight)
         case .checklists:
-            ZipStatusPill(title: "Checklisten", tint: AppTheme.petrolBright)
+            topBarAccessoryBubble(.checklists)
         case .logbook:
-            ZipAvatarBubble(systemImage: "book.closed.fill")
+            topBarAccessoryBubble(.logbook)
         case .costs:
-            ZipStatusPill(title: "Kosten", tint: AppTheme.green)
+            topBarAccessoryBubble(.costs)
         }
+    }
+
+    private func topBarAccessoryBubble(_ accessory: ZipTopBarAccessory) -> some View {
+        ZipAvatarBubble(
+            systemImage: accessory.systemImage,
+            accessibilityLabel: accessory.accessibilityLabel
+        )
     }
 
     private func persistenceBanner(message: String) -> some View {

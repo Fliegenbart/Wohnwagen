@@ -6,6 +6,17 @@ private struct VehicleEditorContext: Identifiable {
     let vehicle: VehicleProfile?
 }
 
+enum GarageRowLayout {
+    static func prefersStackedMetadata(for dynamicTypeSize: DynamicTypeSize) -> Bool {
+        dynamicTypeSize >= .accessibility1
+    }
+}
+
+private enum GarageVehicleRowMode {
+    case selector
+    case manager(onSelect: () -> Void, onEdit: () -> Void)
+}
+
 struct GarageView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var activeVehicleStore: ActiveVehicleStore
@@ -184,30 +195,30 @@ struct VehicleSelectionView: View {
                         )
                         .padding(.top, 20)
 
-                        CamperSceneCard(
-                            mood: .garage,
-                            eyebrow: "Garage",
-                            title: "Ein Camper, viele Geschichten.",
-                            subtitle: "CamperReady merkt sich, wer zuletzt gefahren ist — und hält alles getrennt.",
-                            badge: "Wechseln"
-                        )
-
                         if vehicles.isEmpty {
                             GarageEmptyState {
                                 editorContext = VehicleEditorContext(vehicle: nil)
                             }
                         } else {
-                            VStack(alignment: .leading, spacing: 12) {
-                                ForEach(orderedVehicles) { vehicle in
-                                    Button {
-                                        activeVehicleStore.select(vehicle)
-                                    } label: {
-                                        GarageSelectionCard(
-                                            vehicle: vehicle,
-                                            isActive: vehicle.id == activeVehicleStore.selectedVehicleID
-                                        )
+                            AlpineSurface(role: .section) {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    ForEach(Array(orderedVehicles.enumerated()), id: \.element.id) { index, vehicle in
+                                        Button {
+                                            activeVehicleStore.select(vehicle)
+                                        } label: {
+                                            GarageVehicleRow(
+                                                vehicle: vehicle,
+                                                isActive: vehicle.id == activeVehicleStore.selectedVehicleID,
+                                                mode: .selector
+                                            )
+                                        }
+                                        .buttonStyle(.plain)
+
+                                        if index < orderedVehicles.count - 1 {
+                                            Divider()
+                                                .padding(.leading, 36)
+                                        }
                                     }
-                                    .buttonStyle(.plain)
                                 }
                             }
 
@@ -335,181 +346,159 @@ private struct GarageFleetSection: View {
                     .buttonStyle(.bordered)
             }
 
-            ForEach(vehicles) { vehicle in
-                GarageFleetCard(
-                    vehicle: vehicle,
-                    isActive: vehicle.id == activeVehicleID,
-                    onSelect: { onSelect(vehicle) },
-                    onEdit: { onEdit(vehicle) }
-                )
-            }
-        }
-    }
-}
-
-private struct GarageFleetCard: View {
-    let vehicle: VehicleProfile
-    let isActive: Bool
-    let onSelect: () -> Void
-    let onEdit: () -> Void
-
-    var body: some View {
-        AlpineSurface(role: isActive ? .raised : .section) {
-            VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .top, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(vehicle.name)
-                            .font(.title3.weight(.semibold))
-                            .foregroundStyle(AppTheme.ink)
-
-                        Text(vehicleHeadline(vehicle))
-                            .font(.subheadline)
-                            .foregroundStyle(AppTheme.mutedInk)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    Spacer()
-
-                    if isActive {
-                        GarageTag(title: "Aktiv", isHighlighted: true)
-                    }
-                }
-
-                HStack(spacing: 10) {
-                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
-                    GarageTag(title: vehicle.country.title, isHighlighted: false)
-                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
-                }
-
-                HStack(spacing: 12) {
-                    if isActive {
-                        Text("Ausgewählt")
-                            .font(.footnote.weight(.bold))
-                            .foregroundStyle(AppTheme.petrol)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 11)
-                            .background(AppTheme.sand, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    } else {
-                        Button("Auswählen", action: onSelect)
-                            .buttonStyle(.borderedProminent)
-                    }
-
-                    Button("Bearbeiten", action: onEdit)
-                        .buttonStyle(.bordered)
-                }
-            }
-        }
-    }
-}
-
-private struct GarageSelectionCard: View {
-    let vehicle: VehicleProfile
-    let isActive: Bool
-
-    var body: some View {
-        let compactLayout = ScenicCardLayout.metrics(forScreenWidth: UIScreen.main.bounds.width, emphasis: .support).sizeClass != .regular
-
-        AlpineSurface(role: isActive ? .raised : .section) {
-            VStack(alignment: .leading, spacing: 14) {
-                ZStack(alignment: .bottomLeading) {
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [AppTheme.lavenderSoft, AppTheme.skySoft, AppTheme.canvasWarm],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
+            AlpineSurface(role: .section) {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(Array(vehicles.enumerated()), id: \.element.id) { index, vehicle in
+                        GarageVehicleRow(
+                            vehicle: vehicle,
+                            isActive: vehicle.id == activeVehicleID,
+                            mode: .manager(
+                                onSelect: { onSelect(vehicle) },
+                                onEdit: { onEdit(vehicle) }
                             )
                         )
-                        .frame(height: compactLayout ? 160 : 180)
 
-                    CamperSceneArtwork(mood: .garage)
-                        .frame(height: compactLayout ? 160 : 180)
-                        .opacity(0.92)
-
-                    if isActive {
-                        GarageTag(title: "Aktiv", isHighlighted: true)
-                            .padding(14)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                        if index < vehicles.count - 1 {
+                            Divider()
+                                .padding(.leading, 36)
+                        }
                     }
                 }
+            }
+        }
+    }
+}
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(vehicle.name)
-                        .font(.system(size: compactLayout ? 22 : 24, weight: .medium, design: .default))
-                        .foregroundStyle(AppTheme.petrol)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.82)
+private struct GarageVehicleRow: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    let vehicle: VehicleProfile
+    let isActive: Bool
+    let mode: GarageVehicleRowMode
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(isActive ? AppTheme.accent : AppTheme.mutedInk)
+                    .padding(.top, 2)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: 8) {
+                            rowTitle
+                            activeBadge
+                        }
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            rowTitle
+                            activeBadge
+                        }
+                    }
 
                     Text(vehicleHeadline(vehicle))
                         .font(.subheadline)
                         .foregroundStyle(AppTheme.mutedInk)
                         .fixedSize(horizontal: false, vertical: true)
+
+                    GarageMetadataTags(vehicle: vehicle)
                 }
 
-                if compactLayout {
-                    VStack(spacing: 10) {
-                        statTile(title: "Leergewicht", value: vehicle.preferredBaseWeightKg.map { "\($0.kgString)" } ?? "Offen")
-                        statTile(title: "Nutzlast", value: payloadValue(for: vehicle))
-                    }
-                } else {
-                    HStack(spacing: 10) {
-                        statTile(title: "Leergewicht", value: vehicle.preferredBaseWeightKg.map { "\($0.kgString)" } ?? "Offen")
-                        statTile(title: "Nutzlast", value: payloadValue(for: vehicle))
-                    }
-                }
+                Spacer()
 
-                if compactLayout {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 10) {
-                            GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
-                            GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
-                        }
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
-                    }
-                } else {
-                    HStack(spacing: 10) {
-                        GarageTag(title: vehicle.vehicleKind.title, isHighlighted: isActive)
-                        GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
-                        GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen noch offen"), isHighlighted: false)
-                    }
-                }
-
-                HStack {
-                    Text(isActive ? "Ausgewählt" : "Camper wählen")
+                if case .selector = mode {
+                    Image(systemName: "chevron.right")
                         .font(.footnote.weight(.bold))
-                    Spacer()
-                    Image(systemName: isActive ? "checkmark" : "arrow.right")
-                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
-                .foregroundStyle(isActive ? AppTheme.petrol : AppTheme.ink)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
-                .background(isActive ? AppTheme.sand : AppTheme.surfaceRaised, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            }
+
+            if case let .manager(onSelect, onEdit) = mode {
+                ViewThatFits(in: .horizontal) {
+                    actionRow(onSelect: onSelect, onEdit: onEdit)
+                    VStack(alignment: .leading, spacing: 10) {
+                        selectionStatus(onSelect: onSelect)
+                        Button("Bearbeiten", action: onEdit)
+                            .buttonStyle(.bordered)
+                    }
+                }
+            }
+        }
+        .padding(.vertical, 14)
+    }
+
+    private var rowTitle: some View {
+        Text(vehicle.name)
+            .font(.headline.weight(.semibold))
+            .foregroundStyle(AppTheme.ink)
+    }
+
+    @ViewBuilder
+    private var activeBadge: some View {
+        if isActive {
+            GarageTag(title: "Aktiv", isHighlighted: true)
+        }
+    }
+
+    private func actionRow(onSelect: @escaping () -> Void, onEdit: @escaping () -> Void) -> some View {
+        HStack(spacing: 12) {
+            selectionStatus(onSelect: onSelect)
+
+            Button("Bearbeiten", action: onEdit)
+                .buttonStyle(.bordered)
+        }
+    }
+
+    @ViewBuilder
+    private func selectionStatus(onSelect: @escaping () -> Void) -> some View {
+        if isActive {
+            Text("Ausgewählt")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(AppTheme.petrol)
+        } else {
+            Button("Auswählen", action: onSelect)
+                .buttonStyle(.borderedProminent)
+        }
+    }
+}
+
+private struct GarageMetadataTags: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    let vehicle: VehicleProfile
+
+    var body: some View {
+        if GarageRowLayout.prefersStackedMetadata(for: dynamicTypeSize) {
+            stackedMetadata(singleColumn: true)
+        } else {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                    GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
+                    GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
+                }
+
+                stackedMetadata(singleColumn: false)
             }
         }
     }
 
-    private func statTile(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption.weight(.bold))
-                .textCase(.uppercase)
-                .tracking(0.7)
-                .foregroundStyle(AppTheme.mutedInk)
-            Text(value)
-                .font(.system(size: 20, weight: .semibold, design: .default))
-                .foregroundStyle(AppTheme.ink)
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.surfaceLow, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-    }
+    @ViewBuilder
+    private func stackedMetadata(singleColumn: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if singleColumn {
+                GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
+            } else {
+                HStack(spacing: 8) {
+                    GarageTag(title: vehicle.vehicleKind.title, isHighlighted: false)
+                    GarageTag(title: vehicle.country.shortLabel, isHighlighted: false)
+                }
+            }
 
-    private func payloadValue(for vehicle: VehicleProfile) -> String {
-        guard let gvwr = vehicle.gvwrKg, let baseWeight = vehicle.preferredBaseWeightKg else {
-            return "Offen"
+            GarageTag(title: vehicle.licensePlate.fallback("Kennzeichen offen"), isHighlighted: false)
         }
-        return "\(Int(max(gvwr - baseWeight, 0).rounded())) kg"
     }
 }
 

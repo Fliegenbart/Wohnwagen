@@ -19,8 +19,8 @@ final class WeightPresentationTests: XCTestCase {
 
         XCTAssertEqual(presentation.headline, "+450 kg Reserve")
         XCTAssertEqual(presentation.support, "Bodensee")
-        XCTAssertEqual(presentation.primaryMetrics.map(\.title), ["Gesamtgewicht", "Achslast"])
-        XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["3050 kg", "Niedrig"])
+        XCTAssertEqual(presentation.axleRiskLabel, "Niedrig")
+        XCTAssertEqual(presentation.confidenceNote, "Schätzung wirkt aktuell plausibel.")
     }
 
     func testWeightPresentationFallsBackToCurrentTripSupport() {
@@ -39,20 +39,31 @@ final class WeightPresentationTests: XCTestCase {
         let presentation = WeightPresentation.make(assessment: output, tripTitle: nil)
 
         XCTAssertEqual(presentation.support, "Aktuelle Fahrt")
-        XCTAssertEqual(presentation.primaryMetrics.map(\.value), ["Noch nicht erfasst", "Niedrig"])
+        XCTAssertEqual(presentation.axleRiskLabel, "Niedrig")
+        XCTAssertEqual(
+            presentation.confidenceNote,
+            "Schätzung bleibt vorsichtig, bis zGG und Leergewicht vollständig sind."
+        )
     }
 
     func testWeightPresentationMapsAxleRiskStatesWithoutLosingInformation() {
-        XCTAssertEqual(makePresentation(axleRisk: .low).primaryMetrics.last?.value, "Niedrig")
-        XCTAssertEqual(makePresentation(axleRisk: .elevated).primaryMetrics.last?.value, "Erhöht")
-        XCTAssertEqual(makePresentation(axleRisk: .measured).primaryMetrics.last?.value, "Gemessen")
+        XCTAssertEqual(makePresentation(axleRisk: .low).axleRiskLabel, "Niedrig")
+        XCTAssertEqual(makePresentation(axleRisk: .elevated).axleRiskLabel, "Erhöht")
+        XCTAssertEqual(makePresentation(axleRisk: .measured).axleRiskLabel, "Gemessen")
     }
 
-    func testWeightMetricUsesStableIdentityFromContent() {
-        let firstMetric = WeightMetric(title: "Gesamtgewicht", value: "3050 kg")
-        let secondMetric = WeightMetric(title: "Gesamtgewicht", value: "9999 kg")
+    func testWeightPresentationHighlightsMeasuredAxleConfidence() {
+        XCTAssertEqual(
+            makePresentation(axleRisk: .measured).confidenceNote,
+            "Achslast basiert auf echten Messwerten."
+        )
+    }
 
-        XCTAssertEqual(firstMetric.id, secondMetric.id)
+    func testWeightPresentationUsesCautiousConfidenceForElevatedAxleRisk() {
+        XCTAssertEqual(
+            makePresentation(axleRisk: .elevated).confidenceNote,
+            "Schätzung ist vorsichtig. Achslast besser prüfen."
+        )
     }
 
     private func makePresentation(axleRisk: LoadRiskLevel) -> WeightPresentation {

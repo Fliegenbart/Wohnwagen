@@ -5,6 +5,39 @@ enum ScenicCardEmphasis {
     case support
 }
 
+enum ZipTopBarAccessory {
+    case weight
+    case checklists
+    case logbook
+    case costs
+
+    var systemImage: String {
+        switch self {
+        case .weight:
+            "scalemass"
+        case .checklists:
+            "checklist"
+        case .logbook:
+            "book.closed"
+        case .costs:
+            "eurosign"
+        }
+    }
+
+    var accessibilityLabel: String {
+        switch self {
+        case .weight:
+            "Gewicht"
+        case .checklists:
+            "Checklisten"
+        case .logbook:
+            "Logbuch"
+        case .costs:
+            "Kosten"
+        }
+    }
+}
+
 enum ScenicCardSizeClass {
     case regular
     case compact
@@ -96,22 +129,17 @@ struct ZipTopBar<Trailing: View>: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(AppTheme.petrol)
                     .frame(width: 38, height: 38)
-                    .background(
+                    .background(AppTheme.surfaceRaised, in: Circle())
+                    .overlay {
                         Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [AppTheme.skySoft, AppTheme.canvasWarm],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                    )
+                            .strokeBorder(AppTheme.outlineVariant.opacity(0.6), lineWidth: 1)
+                    }
             }
             .accessibilityLabel("Menü")
 
             Text("CamperReady")
                 .font(.system(size: 21, weight: .semibold, design: .default))
-                .foregroundStyle(AppTheme.petrol)
+                .foregroundStyle(AppTheme.ink)
                 .tracking(-0.3)
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
@@ -121,11 +149,11 @@ struct ZipTopBar<Trailing: View>: View {
             trailing
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(.ultraThinMaterial)
+        .padding(.vertical, 10)
+        .background(AppTheme.surface.opacity(0.96))
         .overlay(alignment: .bottom) {
             Divider()
-                .opacity(0.12)
+                .opacity(0.08)
         }
     }
 }
@@ -136,7 +164,7 @@ struct ZipBottomNavigationBar: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            HStack(spacing: 6) {
+            HStack(spacing: 8) {
                 ForEach(AppTab.allCases) { tab in
                     Button {
                         selectedTab = tab
@@ -153,21 +181,15 @@ struct ZipBottomNavigationBar: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
-                        .foregroundStyle(selectedTab == tab ? Color.white : AppTheme.mutedInk)
+                        .foregroundStyle(selectedTab == tab ? AppTheme.petrol : AppTheme.mutedInk)
                         .background {
                             if selectedTab == tab {
-                                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [AppTheme.petrol, AppTheme.petrolBright, AppTheme.coral],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                            .strokeBorder(AppTheme.sky.opacity(0.35), lineWidth: 1)
-                                    )
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .fill(AppTheme.petrol.opacity(0.10))
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                            .strokeBorder(AppTheme.petrol.opacity(0.12), lineWidth: 1)
+                                    }
                             }
                         }
                     }
@@ -176,27 +198,29 @@ struct ZipBottomNavigationBar: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 10)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-            .shadow(color: AppTheme.ink.opacity(0.06), radius: 16, x: 0, y: 8)
+            .background(AppTheme.surface.opacity(0.98), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .strokeBorder(AppTheme.outlineVariant.opacity(0.55), lineWidth: 1)
+            }
+            .shadow(color: AppTheme.ink.opacity(0.04), radius: 10, x: 0, y: 4)
 
             Button(action: onAddTap) {
                 Image(systemName: "plus")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Color.white)
-                    .frame(width: 48, height: 48)
+                    .frame(width: 44, height: 44)
                     .background(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(
-                                LinearGradient(
-                                    colors: [AppTheme.petrol, AppTheme.coral],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .fill(AppTheme.petrol)
                     )
-                    .shadow(color: AppTheme.petrol.opacity(0.20), radius: 10, x: 0, y: 8)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .strokeBorder(Color.white.opacity(0.16), lineWidth: 1)
+                    }
+                    .shadow(color: AppTheme.ink.opacity(0.10), radius: 6, x: 0, y: 4)
             }
-            .offset(x: -10, y: -16)
+            .offset(x: -10, y: -8)
             .accessibilityLabel("Neue Aufgabe")
         }
     }
@@ -208,28 +232,39 @@ struct ZipStatusPill: View {
 
     var body: some View {
         Text(title)
-            .font(.system(size: 10, weight: .bold, design: .default))
+            .font(.system(size: 9, weight: .semibold, design: .default))
             .textCase(.uppercase)
-            .tracking(1.0)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .tracking(0.8)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
             .foregroundStyle(tint)
             .background(
                 Capsule(style: .continuous)
-                    .fill(tint.opacity(0.14))
+                    .fill(AppTheme.surfaceRaised)
             )
+            .overlay {
+                Capsule(style: .continuous)
+                    .strokeBorder(tint.opacity(0.18), lineWidth: 1)
+            }
     }
 }
 
 struct ZipAvatarBubble: View {
     let systemImage: String
+    let accessibilityLabel: String
 
     var body: some View {
         Image(systemName: systemImage)
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(AppTheme.petrol)
             .frame(width: 38, height: 38)
-            .background(AppTheme.surfaceHigh.opacity(0.78), in: Circle())
+            .background(AppTheme.surfaceRaised, in: Circle())
+            .overlay {
+                Circle()
+                    .strokeBorder(AppTheme.outlineVariant.opacity(0.6), lineWidth: 1)
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(accessibilityLabel)
     }
 }
 

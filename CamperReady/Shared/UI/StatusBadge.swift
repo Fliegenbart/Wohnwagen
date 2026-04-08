@@ -17,19 +17,19 @@ struct StatusBadge: View {
     }
 
     var body: some View {
-        HStack(spacing: 7) {
+        HStack(spacing: 6) {
             Circle()
                 .fill(color)
-                .frame(width: 7, height: 7)
+                .frame(width: 6, height: 6)
             Text(text)
-                .font(.system(size: 10, weight: .bold, design: .default))
+                .font(.system(size: 9, weight: .semibold, design: .default))
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
                 .textCase(.uppercase)
-                .tracking(1.1)
+                .tracking(0.8)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
         .foregroundStyle(foregroundColor)
         .background(
             Capsule(style: .continuous)
@@ -54,16 +54,9 @@ struct StatusBadge: View {
     private var backgroundColor: Color {
         switch surface {
         case .light:
-            switch status {
-            case .green:
-                AppTheme.mintSoft
-            case .yellow:
-                AppTheme.sunSoft
-            case .red:
-                AppTheme.coralSoft
-            }
+            AppTheme.surfaceRaised
         case .dark:
-            Color.white.opacity(0.12)
+            Color.white.opacity(0.10)
         }
     }
 
@@ -79,9 +72,9 @@ struct StatusBadge: View {
     private var borderColor: Color? {
         switch surface {
         case .light:
-            color.opacity(0.18)
+            color.opacity(0.22)
         case .dark:
-            Color.white.opacity(0.22)
+            Color.white.opacity(0.16)
         }
     }
 
